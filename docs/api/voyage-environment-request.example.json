@@ -1,0 +1,47 @@
+{
+  "name": "대한해협–동중국해 해상 구간",
+  "cycle": "20260906T18",
+  "departure_utc": "2026-09-06T18:00:00Z",
+  "waypoints": [
+    {
+      "lat": 34.5,
+      "lon": 129.0,
+      "name": ""
+    },
+    {
+      "lat": 33.5,
+      "lon": 128.0,
+      "name": ""
+    },
+    {
+      "lat": 31.0,
+      "lon": 127.0,
+      "name": ""
+    },
+    {
+      "lat": 28.0,
+      "lon": 126.0,
+      "name": ""
+    }
+  ],
+  "scenarios": [
+    {
+      "name": "기준",
+      "speed_kn": 14.0,
+      "departure_offset_h": 0.0
+    },
+    {
+      "name": "6시간 후 출항",
+      "speed_kn": 14.0,
+      "departure_offset_h": 6.0
+    },
+    {
+      "name": "감속",
+      "speed_kn": 12.0,
+      "departure_offset_h": 0.0
+    }
+  ],
+  "hs_threshold_m": 3.0,
+  "arrival_deadline_utc": "2026-09-08T04:00:00Z",
+  "performance_profile": null
+}

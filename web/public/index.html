@@ -1,0 +1,1822 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>Poseidon — 해양 디지털 트윈</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- 인라인 파비콘: /favicon.ico 404 콘솔 오류 제거 -->
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%2305070f'/%3E%3Cpath d='M1 10c2-3 4-3 6 0s4 3 6 0' stroke='%2361d0ff' stroke-width='1.6' fill='none'/%3E%3C/svg%3E">
+<script src="https://cdn.jsdelivr.net/npm/maplibre-gl@5/dist/maplibre-gl.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/maplibre-gl@5/dist/maplibre-gl.css" rel="stylesheet">
+<style>
+  /* 팔레트 3벌. 색 리터럴을 코드에 남기지 않는다 — 남기면 팔레트를 바꿔도 따라오지 않는다.
+     자동 전환하지 않는다(사용자가 유발하지 않은 화면 변경 금지, IHO S-52 2.2.10).
+     --brand 는 **크롬 전용**이다. 데이터 색으로 쓰지 않는다 —
+     빨강은 조건 해당 표시에만 쓴다(IMO MSC.191(79) 5.5.2). */
+  :root {
+    --bg:#efefef; --bg2:#e4e4e4; --surf:#ffffff; --surf2:#f4f4f4;
+    --panel:#ffffff; --hover:#f0f0f0; --sel:#e3edfb;
+    --line:#e3e3e3; --line2:#ededed; --line3:#d6d6d6;
+    --fg-strong:#111111; --fg:#111111; --fg2:#3a3a3a; --dim:#767676; --dim2:#9a9a9a;
+    --accent:#0074e4; --accent-line:#0074e4; --link:#0074e4;
+    --brand:#e60023;
+    --ok:#067647; --warn:#8a5a00; --warn2:#a06a00; --warn-dim:#9c8250;
+    --bad:#c00016; --bad2:#d34a53; --replay:#5b4bd6;
+    --bar:#9fb0c6; --bar-sparse:#c2a86e;
+    --radius:16px; --radius-sm:12px; --pill:999px;
+    --shadow:0 1px 2px rgba(0,0,0,.05), 0 4px 14px rgba(0,0,0,.07);
+    --shadow-hi:0 2px 6px rgba(0,0,0,.08), 0 10px 26px rgba(0,0,0,.10);
+    --gut:10px;
+  }
+  /* 야간 — 선교 시인성. 밝은 것은 가는 선과 글자에만 남긴다(IEC 62288 §7.2.1.2). */
+  [data-theme="night"] {
+    --bg:#05070f; --bg2:#080b14; --surf:#0d1322; --surf2:#17203a;
+    --panel:rgba(10,14,26,.92); --hover:#16203a; --sel:#132441;
+    --line:#263353; --line2:#1d2a49; --line3:#2a3552;
+    --fg-strong:#ffffff; --fg:#e8ecf5; --fg2:#c8d3e8; --dim:#9aa8c6; --dim2:#7d8caa;
+    --accent:#61d0ff; --accent-line:#2f6c8d; --link:#8fb6d8;
+    --brand:#ff5d6b;
+    --ok:#7ee787; --warn:#ffb454; --warn2:#ffd166; --warn-dim:#a4915f;
+    --bad:#ff6b6b; --bad2:#ff8f8f; --replay:#7fb4ff;
+    --bar:#3d5a8c; --bar-sparse:#8a7442;
+    --shadow:0 2px 10px rgba(0,0,0,.45);
+    --shadow-hi:0 6px 26px rgba(0,0,0,.55);
+  }
+
+  [data-theme="dusk"] {
+    --bg:#202833; --bg2:#26313d; --surf:#303c49; --surf2:#354454;
+    --panel:#303c49; --hover:#3a4c60; --sel:#405870;
+    --line:#596979; --line2:#475868; --line3:#607080;
+    --fg-strong:#fff0dc; --fg:#ecdfce; --fg2:#d9cebc; --dim:#c1b6a7; --dim2:#b4aa9d;
+    --accent:#9bc4df; --accent-line:#7098b5; --link:#b2d0e7;
+    --brand:#ab4553; --bar:#869cb3; --bar-sparse:#ad9669;
+  }
+
+  html, body { margin:0; height:100%; overflow:hidden;
+    font-family:-apple-system, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+    background:var(--bg); color:var(--fg); }
+  /* 화면은 상단 2행(답·자격) + 본문(시간표·지도) + 하단 3행(계보·시간축·범례)로 끝난다.
+     떠 있는 패널을 두지 않는다 — 겹친 패널은 무엇이 최신인지 알 수 없게 만든다. */
+  body { display:grid; grid-template-rows:auto auto minmax(0,1fr) auto auto auto;
+         position:relative; }
+  #mapwrap { position:relative; min-width:0; }
+  #map { position:absolute; inset:0; background:var(--bg); }
+  #wind { position:absolute; inset:0; pointer-events:none; z-index:2; }
+
+  .panel { background:var(--panel); border:1px solid var(--line);
+           border-radius:12px; padding:11px 13px; font-size:13px; }
+  .panel h2 { font-size:12.5px; margin:0 0 7px; color:var(--accent); letter-spacing:.2px; }
+  .meta { color:var(--dim); font-size:11.5px; line-height:1.65; }
+  .hint { color:var(--dim2); font-size:10.5px; line-height:1.55; }
+  b.v { color:var(--fg-strong); font-weight:600; }
+
+  /* 상단 1행 — 답 줄. 화면에서 가장 큰 글씨. 선택한 칸의 답 한 줄. */
+  #answer, #qualify, #lineage, #timeaxis, #legend { min-width:0; overflow-x:hidden; }
+  #answer { padding:11px 15px 5px; font-size:18.5px; line-height:1.35; color:var(--fg-strong);
+            display:flex; align-items:baseline; gap:10px; flex-wrap:wrap; }
+  #answer .where { font-size:12.5px; color:var(--dim); font-weight:400; }
+  #answer .band { font-size:13px; color:var(--dim); }
+
+  /* 상단 2행 — 자격 줄. 고정 5칸, 순서를 바꾸지 않는다.
+     숫자와 그 숫자의 자격은 같은 줄에서 태어나고 같이 죽는다.
+     성적을 별도 탭으로 격리하면 사용자는 값만 읽는다. */
+  #qualify { display:flex; gap:6px; flex-wrap:wrap; padding:0 15px 9px; font-size:11.5px;
+             cursor:pointer; border-bottom:1px solid var(--line); }
+  #qualify .q { border:1px solid var(--line2); border-radius:6px; padding:2px 8px;
+                color:var(--dim); background:rgba(16,22,38,.6);
+                max-width:100%; overflow-wrap:anywhere; }
+  #qualify .q b { color:var(--fg2); font-weight:600; }
+  #qualify .q i { font-style:normal; color:var(--dim2); }
+  #qualify .q b i { color:var(--warn-dim); }   /* 값에 붙는 단서 — 라벨과 구분한다 */
+  #qualify:hover .q { border-color:var(--line); }
+  #qualify .more { color:var(--dim2); align-self:center; font-size:10.5px; }
+
+  /* 시간표 — 이 화면의 주역 */
+  .ttnote { color:var(--dim); font-size:10.5px; line-height:1.55; margin:0 0 7px; }
+  .ttnote b { color:var(--fg2); }
+  .ttempty { color:var(--dim); font-size:12px; padding:18px 4px; line-height:1.6; }
+  table.tt { border-collapse:separate; border-spacing:0; font-size:11.5px; }
+  table.tt th, table.tt td { border-bottom:1px solid var(--line2); padding:2px 3px;
+                             text-align:center; white-space:nowrap; }
+  table.tt th { color:var(--dim); font-weight:500; vertical-align:bottom;
+                border-bottom:1px solid var(--line); }
+  table.tt th.cur, table.tt td.cur { background:rgba(97,208,255,.07); }
+  table.tt th .vt  { color:var(--fg2); font-size:11px; }
+  table.tt th .vt2 { font-size:9.5px; color:var(--dim2); }
+  /* 열 머리 아래단은 **전 관측소 평균**이다. app.py 의 by_lead 는 df.groupby("lead_h") 로만
+     만들어 관측소와 무관하다 — 이 지점의 성적이 아니라는 사실을 자격 줄이 매번 말한다. */
+  table.tt th .sk  { font-size:9px; color:var(--dim2); line-height:1.25; margin-top:1px; }
+  table.tt td { cursor:pointer; color:var(--fg2); }
+  table.tt td .sw { display:inline-block; width:7px; height:7px; border-radius:2px;
+                    background:var(--c, transparent); margin-right:4px; vertical-align:middle; }
+  table.tt td.sel { outline:1px solid var(--accent); outline-offset:-1px; background:rgba(97,208,255,.14); }
+  table.tt td.err { color:var(--warn); text-align:left; white-space:normal; cursor:default; }
+  table.tt td.novalue { color:var(--dim2); }
+  table.tt .rowhead { text-align:left; position:sticky; left:0; background:var(--bg2);
+                      z-index:1; padding-right:9px; min-width:150px; }
+  table.tt .rowhead .hint { white-space:normal; max-width:190px; }
+  table.tt .rm { color:var(--dim2); cursor:pointer; margin-right:5px; font-size:10px; }
+  table.tt .rm:hover { color:var(--bad); }
+  .lk { color:var(--link); cursor:pointer; font-size:10.5px; }
+
+  /* 본문 — 좌 시간표 / 우 지도 */
+  #main { display:grid; grid-template-columns:minmax(0,1.02fr) minmax(0,1fr); min-height:0; }
+  #timetable { overflow:auto; border-right:1px solid var(--line); padding:9px 11px; min-width:0; }
+
+  /* 하단 3행 */
+  #lineage, #timeaxis, #legend { border-top:1px solid var(--line); padding:7px 15px;
+                                 background:rgba(8,11,20,.72); }
+  #lineage { font-size:11px; color:var(--dim); display:flex; gap:10px; flex-wrap:wrap;
+             align-items:center; }
+  #lineage-txt { min-width:0; overflow-wrap:anywhere; }
+  #leadrow { flex-wrap:wrap; }
+  #trust, #legend .hint { overflow-wrap:anywhere; }
+  #lineage a, #lineage .lk { color:var(--link); text-decoration:none; cursor:pointer; }
+  #lineage .sp { margin-left:auto; display:flex; gap:9px; }
+
+  /* 서랍 — 유일하다. 자격 줄을 누르면 열린다. */
+  #drawer { position:absolute; left:0; right:0; bottom:0; max-height:45vh; overflow:auto;
+            z-index:20; display:none; background:var(--panel); backdrop-filter:blur(10px);
+            border-top:1px solid var(--line); box-shadow:0 -6px 28px rgba(0,0,0,.55); }
+  body.drawer #drawer { display:block; }
+  #drawer > .panel { display:none; border:none; border-radius:0; background:none; }
+  #drawer > .panel.open { display:block; }
+  #drawer > .panel.open#busan.closed { display:none; }
+  #hud h1 { font-size:14.5px; margin:0 0 8px; letter-spacing:.3px; font-weight:600; }
+  #hud h1 span { color:var(--accent); }
+  #hud h1 small { color:var(--dim2); font-weight:400; font-size:10.5px; margin-left:6px; letter-spacing:0; }
+  .badge { display:inline-flex; align-items:center; gap:5px; border-radius:6px; padding:2px 8px;
+           font-size:11px; font-weight:600; border:1px solid transparent; }
+  .badge .dot { width:7px; height:7px; border-radius:50%; background:currentColor; }
+  .badge.ok { color:var(--ok); background:rgba(126,231,135,.10); border-color:rgba(126,231,135,.35); }
+  .badge.warn { color:var(--warn); background:rgba(255,180,84,.10); border-color:rgba(255,180,84,.35); }
+  .badge.bad { color:var(--bad); background:rgba(255,107,107,.10); border-color:rgba(255,107,107,.38); }
+  .badge.replay { color:var(--replay); background:rgba(127,180,255,.10); border-color:rgba(127,180,255,.35); }
+  .badge.mute { color:var(--dim); background:rgba(147,163,196,.08); border-color:rgba(147,163,196,.25); }
+
+  .kv { display:grid; grid-template-columns:56px 1fr; gap:1px 8px; font-size:11.5px;
+        color:var(--dim); margin-top:8px; }
+  .kv i { font-style:normal; color:var(--dim2); }
+  .kv span { color:var(--fg2); }
+
+  .btnrow { display:flex; gap:6px; flex-wrap:wrap; margin-top:9px; }
+  button.b { background:var(--surf2); color:var(--fg2); border:1px solid var(--line3); border-radius:7px;
+             padding:3px 9px; cursor:pointer; font-size:11px; font-family:inherit; }
+  button.b:hover { background:var(--hover); color:var(--fg-strong); }
+  button.b.on { background:var(--sel); color:var(--accent); border-color:var(--accent-line); }
+  button.b[disabled] { opacity:.4; cursor:not-allowed; }
+  #btn-help { display:none; }
+
+  /* 하단 2행 — 시간축 */
+  #leadrow { display:flex; align-items:center; gap:9px; color:var(--dim); font-size:11.5px; }
+  #leadrow b { color:var(--fg-strong); font-size:14px; min-width:52px; }
+  #lead { flex:1; accent-color:var(--accent); }
+  /* 리드별 성적은 시간표 열 머리가 갖는다. 여기 남은 것은 **표본 밀도**뿐이다 —
+     슬라이더를 어디로 밀면 근거가 두터워지는지 한눈에 보이게 하는 용도. */
+  #leadbars { width:100%; height:16px; display:block; margin:1px 0 2px; }
+  #horizon { color:var(--dim2); font-size:10px; margin-left:auto; }
+  #trust { font-size:11px; color:var(--dim); line-height:1.5; cursor:pointer;
+           border-top:1px solid var(--line2); padding-top:6px; margin-top:4px; }
+  #trust:hover { color:var(--fg2); }
+  #trust u { text-decoration:none; border-bottom:1px dotted var(--line3); }
+
+  /* 하단 3행 — 범례 + 접히지 않는 면책 */
+  #legend { display:flex; gap:14px; align-items:flex-start; }
+  #legend .lgwrap { flex:0 0 min(340px, 46vw); }
+  #legend .bar { height:10px; border-radius:4px; margin:5px 0 0; border:1px solid var(--line3); }
+  #disclaim { color:var(--dim); font-size:10.5px; line-height:1.6; flex:1; min-width:0; }
+  #legend .ticks { position:relative; height:15px; margin-top:1px; }
+  #legend .ticks span { position:absolute; transform:translateX(-50%); color:var(--dim); font-size:10px; }
+
+  /* 서랍 섹션 (위치 지정 없음 — 서랍이 자리를 정한다) */
+  .close { float:right; cursor:pointer; color:var(--dim2); font-size:14px; line-height:1; padding:0 2px; }
+  .close:hover { color:var(--fg-strong); }
+
+  svg text { fill:var(--dim); font-size:9px; }
+  table { width:100%; border-collapse:collapse; font-size:11.5px; }
+  td, th { padding:2.5px 4px; text-align:right; border-bottom:1px solid var(--line2); }
+  th { color:var(--dim); font-weight:500; font-size:10.5px; }
+  td.l, th.l { text-align:left; }
+  tr.pick { cursor:pointer; } tr.pick:hover td { background:var(--hover); }
+  .warn { color:var(--warn); } .bad { color:var(--bad); } .ok { color:var(--ok); }
+  .sparse { color:var(--warn); font-size:10px; }
+
+  .tabs { display:flex; gap:4px; margin:0 0 8px; border-bottom:1px solid var(--line2); }
+  .tabs button { background:none; border:none; color:var(--dim); font-family:inherit; font-size:11.5px;
+                 padding:4px 8px; cursor:pointer; border-bottom:2px solid transparent; }
+  .tabs button.on { color:var(--accent); border-bottom-color:var(--accent); }
+  .tabpane { display:none; } .tabpane.on { display:block; }
+
+  .note { background:var(--surf2); border:1px solid var(--line2); border-radius:7px; padding:7px 9px;
+          margin-top:8px; color:var(--dim); font-size:10.5px; line-height:1.6; }
+  .note b { color:var(--fg2); }
+
+  /* 마커 */
+  .stn { display:flex; align-items:center; gap:4px; cursor:pointer; transform:translate(-4px,-4px); }
+  .stn .d { width:9px; height:9px; border-radius:50%; box-sizing:border-box; }
+  .stn .lbl { display:none; background:rgba(8,12,22,.82); border:1px solid var(--line3); border-radius:5px;
+              padding:0 4px; font-size:10px; white-space:nowrap; color:var(--fg2); }
+  body.zoomed .stn .lbl { display:inline-block; }   /* 줌 6.5 이상에서만 라벨을 편다 */
+  /* 정지 심볼. 애니메이션을 쓰지 않는다 — 점멸·맥동은 미확인 경보의 표현이고
+     (IMO MSC.191(79) 5.5.4) 우리는 경보를 내는 장비가 아니다.
+     빨강도 쓰지 않는다. 이것은 위험 판정이 아니라 기압 최소점의 위치일 뿐이다. */
+  .storm { width:13px; height:13px; position:relative; }
+  .storm::before { content:''; position:absolute; inset:0; border-radius:50%;
+    border:2px solid var(--fg2); background:rgba(201,214,238,.18); box-sizing:border-box; }
+  .storm-label { position:absolute; left:17px; top:-2px; color:var(--fg2); font-size:10.5px;
+    white-space:nowrap; text-shadow:0 1px 3px #000; }
+
+  .cyc { display:grid; grid-template-columns:98px 1fr auto; gap:6px; align-items:center;
+         padding:4px 5px; border-bottom:1px solid var(--line2); cursor:pointer; font-size:11.5px; }
+  .cyc:hover { background:var(--hover); }
+  .cyc.cur { background:var(--sel); }
+  .cyc .tag { font-size:9.5px; border:1px solid var(--line3); border-radius:4px; padding:0 4px;
+              color:var(--dim); margin-right:3px; }
+  .cyc .tag.on { color:var(--accent); border-color:var(--accent-line); }
+  .cyc .tag.no { opacity:.3; }
+
+  /* 모바일 — 시간축과 범례는 어떤 폭에서도 숨기지 않는다.
+     시간축이 없으면 언제의 예보인지 알 수 없고, 범례가 없으면 색이 무의미하다. */
+  @media (max-width: 860px) {
+    #main { grid-template-columns:1fr; grid-template-rows:minmax(0,1fr) minmax(0,1fr); }
+    #timetable { border-right:none; border-bottom:1px solid var(--line); }
+    #answer { font-size:16px; padding:9px 11px 4px; }
+    #qualify, #lineage, #timeaxis, #legend { padding-left:11px; padding-right:11px; }
+    #legend { flex-direction:column; gap:6px; }
+    #legend .lgwrap { flex:none; width:100%; }
+    #lineage .sp { margin-left:0; flex-wrap:wrap; }
+    #horizon { margin-left:0; }
+    #drawer { max-height:56vh; }
+  }
+
+  /* ══ 표면 — Pinterest 계열 보드/카드 ══════════════════════════════
+     회색 보드 위에 흰 카드가 뜬다. 경계선 대신 여백과 그림자로 나눈다.
+     **정보는 하나도 빼지 않는다.** 단순해 보이려고 숫자를 숨기면 그건 단순화가 아니라 은폐다.
+     빨강(--brand)은 크롬에만 쓴다. 데이터 색이 아니다. */
+  body { background:var(--bg); padding:var(--gut) var(--gut) 0; box-sizing:border-box; }
+  #answer, #qualify, #main, #lineage, #timeaxis, #legend {
+    background:var(--surf); box-shadow:var(--shadow); border:none; }
+
+  #answer  { border-radius:var(--radius) var(--radius) 0 0; padding:14px 20px 6px;
+             font-size:25px; font-weight:800; letter-spacing:-.022em; gap:12px; }
+  #answer b { font-weight:800; }
+  #answer .band  { font-size:14px; font-weight:600; color:var(--dim); letter-spacing:0; }
+  #answer .where { font-size:13px; font-weight:500; letter-spacing:0; }
+
+  #qualify { border-radius:0 0 var(--radius) var(--radius); padding:2px 20px 12px;
+             border-bottom:none; margin-bottom:var(--gut); gap:7px; }
+  #qualify .q { border:none; background:var(--surf2); border-radius:var(--pill);
+                padding:5px 13px; font-size:12px; }
+  #qualify .q b { font-weight:700; color:var(--fg); }
+  #qualify:hover .q { background:var(--hover); }
+  #qualify .more { color:var(--brand); font-weight:700; font-size:11.5px; }
+
+  #main { border-radius:var(--radius); overflow:hidden; margin-bottom:var(--gut); }
+  #timetable { border-right:1px solid var(--line2); padding:15px 17px; }
+  .ttnote { font-size:11.5px; margin-bottom:11px; }
+
+  #lineage, #timeaxis, #legend { border-radius:var(--radius); border-top:none;
+                                 margin-bottom:var(--gut); padding:9px 18px; }
+  #legend { align-items:center; gap:18px; }
+  #legend .lgwrap { flex:0 0 min(300px, 40vw); }
+  #disclaim { font-size:10px; line-height:1.5; }
+  #lineage { font-size:11.5px; }
+
+  /* 알약 버튼 — Pinterest 의 기본 컨트롤 형태 */
+  button.b, a.b { border-radius:var(--pill); background:var(--surf2); color:var(--fg);
+                  border:none; padding:7px 15px; font-size:12px; font-weight:700;
+                  line-height:1.2; }
+  button.b:hover, a.b:hover { background:var(--hover); color:var(--fg); }
+  button.b.on { background:var(--fg); color:var(--surf); }
+  #btn-theme { background:var(--brand); color:#ffffff; }
+  #btn-theme:hover { background:var(--brand); filter:brightness(.92); color:#ffffff; }
+
+  .badge { border-radius:var(--pill); border:none; background:var(--surf2);
+           color:var(--dim); font-weight:700; padding:3px 11px; }
+  .badge.ok   { color:var(--ok);   background:var(--surf2); }
+  .badge.warn { color:var(--warn); background:var(--surf2); }
+  .badge.bad  { color:var(--bad);  background:var(--surf2); }
+  .badge.replay { color:var(--replay); background:var(--surf2); }
+  .badge.mute { color:var(--dim);  background:var(--surf2); }
+
+  .lk, #lineage a { color:var(--fg); font-weight:700; text-decoration:underline;
+                    text-underline-offset:2px; }
+  .lk:hover { color:var(--brand); }
+
+  /* 시간표 — 선을 줄이고 여백으로 나눈다 */
+  table.tt th, table.tt td { border-bottom:none; padding:4px 5px; }
+  table.tt th { border-bottom:1px solid var(--line2); padding-bottom:7px; }
+  table.tt td { border-radius:8px; }
+  table.tt tr:hover td { background:var(--hover); }
+  table.tt td.sel { outline:2px solid var(--fg); outline-offset:-2px; background:var(--sel); }
+  table.tt .rowhead { background:var(--surf); border-bottom:1px solid var(--line2); }
+  table.tt th.cur, table.tt td.cur { background:var(--sel); }
+
+  /* 서랍 — 카드 보드 */
+  #drawer { border-top:none; border-radius:var(--radius) var(--radius) 0 0;
+            box-shadow:var(--shadow-hi); background:var(--surf);
+            left:var(--gut); right:var(--gut); }
+  #drawer > .panel { padding:16px 22px 20px; }
+  .note { background:var(--surf2); border:none; border-radius:var(--radius-sm);
+          padding:11px 13px; break-inside:avoid; margin-top:10px; }
+  /* 노트만 쌓이는 탭은 실제 메이슨리로 흘린다 */
+  #tab-how { column-width:290px; column-gap:12px; }
+  #tab-how .note { margin-top:0; margin-bottom:12px; display:inline-block; width:100%; }
+  .tabs { border-bottom:none; gap:6px; }
+  .tabs button { border-radius:var(--pill); background:var(--surf2); font-weight:700;
+                 border-bottom:none; padding:6px 13px; }
+  .tabs button.on { background:var(--fg); color:var(--surf); border-bottom-color:transparent; }
+  /* 닫기는 서랍에 하나만 둔다. 섹션마다 X 를 두면 무엇이 닫히는지 모호해진다. */
+  .close { font-weight:800; }
+  #drawer > .panel > .close { display:none; }
+  #drawer > [data-close="drawer"] { color:var(--dim); font-size:16px; }
+  #drawer > [data-close="drawer"]:hover { color:var(--fg); }
+
+  #legend .bar { height:12px; border-radius:var(--pill); border:none; }
+  .cyc { border-bottom:none; border-radius:10px; padding:6px 8px; }
+  .cyc .tag { border-radius:var(--pill); border-color:var(--line3); }
+  table td, table th { border-bottom:1px solid var(--line2); }
+
+  @media (max-width: 860px) {
+    body { padding:9px 9px 0; }
+    #answer { font-size:20px; padding:13px 15px 5px; }
+    #qualify { padding:2px 15px 12px; }
+    #lineage, #timeaxis, #legend { padding:10px 14px; }
+    #drawer { left:0; right:0; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══ 상단 1행 — 답 줄 ═══════════════════════════════════════════ -->
+<div id="answer"><span class="where">불러오는 중</span></div>
+
+<!-- ══ 상단 2행 — 자격 줄 (고정 5칸, 순서 불변) ═══════════════════ -->
+<div id="qualify" title="누르면 근거 서랍이 열린다"></div>
+
+<!-- ══ 본문 — 좌 시간표 / 우 지도 ═════════════════════════════════ -->
+<div id="main">
+  <div id="timetable"></div>
+  <div id="mapwrap">
+    <div id="map"></div>
+    <canvas id="wind"></canvas>
+  </div>
+</div>
+
+<!-- ══ 하단 1행 — 계보 줄 ════════════════════════════════════════ -->
+<div id="lineage">
+  <span id="lineage-txt">불러오는 중</span>
+  <span class="sp">
+    <button class="b" id="btn-cycles">사이클</button>
+    <button class="b" id="btn-verify">성적</button>
+    <button class="b" id="btn-busan">부산 조석</button>
+    <a class="b" href="/bridge" style="text-decoration:none">선교 시점</a>
+    <button class="b" id="btn-latest" style="display:none">최신으로</button>
+    <button class="b" id="btn-theme">야간</button>
+  </span>
+</div>
+
+<!-- ══ 하단 2행 — 시간축 ═════════════════════════════════════════ -->
+<div id="timeaxis">
+  <div id="leadrow">
+    <button class="b" id="play" title="리드타임 시간 전개">시간 전개</button>
+    <b id="leadval">+0 h</b>
+    <input type="range" id="lead" min="0" max="8" step="1" value="0">
+    <span id="validtime"></span>
+    <span id="horizon"></span>
+    <button class="b" id="lvl" style="display:none">연안 L2</button>
+  </div>
+  <svg id="leadbars" viewBox="0 0 600 46" preserveAspectRatio="none"></svg>
+</div>
+
+<!-- ══ 하단 3행 — 범례 + 접히지 않는 면책 ════════════════════════ -->
+<div id="legend">
+  <div class="lgwrap">
+    <div style="font-size:11.5px">유의파고 Hs [m]</div>
+    <div class="bar" id="lbar"></div>
+    <div class="ticks" id="lticks"></div>
+  </div>
+  <div class="lgwrap" style="flex:0 0 auto">
+    <div style="font-size:11.5px">레이어</div>
+    <div class="btnrow" style="margin-top:5px">
+      <button class="b on" id="ly-hs">파고</button>
+      <button class="b" id="ly-wind">바람</button>
+      <button class="b on" id="ly-stn">관측소</button>
+    </div>
+  </div>
+  <div id="disclaim">
+    형식승인 없음 · 항해용 아님 · 수심 · 장애물 · 통항규칙을 점검하지 않았다.
+    승인 해도와 GMDSS · NAVTEX 로 교차 확인할 것.
+    바람은 GFS 강제장(입력)이며 우리 예보가 아니다 — 채점된 적 없음.
+  </div>
+</div>
+
+<!-- ══ 서랍 — 유일하다. 자격 줄이나 계보 줄 버튼으로 연다. ══════════ -->
+<div id="drawer">
+  <span class="close" data-close="drawer" style="position:sticky;top:0;float:right;padding:8px 12px 0 0">X</span>
+
+  <!-- 근거: 사이클 · 엔진 · 데이터 계보 -->
+  <div class="panel" id="hud">
+    <h1><span>Poseidon</span> — 파랑 예보 <small>보조 표시 · 항해용 아님</small></h1>
+    <div id="fresh"><span class="badge mute"><span class="dot"></span>불러오는 중</span></div>
+    <div class="kv" id="hudkv"></div>
+    <div class="meta" id="gaps"></div>
+    <div id="trust" style="margin-top:9px">불러오는 중…</div>
+    <div class="hint" id="lnote" style="margin-top:7px"></div>
+    <div class="hint" id="hudhint" style="margin-top:8px"></div>
+    <button class="b" id="btn-help" style="display:none">설명</button>
+  </div>
+
+<!-- ── 부산 조석·해일 ──────────────────────────────────────────────── -->
+<div class="panel" id="busan">
+  <span class="close" data-close="busan">X</span>
+  <h2>부산 — 조석 예측(조화 8분조) · 해일(SWE)</h2>
+  <svg id="tidechart" viewBox="0 0 306 104" width="306" height="104" preserveAspectRatio="xMidYMid meet" style="max-width:100%"></svg>
+  <div class="meta" id="busanmeta"></div>
+</div>
+
+<!-- ── 지점 예보 ───────────────────────────────────────────────────── -->
+<div class="panel" id="point">
+  <span class="close" data-close="point">X</span>
+  <h2 id="pt-title">지점 예보</h2>
+  <div id="pt-appl"></div>
+  <table id="pt-table"></table>
+  <div class="meta" id="pt-meta"></div>
+</div>
+
+<!-- ── 관측소 상세: 예보 vs 관측 ───────────────────────────────────── -->
+<div class="panel" id="station">
+  <span class="close" data-close="station">X</span>
+  <h2 id="st-title">관측소</h2>
+  <div class="meta" id="st-head"></div>
+  <svg id="st-chart" viewBox="0 0 310 176" width="310" height="176" preserveAspectRatio="xMidYMid meet" style="max-width:100%; display:block; margin:6px 0"></svg>
+  <div class="hint" id="st-legend"></div>
+  <div id="st-lead"></div>
+  <div class="note" id="st-note"></div>
+</div>
+
+<!-- ── 검증 성적 패널 ──────────────────────────────────────────────── -->
+<div class="panel" id="verify">
+  <span class="close" data-close="verify">X</span>
+  <h2>검증 성적 — 예보 대 실측</h2>
+  <div class="meta" id="vf-head"></div>
+  <div class="tabs" id="vf-tabs">
+    <button data-t="lead" class="on">리드별</button>
+    <button data-t="stn">관측소별</button>
+    <button data-t="band">파고대별</button>
+    <button data-t="pair">L1 대 L2</button>
+    <button data-t="how">방법</button>
+  </div>
+  <div class="tabpane on" id="tab-lead"></div>
+  <div class="tabpane" id="tab-stn"></div>
+  <div class="tabpane" id="tab-band"></div>
+  <div class="tabpane" id="tab-pair"></div>
+  <div class="tabpane" id="tab-how"></div>
+</div>
+
+<!-- ── 사이클 선택(재생) ───────────────────────────────────────────── -->
+<div class="panel" id="cycles">
+  <span class="close" data-close="cycles">X</span>
+  <h2>사이클 선택 — 과거 재생</h2>
+  <div class="meta" id="cy-head"></div>
+  <div id="cy-list" style="margin-top:6px"></div>
+  <div class="note">L1 = 0.25° 광역, L2 = 0.05° 연안, 해일 = SWE. 표본 = 이 사이클로 만든 청정
+    검증 표본 수(land_frac &le; 0.05). 표본 0건은 검증 대조가 없다는 뜻이지 예보가 틀렸다는 뜻이 아니다.</div>
+</div>
+
+</div>
+
+<script>
+
+"use strict";
+const $ = (id) => document.getElementById(id);
+const fx = (v, n) => (v === null || v === undefined || !isFinite(v)) ? '—' : Number(v).toFixed(n);
+const esc = (s) => String(s === null || s === undefined ? '' : s)
+  .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+
+const S = {
+  reqCycle: new URLSearchParams(location.search).get('cycle'),   // ?cycle=YYYYMMDDTHH
+  meta:null, meta2:null, status:null, storm:null,
+  skill:null, skillL2:null, pairs:null, stations:null, obs:null, cycles:null,
+  level:'L1', leadIdx:0, playing:false, playTimer:null,
+  markers:[], stormMarker:null, map:null,
+  points:[], sel:null, skillError:null, fieldError:null, newCycle:null, theme:'day',
+  layers:{ hs:true, wind:true, stn:true },
+  initPts:null, initLead:null,
+};
+
+async function jget(url) {
+  const r = await fetch(url);
+  if (!r.ok) {
+    // 서버가 준 사유를 버리지 않는다. 'url -> 400'만 남기면 사용자에게 이유를 말할 수 없다.
+    let detail = '';
+    try { const j = await r.json(); detail = j.detail || j.message || ''; } catch (_) {}
+    const e = new Error(detail || `요청 실패 (HTTP ${r.status})`);
+    e.status = r.status; e.url = url;
+    throw e;
+  }
+  return r.json();
+}
+/* 서버 사유를 사용자 문장으로 옮긴다. app.py 는 전 리드 최대 hs 가 0.011 m 이하일 때
+   'land or dry point' 를 던진다 — 육지일 수도 있지만 **전 리드가 아주 잔잔한 해상**일 수도 있다.
+   서버가 두 경우를 구분하지 않으므로 화면도 단정하지 않는다. */
+function pointErrorText(e) {
+  const m = String((e && e.message) || e);
+  if (/land or dry/i.test(m))
+    return `육지이거나 전 리드 파고가 ${DRY_HS} m 이하인 지점이다 (서버가 둘을 구분하지 않는다)`;
+  if (/outside/i.test(m)) return '예보 도메인 밖이다 (L1 120-148E, 12.5-46N)';
+  if (e && e.status === 409) return '이 사이클에는 그 변수가 없다';
+  return m;
+}
+const qc = () => S.reqCycle ? ('cycle=' + encodeURIComponent(S.reqCycle) + '&') : '';
+
+/* 주소의 초기 상태는 **syncURL 이 주소를 갱신하기 전에** 읽어야 한다.
+   renderTop() 이 부팅 중에 먼저 돌면서 주소를 덮어쓰기 때문이다. */
+S.initPts = urlPoints();
+S.initLead = Number(new URLSearchParams(location.search).get('lead'));
+
+/* ══ turbo 컬러맵 (matplotlib turbo 다항 근사) — 범례를 실제 PNG 매핑과 맞추기 위함 ══ */
+function turbo(t) {
+  t = Math.min(1, Math.max(0, t));
+  const p = (a) => a[0] + t*(a[1] + t*(a[2] + t*(a[3] + t*(a[4] + t*a[5]))));
+  const r = p([0.13572138, 4.61539260, -42.66032258, 132.13108234, -152.94239396, 59.28637943]);
+  const g = p([0.09140261, 2.19418839,   4.84296658, -14.18503333,    4.27729857,  2.82956604]);
+  const b = p([0.10667330,12.64194608, -60.58204836, 110.36276771,  -89.90310912, 27.34824973]);
+  const c = (x) => Math.round(255 * Math.min(1, Math.max(0, x)));
+  return `rgb(${c(r)},${c(g)},${c(b)})`;
+}
+
+/* ══ 지도 ═══════════════════════════════════════════════════════════ */
+let styleReady = false, pendingLead = null;
+function markStyleReady() {
+  if (styleReady) return;
+  styleReady = true;
+  if (pendingLead !== null) { const i = pendingLead; pendingLead = null; setLead(i); }
+}
+
+function initMap() {
+  // 베이스맵은 CARTO 다크. 무료 사용이라 "API KEY REQUIRED" 워터마크가 찍히지만
+  // 타일 자체는 정상이다. OSM 표준 타일로 바꿔봤으나 브라우저 환경에 따라 요청이
+  // 막혀 지도가 통째로 사라지는 경우가 있어 되돌렸다(2026-09-07).
+  // 베이스맵은 OSM 표준 타일. CARTO dark_all 은 2026-09 기준 무료 사용에
+  // API 키를 요구해 타일마다 "API KEY REQUIRED" 워터마크가 찍힌다 —
+  // 이 프로젝트는 등록·계정 없이 쓸 수 있는 것만 쓴다(CLAUDE.md 0).
+  // OSM 은 밝은 지도라 raster paint 로 어둡게 깔고 채도를 낮춘다.
+  const sub = ['a','b','c'].map(s => `https://${s}.tile.openstreetmap.org/{z}/{x}/{y}.png`);
+  const map = new maplibregl.Map({
+    container:'map',
+    style: { version:8, projection:{ type:'globe' },
+      sources: { osm:{ type:'raster', tiles:sub, tileSize:256, maxzoom:19,
+                       attribution:'(c) OpenStreetMap contributors' } },
+      layers: [ { id:'bg', type:'background', paint:{ 'background-color':'#dfe6ee' } }, // 주간 기본. applyTheme 가 갱신한다
+                { id:'base', type:'raster', source:'osm', paint:{
+                    'raster-brightness-max':0.26, 'raster-brightness-min':0.0,
+                    'raster-saturation':-0.85, 'raster-contrast':-0.05,
+                    'raster-opacity':0.62 } } ],
+      sky: { 'atmosphere-blend':0.4 },
+    },
+    center:[128.5, 35], zoom:4.4, attributionControl:false,   // 한반도 근해 기준 (해운 용도)
+  });
+  S.map = map;
+  map.addControl(new maplibregl.NavigationControl({ showCompass:false }), 'bottom-left');
+  map.on('click', (e) => addPoint(e.lngLat.lat, e.lngLat.lng));
+  map.on('load', markStyleReady);
+  map.on('style.load', markStyleReady);
+  map.on('idle', markStyleReady);
+  // 렌더가 안 보이면 앱을 고치기 전에 document.hidden 부터 확인할 것.
+  // 브라우저 탭·패널이 숨김이면 requestAnimationFrame 이 발화하지 않아
+  // MapLibre 는 첫 프레임도 그리지 못하고 style.load 조차 끝나지 않는다.
+  // 2026-09-07에 이것을 앱 버그로 오진했다. 타일도 API도 전부 200이었다.
+  window.__map = map;
+  map.on('zoom', () => document.body.classList.toggle('zoomed', map.getZoom() >= 6.5));
+  window.addEventListener('resize', () => map.resize());
+  setTimeout(() => map.resize(), 300);
+  setTimeout(() => map.resize(), 1500);
+  // 베이스맵 타일 오류 시 OSM 폴백
+  let tileErrors = 0;
+  map.on('error', (e) => {
+    if (e && e.sourceId === 'osm' && ++tileErrors === 8) {
+      try {
+        // 베이스맵이 실패해도 파고장·관측소는 그대로 보여야 한다
+        if (map.getLayer('base')) map.removeLayer('base');
+        markStyleReady();
+      } catch (_) {}
+    }
+  });
+}
+
+function boundsCoords(b) {
+  return [[b.west, b.north], [b.east, b.north], [b.east, b.south], [b.west, b.south]];
+}
+function cycleTimeOf(c) {
+  return parseUTC(`${c.slice(0,4)}-${c.slice(4,6)}-${c.slice(6,8)}T${c.slice(9,11)}:00:00Z`);
+}
+
+/* ══ 리드타임 ═══════════════════════════════════════════════════════ */
+function setLead(idx) {
+  if (!S.meta) return;
+  idx = Math.max(0, Math.min(S.meta.leads_h.length - 1, idx));
+  S.leadIdx = idx;
+  const map = S.map, lead = S.meta.leads_h[idx];
+  $('lead').value = idx;
+  $('leadval').textContent = '+' + Math.round(lead) + ' h';
+  $('validtime').innerHTML = esc(fmtUTC(S.meta.valid_times[idx])) +
+    ' <span class="hint">' + esc(fmtKST(S.meta.valid_times[idx])) + '</span>';
+  if (S.sel) S.sel.lead = idx;
+  renderTrust();
+  renderLeadBars();
+  renderHorizon();
+  renderTop();
+  if (!styleReady) { pendingLead = idx; return; }
+  try {
+    const url = `/v1/field/hs.png?cycle=${S.meta.cycle}&lead=${lead}`;
+    const src = map.getSource('hs');
+    if (src) src.updateImage({ url, coordinates: boundsCoords(S.meta.bounds) });
+    else {
+      map.addSource('hs', { type:'image', url, coordinates: boundsCoords(S.meta.bounds) });
+      map.addLayer({ id:'hs', type:'raster', source:'hs',
+        paint:{ 'raster-opacity':0.88, 'raster-fade-duration':250 } });
+    }
+    // L2 연안 중첩
+    if (S.level === 'L2' && S.meta2) {
+      const c2 = boundsCoords(S.meta2.bounds);
+      const lead2 = S.meta2.leads_h.reduce((a,b) => Math.abs(b-lead) < Math.abs(a-lead) ? b : a);
+      const url2 = `/v1/field/hs.png?cycle=${S.meta.cycle}&lead=${lead2}&level=L2`;
+      const s2 = map.getSource('hs2');
+      if (s2) s2.updateImage({ url:url2, coordinates:c2 });
+      else {
+        map.addSource('hs2', { type:'image', url:url2, coordinates:c2 });
+        map.addLayer({ id:'hs2', type:'raster', source:'hs2',
+          paint:{ 'raster-opacity':0.95, 'raster-fade-duration':250 } });
+        map.addLayer({ id:'hs2box', type:'line', source: addBoxSource(c2),
+          paint:{ 'line-color':'var(--accent)', 'line-width':1, 'line-opacity':.55, 'line-dasharray':[3,2] } });
+      }
+    } else {
+      for (const id of ['hs2box','hs2']) if (map.getLayer(id)) map.removeLayer(id);
+      if (map.getSource('hs2')) map.removeSource('hs2');
+    }
+  } catch (e) {
+    pendingLead = idx; styleReady = false;
+    S.map.once('idle', markStyleReady);
+    return;
+  }
+  updateStorm(lead);
+  updateStationMarkers();
+  loadWind(lead).catch(() => {});
+}
+
+function addBoxSource(c2) {
+  const ring = c2.concat([c2[0]]);
+  if (!S.map.getSource('hs2box-src')) {
+    S.map.addSource('hs2box-src', { type:'geojson',
+      data:{ type:'Feature', geometry:{ type:'LineString', coordinates:ring }, properties:{} } });
+  }
+  return 'hs2box-src';
+}
+
+function playToggle() {
+  S.playing = !S.playing;
+  $('play').textContent = S.playing ? '정지' : '재생';
+  $('play').classList.toggle('on', S.playing);
+  if (S.playTimer) clearInterval(S.playTimer);
+  if (S.playing) {
+    S.playTimer = setInterval(() => {
+      if (!S.meta) return;
+      setLead((S.leadIdx + 1) % S.meta.leads_h.length);
+    }, 900);
+  }
+}
+
+/* ══ HUD ════════════════════════════════════════════════════════════ */
+/* 색은 두 축을 섞지 않는다.
+   - 데이터 상태(신선도·표본·배포 여부)는 **무채색**으로 낸다. 이것은 위험이 아니다.
+   - 노랑·빨강은 해상 조건 축에만 남긴다.
+   현행은 '검증 표본 없음'과 '최신 아님'까지 전부 주황이라 색의 의미가 희석돼 있었다. */
+const FRESH_LABEL = {
+  realtime: ['mute', '준실시간'],
+  delayed:  ['mute', '지연'],
+  historical: ['mute', '아카이브 — 실시간 아님'],
+};
+
+/* 결측 사유를 한 문자열로 뭉개지 않는다. 뭉개면 '예보가 틀렸다'로 읽힌다. */
+const NODATA = {
+  not_collocated: '이 사이클은 관측과 대조된 적이 없다 — 예보가 틀렸다는 뜻은 아니다',
+  no_source:      '검증 불가 — 원천이 그 변수를 제공하지 않는다',
+  sparse:         '표본 얇음 — 성적의 불확실성이 크다',
+  land:           '육지 셀 또는 도메인 밖',
+  fetch_failed:   '성적을 불러오지 못했다 — 서버 응답 실패, 값의 정확도를 알 수 없다',
+};
+
+function renderHud() {
+  const m = S.meta, st = S.status;
+  if (!m) return;
+  const replay = !!S.reqCycle;
+  let cls, label;
+  if (replay) { cls = 'replay'; label = '재생 모드 — 과거 사이클'; }
+  else { const f = FRESH_LABEL[m.freshness] || ['mute', String(m.freshness || '알 수 없음')];
+         cls = f[0]; label = f[1]; }
+  const ageH = m.cycle_age_h;
+  const ageTxt = (ageH === null || ageH === undefined) ? '경과시간 불명'
+    : (ageH >= 48 ? `${(ageH/24).toFixed(1)}일 경과` : `${ageH.toFixed(1)} h 경과`);
+  $('fresh').innerHTML =
+    `<span class="badge ${cls}"><span class="dot"></span>${esc(label)}</span>` +
+    `<span class="meta" style="margin-left:7px">${esc(ageTxt)}</span>`;
+
+  const eng = m.engine || {};
+  const corr = (st && st.corrector) || {};
+  const rows = [];
+  rows.push(['사이클', `<b class="v">${esc(m.cycle)}</b>` +
+    (m.is_latest === false ? ' <span class="warn">(최신 아님, 최신=' + esc(m.latest_cycle) + ')</span>' : '')]);
+  rows.push(['발표', esc(String(m.produced_at || '—').slice(0,16).replace('T',' ')) + 'Z' +
+    (m.produced_age_h != null ? ` (${fx(m.produced_age_h,1)} h 전)` : '')]);
+  const vt = (st && st.valid_time) || {};
+  rows.push(['유효', esc(String(vt.first || m.valid_times[0]).slice(5,16).replace('T',' ')) + ' ~ ' +
+    esc(String(vt.last || m.valid_times[m.valid_times.length-1]).slice(5,16).replace('T',' ')) + 'Z' +
+    (m.covers_now === false ? ' <span class="warn">현재 시각 미포함</span>' : '')]);
+  rows.push(['엔진', `${esc(eng.engine || 'spectral_wave-L1')} · advection=<b class="v">${esc(eng.advection || '?')}</b>` +
+    ` · gse=<b class="v">${esc(eng.gse || '?')}</b>` +
+    (eng.gse !== 'none' && eng.gse_gamma != null ? ` (γ=${esc(eng.gse_gamma)})` : '')]);
+  rows.push(['AI보정', corr.deployed
+    ? `<span class="ok">적용 (${esc(corr.model_version || '버전 미상')})</span>`
+    : `<span class="warn">미적용</span> — 물리 원값. 보정기 미배포(${esc(corr.path || 'data/models/corr-hs.json')} 없음)`]);
+  const sk = S.skill;
+  rows.push(['성적', sk && sk.status === 'ok'
+    ? `RMSE <b class="v">${fx(sk.rmse,3)} m</b> [${fx(sk.rmse_ci95 && (sk.rmse_ci95 ? sk.rmse_ci95[0] : sk.rmse),3)}–${fx(sk.rmse_ci95 && (sk.rmse_ci95 ? sk.rmse_ci95[1] : sk.rmse),3)}]` +
+      ` · bias ${fx(sk.bias,3)} m · n=${sk.n}·${sk.n_stations}개소`
+    : '<span class="warn">검증 표본 없음</span>']);
+  $('hudkv').innerHTML = rows.map(r => `<i>${r[0]}</i><span>${r[1]}</span>`).join('');
+
+  // 예보 미생성 사이클
+  const gaps = (st && st.runs_without_wave_forecast) || [];
+  $('gaps').innerHTML = gaps.length
+    ? `<span class="warn">수집됨 · 파랑 예보 미생성:</span> ` +
+      gaps.map(g => `${esc(g.cycle)}${g.status === 'DEGRADED' ? '(DEGRADED)' : ''}`).join(', ')
+    : '';
+
+  $('hudhint').innerHTML =
+    '흐르는 입자 = 해상풍(GFS 강제). 원형 마커 = 검증 관측소' +
+    ' (<span style="color:var(--accent)">청록 기상청</span> / <span style="color:var(--warn2)">노랑 NDBC</span>).' +
+    ' 채운 원 = 최근 관측 있음, 테두리만 = 관측 오래됨, 작은 점 = 검증 표본만.' +
+    ' 마커를 누르면 그 지점의 예보 대 관측 시계열, 바다를 누르면 지점 예보를 보여줍니다.';
+
+  $('btn-latest').style.display = replay ? '' : 'none';
+}
+
+/* ══ 신뢰 스트립 + 리드별 성적 막대 ═════════════════════════════════ */
+function leadSkillAt(idx) {
+  const sk = S.level === 'L2' ? (S.skillL2 || S.skill) : S.skill;
+  if (!sk || sk.status !== 'ok' || !sk.by_lead || !S.meta) return null;
+  const lead = S.meta.leads_h[idx];
+  let best = null, bd = 1e18;
+  for (const r of sk.by_lead) { const d = Math.abs(r.lead_h - lead); if (d < bd) { bd = d; best = r; } }
+  return (best && bd <= 1.5) ? best : null;
+}
+
+function renderTrust() {
+  const m = S.meta;
+  if (!m) return;
+  const eng = m.engine || {};
+  const res = S.level === 'L2' ? '연안 L2 0.05°' : '광역 L1 0.25°';
+  const r = leadSkillAt(S.leadIdx);
+  const corr = (S.status && S.status.corrector) || {};
+  let skillTxt;
+  if (r) {
+    const ci = r.rmse_ci95 ? ` [${fx(r.rmse_ci95[0],3)}–${fx(r.rmse_ci95[1],3)}]` : '';
+    skillTxt = `리드 +${Math.round(r.lead_h)} h 실측 RMSE <b class="v">${fx(r.rmse,3)} m</b>${ci}` +
+      ` · bias ${fx(r.bias,3)} m · n=${r.n}·${r.n_stations || '?'}개소` +
+      (r.sparse ? ' <span class="sparse">표본 부족(n&lt;20)</span>' : '');
+  } else {
+    skillTxt = '<span class="warn">이 리드·해상도의 검증 표본 없음 — 검증 불가</span>';
+  }
+  $('trust').innerHTML = `<u>${esc(res)} · ${esc(eng.advection || '?')} / gse=${esc(eng.gse || '?')}` +
+    `</u> · ${skillTxt} · AI보정 ${corr.deployed ? '적용' : '미적용'} <span class="hint">(눌러서 검증 패널)</span>`;
+}
+
+function renderLeadBars() {
+  /* 표본 밀도 스트립. 높이 = 그 리드의 검증 표본 수(n).
+     RMSE 막대는 시간표 열 머리로 옮겼다 — 같은 숫자를 두 곳에 두면 어긋날 때 알 수 없다. */
+  const el = $('leadbars');
+  const sk = S.level === 'L2' ? (S.skillL2 || S.skill) : S.skill;
+  if (!S.meta) { el.innerHTML = ''; return; }
+  const leads = S.meta.leads_h, W = 600, H = 16;
+  if (!sk || sk.status !== 'ok' || !sk.by_lead || !sk.by_lead.length) {
+    el.innerHTML = '<text x="4" y="12" style="font-size:9px">리드별 검증 표본 없음</text>';
+    return;
+  }
+  const ns = leads.map((_, i) => { const r = leadSkillAt(i); return r ? r.n : 0; });
+  const nmax = Math.max(...ns, 1);
+  const bw = W / leads.length;
+  let out = '';
+  for (let i = 0; i < leads.length; i++) {
+    const h = ns[i] ? Math.max(1.5, (H - 2) * ns[i] / nmax) : 0;
+    out += `<rect x="${(i*bw+0.7).toFixed(1)}" y="${(H-h).toFixed(1)}" width="${(bw-1.4).toFixed(1)}"` +
+      ` height="${h.toFixed(1)}" fill="${i === S.leadIdx ? 'var(--accent)' : 'var(--bar)'}"` +
+      `><title>+${Math.round(leads[i])} h · 표본 ${ns[i]}건</title></rect>`;
+  }
+  el.setAttribute('viewBox', `0 0 ${W} ${H}`);
+  el.innerHTML = out;
+}
+
+function renderHorizon() {
+  /* 예보 지평을 사실로 병기한다. 상용 웨더루팅의 결정 지평은 5~10일이고
+     우리는 그 앞의 전술 구간만 덮는다. 숨기지 않는다. */
+  const m = S.meta;
+  if (!m || !m.leads_h || !m.leads_h.length) { $('horizon').textContent = ''; return; }
+  const last = Math.round(m.leads_h[m.leads_h.length - 1]);
+  $('horizon').textContent = `예보기간 ${last} h · 공공 기준 168 h`;
+}
+
+function renderLegend() {
+  const m = S.meta;
+  const vmax = (m && m.hs_color_max) || 12, gam = (m && m.hs_color_gamma) || 0.85;
+  const stops = [];
+  for (let i = 0; i <= 63; i++) {
+    const hs = vmax * i / 63;
+    stops.push(`${turbo(Math.pow(hs / vmax, gam))} ${(100 * i / 63).toFixed(2)}%`);
+  }
+  $('lbar').style.background = `linear-gradient(90deg, ${stops.join(',')})`;
+  const ticks = [0, 1, 2, 3, 4, 6, 8, 12].filter(v => v <= vmax);
+  $('lticks').innerHTML = ticks.map(v =>
+    `<span style="left:${(100*v/vmax).toFixed(1)}%">${v === vmax ? v + '+' : v}</span>`).join('');
+  $('lnote').textContent = `축은 Hs 선형, 색은 비선형(감마 ${gam}) — 저파고 구간 대비를 키운 매핑이다.` +
+    ' 한국 근해 Hs는 대개 0–2.5 m 구간에 몰려 있다.' +
+    ' 범례 색은 turbo 다항 근사로 그린 것이라 지도 PNG와 미세한 색차가 있을 수 있다.';
+}
+
+/* ══ 태풍 ═══════════════════════════════════════════════════════════ */
+function updateStorm(lead) {
+  if (!S.storm || !S.storm.track || !S.storm.track.length) return;
+  const t = cycleTimeOf(S.meta.cycle).getTime() + lead * 3.6e6;
+  let best = S.storm.track[0], bd = 1e18;
+  for (const p of S.storm.track) {
+    const d = Math.abs(parseUTC(p.time).getTime() - t);
+    if (d < bd) { bd = d; best = p; }
+  }
+  if (!S.stormMarker) {
+    const el = document.createElement('div');
+    el.className = 'storm';
+    el.innerHTML = '<div class="storm-label"></div>';
+    S.stormMarker = new maplibregl.Marker({ element: el }).setLngLat([best.lon, best.lat]).addTo(S.map);
+  } else S.stormMarker.setLngLat([best.lon, best.lat]);
+  // 태풍 추적이 아니다. 도메인 내 해면기압 최소 셀이고, 서버는 995 hPa 미만일 때만 내보낸다
+  // (app.py field_storm). 심볼이 없다는 것은 '저기압 없음'이 아니라 '995 hPa 미만이 없음'이다.
+  S.stormMarker.getElement().querySelector('.storm-label').textContent =
+    `최저기압 셀 ${best.p_hpa} hPa`;
+}
+
+/* ══ 관측소 마커 ════════════════════════════════════════════════════ */
+function buildStations() {
+  const byId = new Map();
+  const skStns = (S.stations && S.stations.stations) || [];
+  for (const s of skStns) {
+    if (!s.has_location) continue;
+    byId.set(s.station_id, { id:s.station_id, lat:s.lat, lon:s.lon,
+      provider:(s.provider || '').toUpperCase(), skill:s, obs:null });
+  }
+  for (const o of (S.obs || [])) {
+    const cur = byId.get(o.station_id);
+    if (cur) cur.obs = o;
+    else if (o.lat != null) byId.set(o.station_id, { id:o.station_id, lat:o.lat, lon:o.lon,
+      provider:(o.provider || '').toUpperCase(), skill:null, obs:o });
+  }
+  return [...byId.values()];
+}
+
+function updateStationMarkers() {
+  for (const mk of S.markers) mk.remove();
+  S.markers = [];
+  const list = buildStations();
+  if (!list.length) return;
+  const vt = S.meta ? parseUTC(S.meta.valid_times[S.leadIdx]).getTime() : null;
+  for (const s of list) {
+    const el = document.createElement('div');
+    el.className = 'stn';
+    const color = s.provider === 'KMA' ? 'var(--accent)' : 'var(--warn2)';
+    const o = s.obs;
+    let dot, label, tip;
+    if (o) {
+      const dtH = vt ? Math.abs(parseUTC(o.ts).getTime() - vt) / 3.6e6 : null;
+      const sync = dtH !== null && dtH <= 3;
+      dot = sync ? `background:${color};border:1px solid ${color}`
+                 : `background:transparent;border:1.5px solid ${color};opacity:.75`;
+      label = `${fx(o.value,1)} m` + (sync ? '' : ` <span style="color:var(--dim)">${fx(dtH,0)}h차</span>`);
+      tip = `${s.id} · 관측 ${String(o.ts).slice(0,16).replace('T',' ')}Z (${fx(o.age_h,1)} h 전)` +
+            (sync ? '' : ' — 표시 중인 예보 시각과 비동기') +
+            (s.skill ? ` · 검증 n=${s.skill.n}, RMSE ${fx(s.skill.rmse,3)} m` : ' · 검증 표본 없음');
+    } else {
+      dot = `background:transparent;border:1px solid ${color};opacity:.45;width:6px;height:6px`;
+      label = `<span style="color:var(--dim)">관측 없음</span>`;
+      tip = `${s.id} · 최근 48 h 관측 없음` +
+            (s.skill ? ` · 검증 n=${s.skill.n}, RMSE ${fx(s.skill.rmse,3)} m` : '');
+    }
+    el.innerHTML = `<span class="d" style="${dot}"></span><span class="lbl">${esc(s.id.split(':')[1] || s.id)} ${label}</span>`;
+    el.title = tip;
+    el.onclick = (ev) => { ev.stopPropagation(); openStation(s.id); };
+    S.markers.push(new maplibregl.Marker({ element: el, anchor:'left' })
+      .setLngLat([s.lon, s.lat]).addTo(S.map));
+  }
+}
+
+/* ══ 관측소 상세: 예보 대 관측 시계열 ═══════════════════════════════ */
+async function openStation(id) {
+  openPanel('station');
+  $('st-title').textContent = '관측소 ' + id;
+  $('st-head').textContent = '불러오는 중…';
+  $('st-chart').innerHTML = ''; $('st-lead').innerHTML = ''; $('st-note').innerHTML = '';
+  let d;
+  try { d = await jget(`/v1/skill/station/${encodeURIComponent(id)}?var=hs`); }
+  catch (e) { $('st-head').innerHTML = '<span class="warn">이 관측소의 검증 표본을 불러올 수 없다</span>'; return; }
+  if (d.status !== 'ok' || !d.series || !d.series.length) {
+    $('st-head').innerHTML = '<span class="warn">검증 표본 없음 — 이 관측소는 예보 대 관측 대조가 없다</span>';
+    return;
+  }
+  $('st-title').textContent = `${d.station_id} (${fx(d.lat,2)}N ${fx(d.lon,2)}E)`;
+  $('st-head').innerHTML =
+    `RMSE <b class="v">${fx(d.rmse,3)} m</b> · bias ${fx(d.bias,3)} m · MAE ${fx(d.mae,3)} m` +
+    ` · n=${d.n} · ${d.n_cycles}사이클` + (d.sparse ? ' <span class="sparse">표본 부족(n&lt;20)</span>' : '') +
+    `<br>기간 ${esc(String(d.period.first_valid_time).slice(0,10))} ~ ${esc(String(d.period.last_valid_time).slice(0,10))}`;
+  drawStationChart(d);
+  const bl = d.by_lead || [];
+  $('st-lead').innerHTML = bl.length
+    ? '<table><tr><th class="l">리드</th><th>n</th><th>RMSE</th><th>bias</th></tr>' +
+      bl.map(r => `<tr><td class="l">+${Math.round(r.lead_h)} h</td><td>${r.n}</td>` +
+        `<td>${fx(r.rmse,3)}</td><td>${fx(r.bias,3)}</td>` +
+        (r.sparse ? '<span class="warn" style="font-size:10px"> 희박</span>' : '') + '</tr>').join('') + '</table>'
+    : '';
+  const t = d.engine_tags || {};
+  $('st-note').innerHTML =
+    `엔진 태그 advection=<b>${esc(t.advection)}</b> · gse=<b>${esc(t.gse)}</b> · 콜로케이션 <b>${esc(t.collocation)}</b>` +
+    (d.engine_tags_mixed ? ' <span class="bad">경고: 서로 다른 물리 스킴의 표본이 섞여 있다</span>' : '') +
+    `<br>청정 필터: land_frac &le; ${d.filter.land_frac_max} (육지 셀 오염 제외). 표시된 값은 AI 보정 전 물리 원값이다.`;
+  if (d.lat != null) S.map.easeTo({ center:[d.lon, d.lat], duration:600 });
+}
+
+function drawStationChart(d) {
+  const el = $('st-chart');
+  const W = 310, H = 176, L = 30, R = 8, T = 12, B = 24;
+  const pts = [];
+  for (const s of d.series) for (const p of s.points) pts.push(p);
+  if (!pts.length) { el.innerHTML = ''; return; }
+  const ts = pts.map(p => parseUTC(p.valid_time).getTime());
+  const t0 = Math.min(...ts), t1 = Math.max(...ts), tspan = (t1 - t0) || 1;
+  const vs = pts.map(p => p.predicted).concat(pts.map(p => p.observed));
+  const v1 = Math.max(...vs) * 1.1 || 1, v0 = 0;
+  const X = (t) => L + (W - L - R) * (t - t0) / tspan;
+  const Y = (v) => H - B - (H - T - B) * (v - v0) / (v1 - v0);
+  let out = '';
+  // 축
+  for (const gv of [v0, v1 / 2, v1]) {
+    out += `<line x1="${L}" x2="${W-R}" y1="${Y(gv).toFixed(1)}" y2="${Y(gv).toFixed(1)}" stroke="var(--line2)"/>` +
+           `<text x="2" y="${(Y(gv)+3).toFixed(1)}">${gv.toFixed(1)}</text>`;
+  }
+  const cycles = d.series.map(s => s.cycle).sort();
+  const last = cycles[cycles.length - 1];
+  // 예보 폴리라인 (사이클별)
+  for (const s of d.series) {
+    const ps = s.points.slice().sort((a,b) => parseUTC(a.valid_time) - parseUTC(b.valid_time));
+    if (ps.length < 2) continue;
+    const path = ps.map((p,i) => (i ? 'L' : 'M') + X(parseUTC(p.valid_time).getTime()).toFixed(1) +
+      ',' + Y(p.predicted).toFixed(1)).join('');
+    const isLast = s.cycle === last;
+    out += `<path d="${path}" fill="none" stroke="var(--accent)" stroke-width="${isLast ? 1.8 : 1}"` +
+           ` opacity="${isLast ? 0.95 : 0.25}"><title>사이클 ${esc(s.cycle)}</title></path>`;
+    if (isLast) {   // 최신 사이클의 잔차만 세로선으로
+      for (const p of ps) {
+        out += `<line x1="${X(parseUTC(p.valid_time).getTime()).toFixed(1)}" x2="${X(parseUTC(p.valid_time).getTime()).toFixed(1)}"` +
+               ` y1="${Y(p.predicted).toFixed(1)}" y2="${Y(p.observed).toFixed(1)}" stroke="var(--bad2)" stroke-width="0.9" opacity=".7"/>`;
+      }
+    }
+  }
+  // 관측 (valid_time 중복 제거, 양자화 보존 위해 점 유지)
+  const seen = new Map();
+  for (const p of pts) seen.set(p.valid_time, p.observed);
+  const obs = [...seen.entries()].map(([t,v]) => [parseUTC(t).getTime(), v]).sort((a,b) => a[0]-b[0]);
+  out += `<path d="${obs.map((o,i) => (i?'L':'M') + X(o[0]).toFixed(1) + ',' + Y(o[1]).toFixed(1)).join('')}"` +
+         ` fill="none" stroke="var(--warn2)" stroke-width="0.9" opacity=".55"/>`;
+  for (const o of obs) out += `<circle cx="${X(o[0]).toFixed(1)}" cy="${Y(o[1]).toFixed(1)}" r="1.9" fill="var(--warn2)"/>`;
+  // x축 라벨
+  const fmt = (t) => { const dd = new Date(t); return String(dd.getUTCMonth()+1).padStart(2,'0') + '-' +
+    String(dd.getUTCDate()).padStart(2,'0'); };
+  out += `<text x="${L}" y="${H-2}">${fmt(t0)}</text>` +
+         `<text x="${W-R}" y="${H-2}" text-anchor="end">${fmt(t1)}Z</text>`;
+  el.innerHTML = out;
+  $('st-legend').innerHTML =
+    '<span style="color:var(--accent)">청록 실선</span> 예보(사이클별, 진한 선 = 최신 사이클) · ' +
+    '<span style="color:var(--warn2)">노랑 점</span> 관측 · ' +
+    '<span style="color:var(--bad2)">붉은 세로선</span> 최신 사이클 잔차(예보−관측)';
+}
+
+/* ══ 지점 예보 ══════════════════════════════════════════════════════ */
+/* 서버 사유 코드를 화면에 그대로 내지 않는다. 코드는 개발자의 언어다. */
+const REASON = {
+  no_nearby_validation_station: '검증 관측소가 200 km 안에 없다',
+  hs_above_validated_max: '채점된 최대 파고를 넘는 값이다',
+  hs_above_validated_p95: '관측 상위 5% 경계를 넘는 값이다 — 이 파고대의 표본이 얇다',
+  sparse_hs_band: '이 파고대의 검증 표본이 얇다',
+  lead_beyond_validated: '채점된 최대 리드를 넘는다',
+};
+const reasonText = (c) => REASON[c] || String(c);
+
+const APPL = {
+  in_range:     ['ok',   '검증 범위 내'],
+  sparse:       ['mute', '표본 얇음 — 성적의 불확실성이 크다'],
+  out_of_range: ['mute', '채점된 적 없는 조건'],
+  no_coverage:  ['mute', '검증 관측소 200 km 내 없음'],
+};
+
+async function clickForecast(lat, lon) {
+  let p;
+  try { p = await jget(`/v1/forecast/point?vars=hs,tp,tm02,dirp&level=L1&${qc()}lat=${lat.toFixed(3)}&lon=${lon.toFixed(3)}`); }
+  catch (e) { return; }
+  openPanel('point');
+  $('pt-title').textContent = `지점 예보 ${lat.toFixed(2)}N ${lon.toFixed(2)}E` +
+    (p.level === 'L2' ? ' · 연안 0.05°' : ' · 광역 0.25°');
+  const a = p.applicability || {};
+  const av = APPL[a.verdict] || ['mute', String(a.verdict || '판정 없음')];
+  let ah = `<span class="badge ${av[0]}"><span class="dot"></span>${esc(av[1])}</span>`;
+  if (a.note) ah += `<div class="hint" style="margin-top:4px">${esc(a.note)}</div>`;
+  if (a.reasons && a.reasons.length)
+    ah += `<div class="hint">${a.reasons.map((x) => esc(reasonText(x))).join(' · ')}</div>`;
+  if (a.nearest_station) ah += `<div class="hint">최근접 검증 관측소 ${esc(a.nearest_station.station_id)}` +
+    ` ${fx(a.nearest_station.distance_km,0)} km · 그 관측소 RMSE ${fx(a.nearest_station.rmse,3)} m` +
+    ` (n=${a.nearest_station.n})</div>`;
+  if (a.validated_range) ah += `<div class="hint">검증된 범위: 관측 Hs 최대 ${fx(a.validated_range.hs_max_observed,1)} m` +
+    ` (p95 ${fx(a.validated_range.hs_p95_observed,1)} m) · 리드 최대 ${fx(a.validated_range.lead_h_max,0)} h` +
+    ` · n=${a.validated_range.n}</div>`;
+  $('pt-appl').innerHTML = ah;
+
+  let html = '<tr><th class="l">시각(Z)</th><th>Hs [m]</th><th>물리 원값</th><th>그 리드 RMSE</th></tr>';
+  for (const it of p.items || []) {
+    const sk = it.skill;
+    const cur = Math.abs(it.lead_h - (S.meta ? S.meta.leads_h[S.leadIdx] : -1)) < 0.6;
+    html += `<tr${cur ? ' style="background:var(--sel)"' : ''}>` +
+      `<td class="l">${esc(String(it.valid_time).slice(5,16).replace('T',' '))}</td>` +
+      `<td><b class="v">${fx(it.q50,2)}</b></td>` +
+      `<td>${fx(it.physics_raw,2)}</td>` +
+      `<td>${sk ? fx(sk.rmse,3) + (sk.sparse ? ' <span class="sparse">희박</span>' : '') : '—'}</td></tr>`;
+  }
+  $('pt-table').innerHTML = html;
+
+  const c = p.corrector || {};
+  let m = p.corrected
+    ? `<span class="ok">AI 보정 적용</span> (${esc(p.model_version)}) — 물리 원값 병기`
+    : `<span class="warn">AI 보정 미적용</span> — 표에 표시된 값은 물리 모델 원값이다.`;
+  if (!p.corrected && c.offline_lso_cv) {
+    m += `<br><span class="hint">오프라인 LSO-CV +${c.offline_lso_cv.gain_pct}%` +
+      ` [${c.offline_lso_cv.ci95[0]}, ${c.offline_lso_cv.ci95[1]}] (${esc(c.offline_lso_cv.source)}) —` +
+      ` 이는 교차검증 결과이며 배포 성적이 아니다. 보정기는 배포되지 않았다.</span>`;
+  }
+  m += `<br><span class="hint">사이클 ${esc(p.cycle)} · ${esc(p.freshness || '')}` +
+    ` · advection=${esc((p.engine||{}).advection)} / gse=${esc((p.engine||{}).gse)}` +
+    ` · 'RMSE'는 과거 실측 오차이지 이 예보의 불확실도 구간이 아니다.</span>`;
+  $('pt-meta').innerHTML = m;
+}
+
+/* ══ 검증 성적 패널 ═════════════════════════════════════════════════ */
+/* 성적·임계 수치를 HTML 에 박지 않는다. 박으면 표본이 늘어도 화면이 옛 숫자를 계속 말한다.
+   읽을 수 없으면 그 자리에 '미산출'이라고 쓰고, API 로 못 얻는 값은 출처 문서를 병기한다. */
+function corrNote() {
+  const c = (S.status && S.status.corrector) || null;
+  if (!c) return '미산출 — 상태를 불러오지 못했다';
+  if (c.deployed) return `배포됨 (${esc(c.model_version || '버전 미상')})`;
+  const cv = c.offline_lso_cv;
+  return '<span class="warn">미배포</span>' + (cv
+    ? ` — 오프라인 ${esc(cv.method || 'CV')} +${cv.gain_pct}% [${cv.ci95[0]}, ${cv.ci95[1]}]` +
+      ` (n=${cv.n}, ${esc(cv.source)}). ${esc(cv.note || '')}`
+    : ' — 교차검증 결과 미산출');
+}
+function notShownNote() {
+  const parts = [];
+  const cyc = S.cycles && S.cycles.cycles ? S.cycles.cycles : null;
+  const nL2 = cyc ? cyc.filter((c) => c.has_l2 || c.l2).length : null;
+  parts.push('앙상블 스프레드 (단일 결정론 실행이라 존재하지 않는다)');
+  parts.push(nL2 === null ? 'L2 전 사이클 (생산 사이클 수 미산출)'
+                          : `L2 전 사이클 (${nL2}개 사이클만 L2 생산)`);
+  parts.push('Tm02 채점 (기상청 평균주기 미제공, 도메인 내 NDBC 2026-08-07 송신 중단)');
+  return parts.join(' · ');
+}
+
+function skTable(rows, keyName, keyFn) {
+  return '<table><tr><th class="l">' + keyName + '</th><th>n</th><th>관측소</th><th>RMSE</th><th>bias</th></tr>' +
+    rows.map(r => `<tr><td class="l">${keyFn(r)}</td><td>${r.n}` +
+      (r.sparse ? ' <span class="sparse">희박</span>' : '') + `</td><td>${r.n_stations != null ? r.n_stations : '—'}</td>` +
+      `<td>${fx(r.rmse,3)}</td><td>${fx(r.bias,3)}</td></tr>`).join('') + '</table>';
+}
+
+function renderVerify() {
+  const sk = S.skill;
+  if (!sk || sk.status !== 'ok') {
+    $('vf-head').innerHTML = '<span class="warn">검증 표본이 없다 — 성적을 표시할 수 없다</span>';
+    return;
+  }
+  const t = sk.engine_tags || {};
+  $('vf-head').innerHTML =
+    `${S.level==='L2' ? '<span class="warn">[L2 표본 — L1과 다른 관측소 집합이라 직접 비교 불가. 짝 비교는 L1 대 L2 탭]</span><br>' : ''}전체 청정 표본 RMSE <b class="v">${fx(sk.rmse,3)} m</b>` +
+    (sk.rmse_ci95 ? ` [${fx(sk.rmse_ci95[0],3)}–${fx(sk.rmse_ci95[1],3)}]` : ' [CI 없음: 표본 부족]') + ` · bias ${fx(sk.bias,3)} m · MAE ${fx(sk.mae,3)} m` +
+    ` · SI ${fx(sk.si,3)}<br>n=${sk.n} · ${sk.n_stations}개소 · ${sk.n_cycles}사이클 ·` +
+    ` ${esc(sk.period.first_cycle)}~${esc(sk.period.last_cycle)} ·` +
+    ` 관측 ${Object.entries(sk.station_mix || {}).map(([k,v]) => k + ' ' + v).join(' / ')}` +
+    (sk.engine_tags_mixed ? '<br><span class="bad">경고: 서로 다른 엔진 스킴의 표본이 섞여 있다 — 성적 귀속 불가</span>' : '');
+
+  // 리드별
+  const bl = sk.by_lead || [];
+  const maxR = Math.max(...bl.map(r => r.rmse_ci95 ? r.rmse_ci95[1] : r.rmse), 0.001);
+  const W = 396, H = 120, B = 16, T = 8;
+  let chart = '';
+  bl.forEach((r, i) => {
+    const bw = W / bl.length, cx = bw * (i + 0.5);
+    const h = (H - B - T) * r.rmse / maxR;
+    chart += `<rect x="${(cx-bw*0.3).toFixed(1)}" y="${(H-B-h).toFixed(1)}" width="${(bw*0.6).toFixed(1)}"` +
+      ` height="${h.toFixed(1)}" fill="${r.sparse ? 'var(--bar-sparse)' : 'var(--bar)'}" rx="1"/>`;
+    if (r.rmse_ci95) {
+      const y0 = H - B - (H-B-T) * (r.rmse_ci95 ? r.rmse_ci95[0] : r.rmse) / maxR, y1 = H - B - (H-B-T) * (r.rmse_ci95 ? r.rmse_ci95[1] : r.rmse) / maxR;
+      chart += `<line x1="${cx}" x2="${cx}" y1="${y1.toFixed(1)}" y2="${y0.toFixed(1)}" stroke="var(--dim)" stroke-width="1"/>` +
+        `<line x1="${(cx-3)}" x2="${(cx+3)}" y1="${y1.toFixed(1)}" y2="${y1.toFixed(1)}" stroke="var(--dim)"/>` +
+        `<line x1="${(cx-3)}" x2="${(cx+3)}" y1="${y0.toFixed(1)}" y2="${y0.toFixed(1)}" stroke="var(--dim)"/>`;
+    }
+    chart += `<text x="${cx}" y="${H-4}" text-anchor="middle">+${Math.round(r.lead_h)}</text>`;
+  });
+  $('tab-lead').innerHTML =
+    `<svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" preserveAspectRatio="xMidYMid meet"` +
+    ` style="max-width:100%">${chart}</svg>` +
+    `<div class="hint">막대 = RMSE, 수직선 = 95% CI (${esc(sk.ci_method || '')}). x축 = 리드 [h]</div>` +
+    skTable(bl, '리드', r => '+' + Math.round(r.lead_h) + ' h') +
+    `<div class="note">리드 0 h 의 RMSE 가 가장 크다. 초기장은 GFS-Wave 를 물려받은 것이라
+      입력 품질이 그대로 반영되고, 자체 물리가 리드 12 h 부터 그 편향을 줄인다.
+      수치와 그 기준 시점은 docs/PHASE17_BIAS_STRUCTURE.md 에 있다 — 표본이 늘면 값이 바뀌므로
+      여기에 옮겨 적지 않는다.
+      <b>[확인 필요 2026-09-07]</b> 20260906T18 사이클에서 바다 셀의 10.37%가 리드 0 에서
+      hs=0 이고 리드 12 h 까지 0.02%로 사라진다. 초기장 마스크 불일치로 보이며
+      이 편향과 같은 원인인지는 아직 검정되지 않았다.</div>`;
+
+  // 관측소별
+  const stns = ((S.stations && S.stations.stations) || []).slice().sort((a,b) => b.n - a.n);
+  $('tab-stn').innerHTML = stns.length
+    ? '<table><tr><th class="l">관측소</th><th>n</th><th>RMSE</th><th>bias</th></tr>' +
+      stns.map(s => `<tr class="pick" data-stn="${esc(s.station_id)}"><td class="l">${esc(s.station_id)}` +
+        (s.has_location ? '' : ' <span class="hint">(좌표 없음)</span>') + `</td><td>${s.n}` +
+        (s.sparse ? ' <span class="sparse">희박</span>' : '') +
+        `</td><td>${fx(s.rmse,3)}</td><td>${fx(s.bias,3)}</td></tr>`).join('') + '</table>' +
+      '<div class="hint">행을 누르면 그 관측소의 예보 대 관측 시계열을 연다.</div>'
+    : '<div class="warn">관측소별 표본 없음</div>';
+  $('tab-stn').querySelectorAll('tr[data-stn]').forEach(tr =>
+    tr.onclick = () => openStation(tr.getAttribute('data-stn')));
+
+  // 파고대별
+  const bb = sk.by_obs_hs || [];
+  $('tab-band').innerHTML = bb.length
+    ? skTable(bb, '관측 Hs [m]', r => `${fx(r.obs_hs_min,1)}–${fx(r.obs_hs_max,1)}`) +
+      `<div class="note">높은 파고대의 표본이 극히 적다. 관측 최대 ${fx(sk.observed_range.max,1)} m,
+       p95 ${fx(sk.observed_range.p95,1)} m — <b>이보다 높은 파고에 대해서는 검증 불가</b>다.
+       해운 판단에서 중요한 고파랑 구간이 바로 검증되지 않은 구간이라는 점을 남겨 둔다.</div>`
+    : '<div class="warn">파고대별 표본 없음</div>';
+
+  // L1 대 L2
+  renderPairs();
+
+  // 방법
+  $('tab-how').innerHTML =
+    `<div class="note"><b>표본</b> error_sample (예보 x 관측 콜로케이션). 청정 기준
+      land_frac &le; ${sk.filter.land_frac_max} — ${esc(sk.filter.definition)}.
+      필터 전 ${sk.filter.n_before_filter}건 중 ${sk.filter.n_excluded_by_filter}건 제외.</div>` +
+    `<div class="note"><b>신뢰구간</b> ${esc(sk.ci_method || '미산출')}. 관측소 단위로 재표집하므로
+      같은 관측소 안의 시간 상관을 흡수한다.</div>` +
+    `<div class="note"><b>엔진 태그</b> advection=${esc(t.advection)} · gse=${esc(t.gse)}
+      (γ=${esc(t.gse_gamma)}) · 콜로케이션 ${esc(t.collocation)}.
+      전 표본이 동일 조합인지 확인: ${sk.engine_tags_mixed ? '<span class="bad">아니다 — 혼입</span>' : '<span class="ok">그렇다</span>'}.</div>` +
+    `<div class="note"><b>AI 보정</b> ${corrNote()}</div>` +
+    `<div class="note"><b>표시되지 않는 것</b> ${esc(notShownNote())}</div>`;
+}
+
+async function renderPairs() {
+  const el = $('tab-pair');
+  if (!S.pairs) {
+    try { S.pairs = await jget('/v1/skill/pairs'); }
+    catch (e) { el.innerHTML = '<div class="warn">L1/L2 매칭 비교를 불러올 수 없다</div>'; return; }
+  }
+  const p = S.pairs;
+  if (p.status !== 'ok') { el.innerHTML = '<div class="warn">매칭 표본 없음 — L1/L2 비교 불가</div>'; return; }
+  const mx = Math.max(p.l1.rmse_ci95 ? p.l1.rmse_ci95[1] : p.l1.rmse,
+                      p.l2.rmse_ci95 ? p.l2.rmse_ci95[1] : p.l2.rmse);
+  const bar = (lab, o, col) => {
+    const w = 260 * o.rmse / mx;
+    return `<div style="display:flex;align-items:center;gap:6px;margin:4px 0">` +
+      `<span style="width:26px;color:var(--dim);font-size:11px">${lab}</span>` +
+      `<span style="display:inline-block;height:12px;width:${w.toFixed(0)}px;background:${col};border-radius:2px"></span>` +
+      `<span style="font-size:11px">${fx(o.rmse,4)} m` +
+      (o.rmse_ci95 ? ` <span class="hint">[${fx(o.rmse_ci95[0],3)}–${fx(o.rmse_ci95[1],3)}]</span>` : '') + `</span></div>`;
+  };
+  const worse = p.rmse_delta_l2_minus_l1 > 0;
+  el.innerHTML =
+    `<div class="meta">동일 표본 매칭 비교 · 조인키 ${esc((p.filter.join_key || []).join(', '))}<br>` +
+    `n=${p.n_pairs}쌍 · ${p.n_stations}개소 · ${p.n_cycles}사이클 (${(p.cycles||[]).map(esc).join(', ')})</div>` +
+    bar('L1', p.l1, 'var(--line3)') + bar('L2', p.l2, 'var(--warn-dim)') +
+    `<div class="note">${worse
+      ? `<b class="bad">매칭 표본에서 L2(0.05°)가 L1(0.25°)보다 RMSE ${fx(Math.abs(p.rmse_gain_pct_l2_over_l1),1)}% 나쁘다.</b>
+         고해상도가 곧 고정확도가 아니다.`
+      : `<b>매칭 표본에서 L2가 L1보다 RMSE ${fx(Math.abs(p.rmse_gain_pct_l2_over_l1),1)}% 낫다.</b>`}
+      bias L1 ${fx(p.l1.bias,4)} m / L2 ${fx(p.l2.bias,4)} m.
+      ${esc(p.note || '')}</div>` +
+    `<div class="note">이 비교는 서버가 같은 (사이클, 관측소, 유효시각, 리드)로 조인한 결과다.
+      표본이 서로 다른 두 성적을 나란히 놓지 않기 위한 조치다(2026-08-22 마스크 불일치 사례 재발 방지).</div>`;
+}
+
+/* ══ 사이클 선택 ════════════════════════════════════════════════════ */
+async function renderCycles() {
+  const el = $('cy-list');
+  if (!S.cycles) {
+    el.innerHTML = '<div class="meta">불러오는 중…</div>';
+    try { S.cycles = await jget('/v1/system/forecast_cycles'); }
+    catch (e) { el.innerHTML = '<div class="warn">사이클 목록을 불러올 수 없다</div>'; return; }
+  }
+  const d = S.cycles;
+  $('cy-head').innerHTML = `등록 사이클 ${d.n}개 · 최신 L1 = <b class="v">${esc(d.latest_l1_cycle)}</b>` +
+    `<br>현재 표시 중: <b class="v">${esc(S.meta ? S.meta.cycle : '—')}</b>` +
+    (S.reqCycle ? ' <span class="badge replay" style="padding:0 5px">재생</span>' : '');
+  el.innerHTML = d.cycles.map(c => {
+    const f = FRESH_LABEL[c.freshness] || ['mute', c.freshness];
+    const age = c.cycle_age_h >= 48 ? `${(c.cycle_age_h/24).toFixed(1)}일` : `${fx(c.cycle_age_h,0)} h`;
+    const tags = `<span class="tag ${c.has_l1 ? 'on' : 'no'}">L1</span>` +
+                 `<span class="tag ${c.has_l2 ? 'on' : 'no'}">L2</span>` +
+                 `<span class="tag ${c.has_surge ? 'on' : 'no'}">해일</span>` +
+                 (c.has_l1 ? '' : '<span class="tag" style="color:var(--warn);border-color:var(--warn-dim)">예보 없음</span>');
+    return `<div class="cyc ${S.meta && c.cycle === S.meta.cycle ? 'cur' : ''}"` +
+      ` data-c="${esc(c.cycle)}" data-l1="${c.has_l1 ? 1 : 0}">` +
+      `<span class="${c.has_l1 ? '' : 'hint'}">${esc(c.cycle)}</span>` +
+      `<span>${tags}</span>` +
+      `<span class="hint">표본 ${c.n_samples_clean.hs}${c.n_samples_clean.hs_l2 ? '/' + c.n_samples_clean.hs_l2 : ''} · ${age}</span></div>`;
+  }).join('');
+  el.querySelectorAll('.cyc').forEach(row => row.onclick = () => {
+    if (row.getAttribute('data-l1') !== '1') return;
+    const c = row.getAttribute('data-c');
+    location.search = (c === (S.cycles.latest_l1_cycle) ? '' : '?cycle=' + encodeURIComponent(c));
+  });
+}
+
+/* ══ 부산 조석·해일 ═════════════════════════════════════════════════ */
+function sparkline(svgId, values, color) {
+  const el = $(svgId); el.innerHTML = '';
+  if (!values || values.length < 2) { el.innerHTML = '<text x="6" y="20">데이터 없음</text>'; return; }
+  const W = 306, H = 104, P = 18;
+  const y0 = Math.min(...values), y1 = Math.max(...values), span = (y1 - y0) || 1;
+  const X = (i) => P + (W - 2*P) * i / (values.length - 1);
+  const Y = (v) => H - P - (H - 2*P) * (v - y0) / span;
+  let path = '';
+  values.forEach((v,i) => { path += (i ? 'L' : 'M') + X(i).toFixed(1) + ',' + Y(v).toFixed(1); });
+  el.innerHTML = `<path d="${path}" fill="none" stroke="${color}" stroke-width="1.8"/>` +
+    `<text x="${P}" y="10">${y1.toFixed(2)} m</text>` +
+    `<text x="${P}" y="${H-4}">${y0.toFixed(2)} m</text>` +
+    `<text x="${W-64}" y="${H-4}">+48h</text>`;
+}
+
+async function loadBusan() {
+  let msg = '';
+  try {
+    const tide = await jget('/v1/tide/busan?hours=48');
+    sparkline('tidechart', tide.values, 'var(--accent)');
+    msg = `조석: 조화 8분조 · 기준면 ${esc(tide.datum)}` +
+      '<br><span class="hint">적합 기간과 홀드아웃 성적은 API 가 내보내지 않는다 —' +
+      ' docs/PHASE5 조석 절을 볼 것.</span>' +
+      `<br><span class="hint">기준 시각 = 현재(${esc(String(tide.times[0]).slice(0,16).replace('T',' '))}Z) —` +
+      ` 파고장 사이클과 별개다.</span>`;
+  } catch (e) {
+    $('tidechart').innerHTML = '<text x="6" y="20">조석 상수 없음</text>';
+    msg = '<span class="warn">조석 예측 불가 — 조화상수 없음</span>';
+  }
+  try {
+    const s = await jget('/v1/surge/busan' + (S.reqCycle ? `?cycle=${encodeURIComponent(S.reqCycle)}` : ''));
+    const mx = Math.max(...s.eta.map(Math.abs));
+    msg += `<br>해일(SWE) 사이클 <b class="v">${esc(s.cycle)}</b>: |eta| 최대 ${(mx*100).toFixed(0)} cm — ` +
+      (mx < 0.15 ? '평온' : '<span class="warn">주의</span>');
+    if (s.warning) msg += `<br><span class="bad">${esc(s.warning)}</span>`;
+    else if (s.same_cycle_as_wave === false)
+      msg += `<br><span class="warn">파고장과 다른 사이클이다 — 같은 상황이 아니다</span>`;
+  } catch (e) {
+    msg += '<br><span class="warn">해일 예보 없음 — 이 사이클에 SWE 산출물이 없다</span>';
+  }
+  $('busanmeta').innerHTML = msg;
+}
+
+/* ══ 바람 입자 ══════════════════════════════════════════════════════ */
+const wind = { grid:null, parts:[], canvas:null, ctx:null };
+async function loadWind(lead) {
+  wind.grid = await jget(`/v1/field/wind.json?cycle=${S.meta.cycle}&lead=${lead}`);
+}
+function windSample(lon, lat) {
+  const g = wind.grid;
+  if (!g) return null;
+  const la = g.lats, lo = g.lons;
+  if (lat < la[0] || lat > la[la.length-1] || lon < lo[0] || lon > lo[lo.length-1]) return null;
+  const fy = (lat - la[0]) / (la[1] - la[0]), fx2 = (lon - lo[0]) / (lo[1] - lo[0]);
+  const j = Math.min(Math.floor(fy), la.length - 2), i = Math.min(Math.floor(fx2), lo.length - 2);
+  const ty = fy - j, tx = fx2 - i;
+  const b = (f) => f[j][i]*(1-tx)*(1-ty) + f[j][i+1]*tx*(1-ty) + f[j+1][i]*(1-tx)*ty + f[j+1][i+1]*tx*ty;
+  return [b(g.u), b(g.v)];
+}
+function spawn() {
+  const b = S.meta.bounds;
+  return { lon:b.west + Math.random()*(b.east-b.west), lat:b.south + Math.random()*(b.north-b.south),
+           age:Math.random()*90|0, px:null, py:null };
+}
+function windLoop() {
+  const c = wind.canvas, ctx = wind.ctx;
+  if (c.width !== innerWidth || c.height !== innerHeight) { c.width = innerWidth; c.height = innerHeight; }
+  ctx.globalCompositeOperation = 'destination-in';
+  ctx.fillStyle = 'rgba(0,0,0,0.93)';
+  ctx.fillRect(0, 0, c.width, c.height);
+  ctx.globalCompositeOperation = 'source-over';
+  if (wind.grid && S.meta) {
+    if (wind.parts.length < 1100) for (let k = 0; k < 40; k++) wind.parts.push(spawn());
+    ctx.lineWidth = 1.1;
+    for (const p of wind.parts) {
+      const s = windSample(p.lon, p.lat);
+      if (!s || ++p.age > 110) { Object.assign(p, spawn(), { age:0 }); continue; }
+      const [u, v] = s;
+      const spd = Math.hypot(u, v);
+      p.lon += u * 0.0011 / Math.max(Math.cos(p.lat * Math.PI / 180), 0.3);
+      p.lat += v * 0.0011;
+      const q = S.map.project([p.lon, p.lat]);
+      if (p.px !== null) {
+        const dx = q.x - p.px, dy = q.y - p.py;
+        if (dx*dx + dy*dy < 1600) {
+          const a = Math.min(0.12 + spd / 28, 0.5);
+          ctx.strokeStyle = S.theme === 'night'
+            ? `rgba(190,215,255,${a})` : `rgba(18,52,104,${a * 1.25})`;
+          ctx.beginPath(); ctx.moveTo(p.px, p.py); ctx.lineTo(q.x, q.y); ctx.stroke();
+        }
+      }
+      p.px = q.x; p.py = q.y;
+    }
+  }
+  requestAnimationFrame(windLoop);
+}
+
+/* ══ 패널 제어 ══════════════════════════════════════════════════════ */
+/* ══ 시각 — UTC/KST 병기 ═══════════════════════════════════════════
+   서버가 내보내는 시각 문자열은 tz 표기가 섞여 있다:
+   field/meta.valid_times 는 str(np.datetime64) 라 naive("2026-09-07T06:00:00.000000000"),
+   status.valid_time.first/last 는 isoformat() 이라 aware(+00:00).
+   naive 를 그대로 new Date() 에 넣으면 로컬시로 파싱돼 KST 에서 9시간 어긋난다.
+   **시각 파싱은 예외 없이 parseUTC 로만 한다.** new Date(문자열) 을 직접 쓰지 말 것. */
+function parseUTC(v) {
+  if (v === null || v === undefined) return null;
+  let t = String(v).trim().replace(' ', 'T').replace(/\.(\d{3})\d+/, '.$1');
+  if (!/(Z|z|[+-]\d{2}:?\d{2})$/.test(t)) t += 'Z';
+  const d = new Date(t);
+  return isFinite(d.getTime()) ? d : null;
+}
+const P2 = (n) => String(n).padStart(2, '0');
+function fmtUTC(v, withDate) {
+  const d = parseUTC(v); if (!d) return '—';
+  const hm = `${P2(d.getUTCHours())}:${P2(d.getUTCMinutes())}Z`;
+  return withDate === false ? hm : `${P2(d.getUTCMonth()+1)}-${P2(d.getUTCDate())} ${hm}`;
+}
+function fmtKST(v) {
+  const d = parseUTC(v); if (!d) return '—';
+  const k = new Date(d.getTime() + 9 * 3600 * 1000);
+  return `${P2(k.getUTCMonth()+1)}-${P2(k.getUTCDate())} ${P2(k.getUTCHours())}시 KST`;
+}
+
+/* ══ WMO Code Table 3700 — 해상상태 계급 ═══════════════════════════
+   WMO-No. 306 Manual on Codes, Code Table 3700 (Sea state).
+   경계값은 유의파고 상한[m]. 이름만 쓰고 색은 쓰지 않는다 —
+   지도 PNG 색표(turbo)와 어긋나면 오독이 늘어난다. 색표 교체는 별도 단계다. */
+// https://www.nodc.noaa.gov/gtspp/document/codetbls/wmocodes/table3700.html
+const WMO3700 = [[0.10,'고요'],[0.50,'잔물결'],[1.25,'약간'],[2.50,'보통'],
+                 [4.00,'거침'],[6.00,'매우 거침'],[9.00,'높음'],[14.0,'매우 높음']];
+function seaState(hs) {
+  if (hs === null || hs === undefined || !isFinite(hs)) return '';
+  for (const b of WMO3700) if (hs <= b[0]) return b[1];
+  return '극심';
+}
+/* 서버가 육지·건조 판정에 쓰는 임계와 같은 값(app.py forecast_point).
+   이 값 이하는 '고요한 바다'가 아니라 **그 리드에 유효한 값이 없다**는 뜻으로 읽는다.
+   20260906T18 실측: 바다 셀의 10.37%가 리드 0 에서 0 이고 리드 12 h 까지 0.02%로 줄어든다.
+   초기장(GFS-Wave)과 우리 격자의 바다 마스크가 어긋나 생긴 결손으로 보인다 [가설 2026-09-07]. */
+const DRY_HS = 0.011;
+const hasValue = (v) => (v !== null && v !== undefined && isFinite(v) && v > DRY_HS);
+
+function hsColor(hs) {
+  const m = S.meta, vmax = (m && m.hs_color_max) || 12, gam = (m && m.hs_color_gamma) || 0.85;
+  if (!isFinite(hs)) return 'transparent';
+  return turbo(Math.pow(Math.max(0, Math.min(hs, vmax)) / vmax, gam));
+}
+
+/* ══ 등록 지점 × 리드 시간표 ═══════════════════════════════════════
+   이 화면의 주역. 행 = 사용자가 지도에서 등록한 지점, 열 = 이 사이클의 리드.
+   **한계를 먼저 적는다**: 행은 '항로'가 아니라 '고정 지점'이다.
+   14 kn 선박은 12시간에 약 168 nm(2.8°) 이동해 L1 격자 11칸을 지나가므로
+   고정 지점의 시계열은 정박선의 시계열이다. 항로 입력은 서버에 없다
+   (어떤 엔드포인트도 좌표 배열을 받지 않는다). */
+const MAX_POINTS = 5;
+
+function renderTimetable() {
+  const el = $('timetable'), m = S.meta;
+  if (!m) { el.innerHTML = '<div class="hint">예보 메타를 불러오지 못했다.</div>'; return; }
+  const leads = m.leads_h;
+  let h = '<div class="ttnote">행 = 등록 지점(고정 좌표), 열 = 리드. ' +
+    '각 칸: 파고 m / 첨두주기 s / 오는 파향 °. 주기·파향은 부분 검증. 지도를 눌러 지점을 등록한다.' +
+    ' <b>이 표는 항로가 아니라 고정 지점의 시계열이다</b> — 항해 중 선박은 그 자리에 머물지 않는다.</div>';
+
+  if (!S.points.length) {
+    h += '<div class="ttempty">등록된 지점이 없다. 오른쪽 지도의 바다를 누르면 여기에 행으로 추가된다' +
+         ` (최대 ${MAX_POINTS}개).</div>`;
+    el.innerHTML = h; return;
+  }
+
+  h += '<table class="tt"><tr><th class="l rowhead">지점</th>';
+  for (let i = 0; i < leads.length; i++) {
+    const sk = leadSkillAt(i);
+    const vt = m.valid_times[i];
+    h += `<th class="${i === S.leadIdx ? 'cur' : ''}">` +
+      `<div class="vt">+${Math.round(leads[i])}h</div>` +
+      `<div class="vt2">${esc(fmtUTC(vt))}</div>` +
+      `<div class="sk">${sk ? fx(sk.rmse, 2) + '<br>n=' + sk.n : '—'}</div></th>`;
+  }
+  h += '</tr>';
+
+  for (let r = 0; r < S.points.length; r++) {
+    const pt = S.points[r];
+    h += `<tr><td class="l rowhead">` +
+      `<span class="rm" data-del="${r}" title="이 행을 지운다">X</span>` +
+      `<b>${pt.lat.toFixed(2)}N ${pt.lon.toFixed(2)}E</b>` +
+      ` <span class="lk" data-detail="${r}">상세</span>` +
+      `<div class="hint">${esc(pt.note || '')}</div></td>`;
+    if (pt.error) {
+      h += `<td class="l err" colspan="${leads.length}">${esc(pt.error)}</td></tr>`;
+      continue;
+    }
+    for (let i = 0; i < leads.length; i++) {
+      const it = pt.byLead ? pt.byLead[i] : null;
+      const v = it ? it.q50 : null;
+      const cls = (i === S.leadIdx ? 'cur ' : '') +
+        (S.sel && S.sel.row === r && S.sel.lead === i ? 'sel' : '');
+      const ok = hasValue(v);
+      h += `<td class="${cls}${ok ? '' : ' novalue'}" data-r="${r}" data-i="${i}"` +
+        (ok ? ` style="--c:${hsColor(v)}"` : ' title="이 리드에 유효한 값이 없다"') +
+        `>${ok ? '<span class="sw"></span>' + fx(v, 1) : '·'}` +
+        `<div class="hint">${it && it.values && it.values.tp != null ? fx(it.values.tp, 1) + ' s' : '— s'}</div>` +
+        `<div class="hint">${it && it.values && it.values.dirp != null ? fx(it.values.dirp, 0) + '°' : '—°'}</div></td>`;
+    }
+    h += '</tr>';
+  }
+  h += '</table>';
+  el.innerHTML = h;
+
+  el.querySelectorAll('td[data-r]').forEach((td) => {
+    td.onclick = () => {
+      S.sel = { row: +td.getAttribute('data-r'), lead: +td.getAttribute('data-i') };
+      setLead(S.sel.lead);
+      renderTop(); renderTimetable();
+    };
+  });
+  el.querySelectorAll('[data-detail]').forEach((x) => {
+    x.onclick = (e) => {
+      e.stopPropagation();
+      const pt = S.points[+x.getAttribute('data-detail')];
+      if (pt) clickForecast(pt.lat, pt.lon);
+    };
+  });
+  el.querySelectorAll('[data-del]').forEach((x) => {
+    x.onclick = (e) => {
+      e.stopPropagation();
+      S.points.splice(+x.getAttribute('data-del'), 1);
+      if (S.sel && S.sel.row >= S.points.length) S.sel = null;
+      savePoints(); renderTop(); renderTimetable();
+    };
+  });
+}
+
+function savePoints() {
+  try {
+    localStorage.setItem('poseidon.points',
+      JSON.stringify(S.points.map((p) => [p.lat, p.lon])));
+  } catch (_) { /* 저장 실패는 화면 동작을 막지 않는다 */ }
+}
+function loadSavedPoints() {
+  try {
+    const raw = localStorage.getItem('poseidon.points');
+    return raw ? JSON.parse(raw).slice(0, MAX_POINTS) : [];
+  } catch (_) { return []; }
+}
+
+async function addPoint(lat, lon) {
+  if (S.points.length >= MAX_POINTS) {
+    S.points.shift();
+    if (S.sel) S.sel = null;
+  }
+  const pt = { lat, lon, byLead: null, data: null, error: null, note: '불러오는 중' };
+  S.points.push(pt);
+  renderTimetable();
+  try {
+    const p = await jget(`/v1/forecast/point?vars=hs,tp,tm02,dirp&level=L1&${qc()}lat=${lat.toFixed(3)}&lon=${lon.toFixed(3)}`);
+    pt.data = p;
+    // 리드 인덱스에 맞춰 items 를 정렬한다 (서버 items 순서에 의존하지 않는다)
+    const leads = S.meta ? S.meta.leads_h : [];
+    pt.byLead = leads.map((lh) => (p.items || []).find((it) => Math.abs(it.lead_h - lh) < 0.6) || null);
+    const a = p.applicability || {};
+    const ns = a.nearest_station;
+    pt.note = (p.level === 'L2' ? '연안 0.05°' : '광역 0.25°') +
+      (ns ? ` · 최근접 검증 관측소 ${ns.station_id} ${fx(ns.distance_km, 0)} km` : ' · 최근접 검증 관측소 없음');
+    S.sel = { row: S.points.indexOf(pt), lead: S.leadIdx };
+  } catch (e) {
+    // 결측 사유를 삼키지 않는다. 삼키면 자격 줄이 조용히 빈칸이 된다.
+    pt.error = pointErrorText(e);
+  }
+  savePoints(); renderTop(); renderTimetable();
+}
+
+/* ══ 답 줄 · 자격 줄 · 계보 줄 ═════════════════════════════════════
+   원칙: 숫자와 그 숫자의 자격은 같은 줄에서 태어나고 같이 죽는다.
+   성적을 별도 탭으로 격리하면 사용자는 값만 읽는다. */
+function selCell() {
+  if (!S.sel) return null;
+  const pt = S.points[S.sel.row];
+  if (!pt || !pt.byLead) return null;
+  return { pt, it: pt.byLead[S.sel.lead], lead: S.sel.lead };
+}
+
+function renderAnswer() {
+  const c = selCell();
+  if (!c || !c.it) {
+    $('answer').innerHTML = S.points.length
+      ? '<span class="where">시간표의 칸을 고르면 여기에 답이 나온다</span>'
+      : '<span class="where">지도의 바다를 누르면 그 지점이 시간표에 등록된다</span>';
+    return;
+  }
+  const v = c.it.q50;
+  const head = hasValue(v)
+    ? `<b>유의파고 ${fx(v, 2)} m</b><span class="band">${esc(seaState(v))} (WMO 3700)</span>`
+    : '<b class="warn">값 없음</b><span class="band">이 리드에 유효한 값이 없다 — 잔잔한 바다라는 뜻이 아니다</span>';
+  $('answer').innerHTML =
+    head +
+    `<span class="where">${c.pt.lat.toFixed(2)}N ${c.pt.lon.toFixed(2)}E · ` +
+    `+${Math.round(c.it.lead_h)} h · ${esc(fmtUTC(c.it.valid_time))} / ${esc(fmtKST(c.it.valid_time))}</span>`;
+}
+
+function renderQualify() {
+  const q = [];
+  const push = (label, val) => q.push(`<span class="q"><i>${label}</i> <b>${val}</b></span>`);
+  const c = selCell();
+
+  // 1칸 — 검증 범위
+  const a = (c && c.it && c.it.applicability) || (c && c.pt.data && c.pt.data.applicability) || null;
+  if (c && c.pt.error) push('검증 범위', '판정 불가 — 조회 실패');
+  else if (a) {
+    const av = APPL[a.verdict] || ['mute', String(a.verdict || '판정 없음')];
+    push('검증 범위', esc(av[1]));
+  } else push('검증 범위', '지점 미선택');
+
+  // 2칸 — 과거 실측 오차. **이 지점의 성적이 아니다.**
+  // by_lead 는 app.py 에서 df.groupby("lead_h") 로만 만든다 — 관측소 무관 도메인 전체 집계다.
+  const r = leadSkillAt(c ? c.lead : S.leadIdx);
+  if (r) {
+    const ci = r.rmse_ci95 ? ` (불확실 폭 ${fx(r.rmse_ci95[0],2)}-${fx(r.rmse_ci95[1],2)})` : '';
+    push('과거 실측 오차', `${fx(r.rmse,2)} m${ci} · 치우침 ${fx(r.bias,2)} m` +
+      ' <i>— 전 관측소 평균, 이 지점의 성적이 아니다</i>');
+  } else push('과거 실측 오차', '이 리드는 채점된 적이 없다');
+
+  // 3칸 — 표본
+  const sk = S.level === 'L2' ? (S.skillL2 || S.skill) : S.skill;
+  if (S.skillError) push('표본', `불러오지 못했다 — ${esc(S.skillError)}`);
+  else if (sk && sk.status === 'ok')
+    push('표본', `${r ? r.n : sk.n}건 · ${(r && r.n_stations) || sk.n_stations}개소` +
+      (sk.n_cycles ? ` · ${sk.n_cycles}사이클` : ''));
+  else push('표본', '검증 표본 없음 — 이 조건은 관측과 대조된 적이 없다');
+
+  // 4칸 — 통계 보정
+  const corr = (S.status && S.status.corrector) || {};
+  push('통계 보정', corr.deployed ? `적용 (${esc(corr.model_version || '버전 미상')})` : '미적용 — 물리 원값');
+
+  // 5칸 — 경고가 있을 때만
+  if (c && c.it && !hasValue(c.it.q50))
+    push('유의', `이 리드의 값이 ${DRY_HS} m 이하다 — 초기장 결손으로 보인다 [확인 필요]`);
+  else if (a && a.reasons && a.reasons.length)
+    push('유의', a.reasons.map((x) => esc(reasonText(x))).join(' · '));
+  else if (c && c.pt.error) push('유의', esc(c.pt.error));
+
+  $('qualify').innerHTML = q.join('') + '<span class="more">누르면 근거</span>';
+}
+
+function renderLineage() {
+  const m = S.meta, st = S.status;
+  if (!m) { $('lineage-txt').textContent = '예보 메타 없음'; return; }
+  const f = FRESH_LABEL[m.freshness] || ['mute', String(m.freshness || '알 수 없음')];
+  const age = m.produced_age_h;
+  const eng = m.engine || {};
+  $('lineage-txt').innerHTML =
+    `사이클 <b class="v">${esc(m.cycle)}</b> UTC` +
+    (age != null ? ` · 발표 후 ${fx(age,1)} h` : '') +
+    ` · ${esc(f[1])}` +
+    ` · ${S.level === 'L2' ? '연안 0.05°' : '광역 0.25°'}` +
+    ' · GFS / GFS-Wave 강제 → Poseidon 물리 원값' +
+    (m.is_latest === false ? ` · <span class="warn">최신 아님 (최신 ${esc(m.latest_cycle)})</span>` : '') +
+    (S.newCycle ? ` · <span class="lk" id="lk-switch">새 사이클 ${esc(S.newCycle)} 도착 — 전환</span>` : '');
+  const sw = $('lk-switch');
+  if (sw) sw.onclick = () => { location.href = '?cycle=' + encodeURIComponent(S.newCycle); };
+}
+
+function renderTop() { renderAnswer(); renderQualify(); renderLineage(); syncURL(); }
+
+/* ══ 팔레트 ═══════════════════════════════════════════════════════
+   주간·박명·야간 3벌. **자동 전환하지 않는다** — 사용자가 유발하지 않은 화면 변경을
+   하지 않는다(IHO S-52 2.2.10). 야간은 선교 시인성 보존용이고,
+   야간에서 주간으로 돌아오는 버튼 자체는 조광 대상에서 제외한다(IEC 62288 §7.2.1.2 c). */
+function applyTheme(t) {
+  const night = (t === 'night');
+  S.theme = ['day', 'dusk', 'night'].includes(t) ? t : 'day';
+  document.documentElement.setAttribute('data-theme', S.theme);
+  try { localStorage.setItem('poseidon.theme', S.theme); } catch (_) {}
+  const b = $('btn-theme'); if (b) b.textContent = ({day:'박명', dusk:'야간', night:'주간'})[S.theme];
+  const map = S.map;
+  if (map && map.getLayer) {
+    try {
+      if (map.getLayer('bg'))
+        map.setPaintProperty('bg', 'background-color', night ? '#05070f' : t === 'dusk' ? '#202833' : '#dfe6ee');
+      if (map.getLayer('base')) {
+        map.setPaintProperty('base', 'raster-brightness-max', night ? 0.26 : t === 'dusk' ? 0.55 : 1.0);
+        map.setPaintProperty('base', 'raster-saturation',     night ? -0.85 : -0.30);
+        map.setPaintProperty('base', 'raster-contrast',       night ? -0.05 : -0.08);
+        map.setPaintProperty('base', 'raster-opacity',        night ? 0.62 : 0.90);
+      }
+    } catch (_) {}
+  }
+}
+function initTheme() {
+  let t = 'day';
+  try { t = localStorage.getItem('poseidon.theme') || 'day'; } catch (_) {}
+  applyTheme(t);
+  $('btn-theme').onclick = () => applyTheme(({day:'dusk', dusk:'night', night:'day'})[S.theme]);
+}
+
+/* ══ 레이어 토글 ═══════════════════════════════════════════════════
+   바람은 기본 꺼둔다. 우리 예보가 아니라 GFS 강제장(입력)이고 채점된 적이 없다. */
+function applyLayers() {
+  const L = S.layers, map = S.map;
+  try { if (map && map.getLayer && map.getLayer('hs'))
+    map.setLayoutProperty('hs', 'visibility', L.hs ? 'visible' : 'none'); } catch (_) {}
+  $('wind').style.display = L.wind ? '' : 'none';
+  for (const mk of S.markers) mk.getElement().style.display = L.stn ? '' : 'none';
+  $('ly-hs').classList.toggle('on', L.hs);
+  $('ly-wind').classList.toggle('on', L.wind);
+  $('ly-stn').classList.toggle('on', L.stn);
+}
+function initLayerToggles() {
+  const bind = (id, key) => { $(id).onclick = () => { S.layers[key] = !S.layers[key]; applyLayers(); }; };
+  bind('ly-hs', 'hs'); bind('ly-wind', 'wind'); bind('ly-stn', 'stn');
+  S.layers.wind = false;   // 기본 꺼짐
+  applyLayers();
+}
+
+/* ══ 주소 동기화 ═══════════════════════════════════════════════════
+   리로드 없이 주소만 갱신한다. 주소를 복사해 새 탭에서 열면 같은 화면이 나와야 한다.
+   결정 시점 재현(스냅샷)의 대체물은 아니지만, 최소한 링크로 공유는 된다. */
+function syncURL() {
+  try {
+    const q = new URLSearchParams();
+    if (S.reqCycle) q.set('cycle', S.reqCycle);
+    if (S.meta) q.set('lead', String(S.leadIdx));
+    for (const pt of S.points) q.append('pt', `${pt.lat.toFixed(3)},${pt.lon.toFixed(3)}`);
+    history.replaceState(null, '', q.toString() ? '?' + q.toString() : location.pathname);
+  } catch (_) { /* 주소 갱신 실패가 화면 동작을 막지 않는다 */ }
+}
+function urlPoints() {
+  try {
+    return new URLSearchParams(location.search).getAll('pt')
+      .map((v) => v.split(',').map(Number)).filter((a) => a.length === 2 && a.every(isFinite));
+  } catch (_) { return []; }
+}
+
+/* 서랍은 하나다. 한 번에 한 섹션만 보인다.
+   여러 패널이 동시에 떠 있으면 무엇이 지금 보고 있는 것인지 알 수 없다. */
+const DRAWER = ['hud','busan','point','station','verify','cycles'];
+function openPanel(id) {
+  for (const s of DRAWER) {
+    $(s).classList.toggle('open', s === id);
+    if (s === 'busan') $(s).classList.toggle('closed', id !== 'busan');
+  }
+  document.body.classList.add('drawer');
+  $('drawer').scrollTop = 0;
+}
+function closeDrawer() {
+  document.body.classList.remove('drawer');
+  for (const s of DRAWER) $(s).classList.remove('open');
+}
+function closePanel() { closeDrawer(); }
+document.querySelectorAll('[data-close]').forEach(x => x.onclick = closeDrawer);
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') { closeDrawer(); return; }
+  if (e.target && /INPUT|TEXTAREA/.test(e.target.tagName)) return;
+  if (e.key === 'ArrowLeft')  { setLead(S.leadIdx - 1); renderTimetable(); }
+  if (e.key === 'ArrowRight') { setLead(S.leadIdx + 1); renderTimetable(); }
+});
+$('qualify').onclick = () => openPanel('hud');
+
+/* ══ 부팅 ═══════════════════════════════════════════════════════════ */
+async function loadField() {
+  S.meta = await jget('/v1/field/meta' + (S.reqCycle ? `?cycle=${encodeURIComponent(S.reqCycle)}` : ''));
+  const s = $('lead');
+  s.max = S.meta.leads_h.length - 1;
+  s.value = 0;
+  s.oninput = () => { if (S.playing) playToggle(); setLead(+s.value); };
+  renderLegend();
+  if (S.meta.has_l2) {
+    S.meta2 = await jget(`/v1/field/meta?cycle=${S.meta.cycle}&level=L2`).catch(() => null);
+  } else S.meta2 = null;
+  const lvl = $('lvl');
+  if (S.meta2) {
+    lvl.style.display = '';
+    lvl.textContent = '연안 L2 켜기';
+    lvl.title = 'L2는 0.05° 연안 격자다. 매칭 표본 비교에서 L2가 L1보다 나쁘다 — 검증 패널의 "L1 대 L2" 참조';
+    lvl.onclick = () => {
+      S.level = S.level === 'L1' ? 'L2' : 'L1';
+      lvl.textContent = S.level === 'L2' ? '연안 L2 끄기' : '연안 L2 켜기';
+      lvl.classList.toggle('on', S.level === 'L2');
+      setLead(S.leadIdx);
+    };
+  } else {
+    lvl.style.display = 'none';
+    S.level = 'L1';
+  }
+  try { S.storm = await jget(`/v1/field/storm.json?cycle=${S.meta.cycle}`); } catch (e) { S.storm = null; }
+  setLead(0);
+}
+
+(async () => {
+  initMap();
+  wind.canvas = $('wind'); wind.ctx = wind.canvas.getContext('2d');
+  $('btn-verify').onclick = () => { openPanel('verify'); renderVerify(); };
+  $('btn-cycles').onclick = () => { openPanel('cycles'); renderCycles(); };
+  $('btn-busan').onclick = () => openPanel('busan');
+  $('btn-latest').onclick = () => { location.search = ''; };
+  $('play').onclick = playToggle;
+  $('trust').onclick = () => { openPanel('verify'); renderVerify(); };
+  $('vf-tabs').onclick = (e) => {
+    const b = e.target.closest('button'); if (!b) return;
+    $('vf-tabs').querySelectorAll('button').forEach(x => x.classList.toggle('on', x === b));
+    document.querySelectorAll('#verify .tabpane').forEach(p =>
+      p.classList.toggle('on', p.id === 'tab-' + b.getAttribute('data-t')));
+  };
+
+  let booted = false;
+  async function boot() {
+    if (booted) return; booted = true;
+    // 데이터 로딩은 베이스맵 타일 완료에 묶지 않는다 — 타일 CDN 지연/차단 시에도 예보는 떠야 한다.
+    renderLegend();      // 예보가 없어도 범례는 그린다 (meta 실패 시 기본값 사용)
+    S.status = await jget('/v1/system/status').catch(() => null);
+    await loadField().catch((e) => {
+      S.fieldError = String((e && e.message) || e);
+      $('answer').innerHTML = '<b class="warn">예보 없음</b>' +
+        '<span class="where">파랑 예보 산출물이 없다. 어떤 값도 그리지 않는다.</span>';
+      $('qualify').innerHTML = `<span class="q"><i>사유</i> <b>${esc(S.fieldError)}</b></span>` +
+        '<span class="more">누르면 근거</span>';
+      $('lineage-txt').textContent = '예보 산출물 없음';
+      $('fresh').innerHTML = '<span class="badge mute"><span class="dot"></span>예보 없음</span>';
+      $('hudkv').innerHTML = '';
+      $('gaps').innerHTML = '<span class="hint">파랑 예보 산출물이 없다. ' +
+        '운영 루프가 멈췄거나 데이터 볼륨(T7)이 연결되지 않았을 수 있다. ' +
+        'wave_cycle 을 먼저 실행해야 한다.</span>';
+      $('trust').textContent = '예보 없음';
+      $('timetable').innerHTML = '<div class="ttempty">예보가 없어 시간표를 그릴 수 없다.</div>';
+    });
+    Promise.all([
+      jget('/v1/skill?var=hs').catch((e) => { S.skillError = String((e && e.message) || e); return null; }),
+      jget('/v1/skill?var=hs_l2').catch(() => null),
+      jget('/v1/skill/stations?var=hs').catch(() => null),
+      jget('/v1/obs/latest?var=hs&hours=48').catch(() => []),
+    ]).then(([sk, sk2, stns, obs]) => {
+      S.skill = sk; S.skillL2 = sk2; S.stations = stns; S.obs = obs || [];
+      renderHud(); renderTrust(); renderLeadBars(); updateStationMarkers();
+      renderTop(); renderTimetable();
+      if (!(obs && obs.length)) {
+        $('gaps').innerHTML += (($('gaps').innerHTML) ? '<br>' : '') +
+          '<span class="hint">최근 48 h 도메인 내 관측 없음 — 마커는 검증 표본 위치만 표시한다</span>';
+      }
+    });
+    renderHud(); renderTop();
+    // 이전에 등록한 지점을 복원한다 (사이클이 바뀌어도 관심 지점은 유지된다)
+    const saved = (S.initPts && S.initPts.length) ? S.initPts : loadSavedPoints();
+    if (saved.length) { S.points = []; for (const c of saved) addPoint(c[0], c[1]); }
+    else renderTimetable();
+    if (isFinite(S.initLead) && S.initLead > 0) setLead(S.initLead);
+    initLayerToggles();
+    initTheme();
+    loadBusan();
+    requestAnimationFrame(windLoop);
+    setInterval(async () => {           // 새 사이클 자동 반영 (재생 모드 제외)
+      if (S.reqCycle) return;
+      const st = await jget('/v1/system/status').catch(() => null);
+      if (!st) return;
+      // 사용자가 유발하지 않은 화면 교체를 하지 않는다. 리로드하면 등록 지점·줌·열린 서랍이 사라지고,
+      // 무엇보다 사용자가 보고 있던 것이 소리 없이 다른 것으로 바뀐다.
+      if (S.meta && st.cycle && st.cycle !== S.meta.cycle) S.newCycle = st.cycle;
+      S.status = st; renderHud(); renderTop();
+    }, 5 * 60 * 1000);
+  }
+  S.map.on('style.load', boot);
+  S.map.on('load', boot);
+  setTimeout(boot, 3000);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,55 @@
+[project]
+name = "poseidon"
+version = "0.1.0"
+description = "Project Poseidon - Global Ocean Digital Twin AI"
+requires-python = ">=3.12"
+readme = "README.md"
+# 솔버 코어 허용 목록: numpy, jax, xarray, zarr (ADR-001)
+dependencies = [
+  "shapely>=2.1,<3", # 전 지구 육지 표본 검사
+  "pyshp>=3.1,<4", # Natural Earth shapefile 읽기
+  "numpy>=2",
+  "geographiclib>=2.1,<3", # WGS84 항로 거리·침로 (Karney 2013)
+  "pandas>=2.2",
+  "xarray>=2026.1",
+  "zarr>=3",
+  "cfgrib>=0.9.14",
+  "eccodes>=2.39",
+  "httpx>=0.27",
+  "pyarrow>=17",
+  "scipy>=1.14",
+  # 아래 넷은 코드가 실제로 import 하는데 목록에서 빠져 있었다 (2026-09-11 발견).
+  # 빠진 채로 새 환경을 만들면 API(fastapi·uvicorn)와 파랑 엔진(jax)이 뜨지 않는다.
+  "fastapi>=0.110",       # poseidon/api/app.py
+  "uvicorn>=0.30",        # 대시보드 서버
+  "jax>=0.4.30",          # poseidon/engines/spectral_wave/jax_kernel.py (jaxlib 동반 설치)
+  "matplotlib>=3.8",      # poseidon/api/app.py (hs.png 렌더)
+]
+
+[dependency-groups]
+dev = ["pytest>=8", "ruff>=0.6", "mypy>=1.11"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "N", "UP", "B", "SIM", "TID"]
+
+[tool.mypy]
+strict = true
+python_version = "3.12"
+packages = ["poseidon"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+# poseidon은 site-packages에 설치돼 있지 않다. pytest는 python -c와 달리 rootdir을
+# sys.path에 자동 추가하지 않으므로(rootdir != 자동 삽입 경로), 명시해야 수집이 된다.
+pythonpath = ["."]
+markers = [
+  "unit: 순수 함수 단위 테스트 (push마다)",
+  "scientific: 해석해·성장곡선·보존 검증 (nightly, M4/M5 게이트)",
+  "integration: 외부 네트워크·E2E (nightly)",
+  "benchmark: 성능 회귀 (주간)",
+  "regression: hindcast 고정 케이스 (릴리스)",
+]

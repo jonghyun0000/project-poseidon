@@ -1,0 +1,1774 @@
+{
+  "status": "candidate",
+  "distance_nm": 13895.835215966687,
+  "waypoints": [
+    {
+      "lat": 52.01875,
+      "lon": 4.14125
+    },
+    {
+      "lat": 52.01475,
+      "lon": 4.10475
+    },
+    {
+      "lat": 52.0083125,
+      "lon": 4.0474375
+    },
+    {
+      "lat": 51.996125,
+      "lon": 4.0241875
+    },
+    {
+      "lat": 51.99325,
+      "lon": 3.965375
+    },
+    {
+      "lat": 51.993625,
+      "lon": 3.8971875000000002
+    },
+    {
+      "lat": 51.992,
+      "lon": 3.82
+    },
+    {
+      "lat": 51.99,
+      "lon": 3.77
+    },
+    {
+      "lat": 51.970749999999995,
+      "lon": 3.585
+    },
+    {
+      "lat": 51.961124999999996,
+      "lon": 3.51125
+    },
+    {
+      "lat": 51.942,
+      "lon": 3.463
+    },
+    {
+      "lat": 51.901125,
+      "lon": 3.3520000000000003
+    },
+    {
+      "lat": 51.8885,
+      "lon": 3.283
+    },
+    {
+      "lat": 51.8845,
+      "lon": 3.24525
+    },
+    {
+      "lat": 51.871,
+      "lon": 3.177
+    },
+    {
+      "lat": 51.84375,
+      "lon": 3.03925
+    },
+    {
+      "lat": 51.835,
+      "lon": 2.98125
+    },
+    {
+      "lat": 51.82125,
+      "lon": 2.924
+    },
+    {
+      "lat": 51.78875,
+      "lon": 2.78875
+    },
+    {
+      "lat": 51.757125,
+      "lon": 2.6368125
+    },
+    {
+      "lat": 51.73475,
+      "lon": 2.60125
+    },
+    {
+      "lat": 51.67975,
+      "lon": 2.4915
+    },
+    {
+      "lat": 51.646,
+      "lon": 2.41575
+    },
+    {
+      "lat": 51.53675,
+      "lon": 2.2655
+    },
+    {
+      "lat": 51.51875,
+      "lon": 2.242
+    },
+    {
+      "lat": 51.458875,
+      "lon": 2.1704999999999997
+    },
+    {
+      "lat": 51.4328125,
+      "lon": 2.122375
+    },
+    {
+      "lat": 51.397921875,
+      "lon": 2.06234375
+    },
+    {
+      "lat": 51.342124999999996,
+      "lon": 2.019625
+    },
+    {
+      "lat": 51.24359375,
+      "lon": 1.8791250000000002
+    },
+    {
+      "lat": 51.2301875,
+      "lon": 1.8513437499999998
+    },
+    {
+      "lat": 51.2085,
+      "lon": 1.801
+    },
+    {
+      "lat": 51.18625,
+      "lon": 1.746
+    },
+    {
+      "lat": 51.172875000000005,
+      "lon": 1.720125
+    },
+    {
+      "lat": 51.14665625000001,
+      "lon": 1.60965625
+    },
+    {
+      "lat": 51.10825,
+      "lon": 1.532625
+    },
+    {
+      "lat": 51.088499999999996,
+      "lon": 1.502421875
+    },
+    {
+      "lat": 51.05709375,
+      "lon": 1.4495312500000002
+    },
+    {
+      "lat": 51.06425,
+      "lon": 1.39375
+    },
+    {
+      "lat": 51.0215625,
+      "lon": 1.3423125
+    },
+    {
+      "lat": 50.903,
+      "lon": 0.9895
+    },
+    {
+      "lat": 50.8545,
+      "lon": 0.8445
+    },
+    {
+      "lat": 50.84525,
+      "lon": 0.8165
+    },
+    {
+      "lat": 50.83375,
+      "lon": 0.78275
+    },
+    {
+      "lat": 50.77575,
+      "lon": 0.61225
+    },
+    {
+      "lat": 50.64225,
+      "lon": 0.21875
+    },
+    {
+      "lat": 50.616375,
+      "lon": 0.17875000000000002
+    },
+    {
+      "lat": 50.6035,
+      "lon": 0.104
+    },
+    {
+      "lat": 50.590375,
+      "lon": 0.0655
+    },
+    {
+      "lat": 50.56175,
+      "lon": -0.021
+    },
+    {
+      "lat": 50.544312500000004,
+      "lon": -0.052875
+    },
+    {
+      "lat": 50.520375,
+      "lon": -0.12087500000000001
+    },
+    {
+      "lat": 50.496,
+      "lon": -0.2125
+    },
+    {
+      "lat": 50.416687499999995,
+      "lon": -0.43125
+    },
+    {
+      "lat": 50.3955,
+      "lon": -0.5055
+    },
+    {
+      "lat": 50.357375000000005,
+      "lon": -0.685
+    },
+    {
+      "lat": 50.349656249999995,
+      "lon": -0.76546875
+    },
+    {
+      "lat": 50.328,
+      "lon": -0.81625
+    },
+    {
+      "lat": 50.31725,
+      "lon": -0.875
+    },
+    {
+      "lat": 50.307,
+      "lon": -0.928
+    },
+    {
+      "lat": 50.26,
+      "lon": -1.111
+    },
+    {
+      "lat": 50.230374999999995,
+      "lon": -1.27325
+    },
+    {
+      "lat": 50.210875,
+      "lon": -1.349125
+    },
+    {
+      "lat": 50.19199999999999,
+      "lon": -1.3786875
+    },
+    {
+      "lat": 50.184383401139584,
+      "lon": -1.4326741672747068
+    },
+    {
+      "lat": 50.17425,
+      "lon": -1.5045
+    },
+    {
+      "lat": 50.164375,
+      "lon": -1.56525
+    },
+    {
+      "lat": 50.14275,
+      "lon": -1.6711875
+    },
+    {
+      "lat": 50.11225,
+      "lon": -1.7291249999999998
+    },
+    {
+      "lat": 50.0955,
+      "lon": -1.78
+    },
+    {
+      "lat": 50.081,
+      "lon": -1.81775
+    },
+    {
+      "lat": 50.042,
+      "lon": -1.91525
+    },
+    {
+      "lat": 50.01925,
+      "lon": -1.97975
+    },
+    {
+      "lat": 49.99075,
+      "lon": -2.0565
+    },
+    {
+      "lat": 49.942,
+      "lon": -2.17925
+    },
+    {
+      "lat": 49.92525,
+      "lon": -2.2385
+    },
+    {
+      "lat": 49.9033125,
+      "lon": -2.264625
+    },
+    {
+      "lat": 49.895,
+      "lon": -2.30125
+    },
+    {
+      "lat": 49.875875,
+      "lon": -2.3445
+    },
+    {
+      "lat": 49.8375,
+      "lon": -2.4515
+    },
+    {
+      "lat": 49.8265,
+      "lon": -2.48025
+    },
+    {
+      "lat": 49.70675,
+      "lon": -2.7915
+    },
+    {
+      "lat": 49.68375,
+      "lon": -2.85375
+    },
+    {
+      "lat": 49.6485,
+      "lon": -2.94325
+    },
+    {
+      "lat": 49.6195,
+      "lon": -3.01975
+    },
+    {
+      "lat": 49.60975,
+      "lon": -3.04525
+    },
+    {
+      "lat": 49.578,
+      "lon": -3.1285
+    },
+    {
+      "lat": 49.558,
+      "lon": -3.181
+    },
+    {
+      "lat": 49.4345,
+      "lon": -3.503375
+    },
+    {
+      "lat": 49.34075,
+      "lon": -3.74475
+    },
+    {
+      "lat": 49.311,
+      "lon": -3.82225
+    },
+    {
+      "lat": 49.244375,
+      "lon": -3.995625
+    },
+    {
+      "lat": 49.23075,
+      "lon": -4.031
+    },
+    {
+      "lat": 49.2005,
+      "lon": -4.1095
+    },
+    {
+      "lat": 49.1755,
+      "lon": -4.175
+    },
+    {
+      "lat": 49.0995,
+      "lon": -4.37325
+    },
+    {
+      "lat": 49.081625,
+      "lon": -4.4197500000000005
+    },
+    {
+      "lat": 49.051375,
+      "lon": -4.496124999999999
+    },
+    {
+      "lat": 49.021,
+      "lon": -4.57725
+    },
+    {
+      "lat": 48.9975,
+      "lon": -4.6385
+    },
+    {
+      "lat": 48.95975,
+      "lon": -4.73675
+    },
+    {
+      "lat": 48.93,
+      "lon": -4.81425
+    },
+    {
+      "lat": 48.878,
+      "lon": -4.95
+    },
+    {
+      "lat": 48.84,
+      "lon": -5.04875
+    },
+    {
+      "lat": 48.828,
+      "lon": -5.08
+    },
+    {
+      "lat": 48.703734374999996,
+      "lon": -5.361359374999999
+    },
+    {
+      "lat": 48.69275,
+      "lon": -5.42425
+    },
+    {
+      "lat": 48.66765625,
+      "lon": -5.47146875
+    },
+    {
+      "lat": 48.666,
+      "lon": -5.510125
+    },
+    {
+      "lat": 48.63725,
+      "lon": -5.507625
+    },
+    {
+      "lat": 48.6160625,
+      "lon": -5.5285625
+    },
+    {
+      "lat": 48.585125,
+      "lon": -5.560625
+    },
+    {
+      "lat": 48.432375,
+      "lon": -5.7179375
+    },
+    {
+      "lat": 48.31375,
+      "lon": -5.819
+    },
+    {
+      "lat": 48.04625,
+      "lon": -6.0605
+    },
+    {
+      "lat": 47.78325,
+      "lon": -6.29825
+    },
+    {
+      "lat": 47.4285,
+      "lon": -6.619
+    },
+    {
+      "lat": 47.34,
+      "lon": -6.699
+    },
+    {
+      "lat": 47.278125,
+      "lon": -6.74975
+    },
+    {
+      "lat": 47.25525,
+      "lon": -6.7745
+    },
+    {
+      "lat": 47.212875,
+      "lon": -6.810124999999999
+    },
+    {
+      "lat": 47.11775,
+      "lon": -6.89975
+    },
+    {
+      "lat": 46.93425,
+      "lon": -7.0655
+    },
+    {
+      "lat": 45.91425,
+      "lon": -7.9875
+    },
+    {
+      "lat": 45.80325,
+      "lon": -8.08775
+    },
+    {
+      "lat": 45.15925,
+      "lon": -8.66975
+    },
+    {
+      "lat": 45.004,
+      "lon": -8.81
+    },
+    {
+      "lat": 44.7415,
+      "lon": -9.025749999999999
+    },
+    {
+      "lat": 44.64375,
+      "lon": -9.102625
+    },
+    {
+      "lat": 44.581,
+      "lon": -9.152
+    },
+    {
+      "lat": 44.41775,
+      "lon": -9.2765
+    },
+    {
+      "lat": 44.1885,
+      "lon": -9.46325
+    },
+    {
+      "lat": 44.094125000000005,
+      "lon": -9.535625
+    },
+    {
+      "lat": 43.99975,
+      "lon": -9.603
+    },
+    {
+      "lat": 43.92825,
+      "lon": -9.658
+    },
+    {
+      "lat": 43.393625,
+      "lon": -10.05896875
+    },
+    {
+      "lat": 43.372625,
+      "lon": -10.088125000000002
+    },
+    {
+      "lat": 43.14675,
+      "lon": -10.168
+    },
+    {
+      "lat": 42.797,
+      "lon": -10.28975
+    },
+    {
+      "lat": 42.2815,
+      "lon": -10.46925
+    },
+    {
+      "lat": 41.2085,
+      "lon": -10.8425
+    },
+    {
+      "lat": 40.415,
+      "lon": -11.11875
+    },
+    {
+      "lat": 40.28925,
+      "lon": -11.1625
+    },
+    {
+      "lat": 40.07875,
+      "lon": -11.23575
+    },
+    {
+      "lat": 38.856875,
+      "lon": -11.662375
+    },
+    {
+      "lat": 38.79525,
+      "lon": -11.68425
+    },
+    {
+      "lat": 38.4285,
+      "lon": -11.81
+    },
+    {
+      "lat": 37.71775,
+      "lon": -12.0575
+    },
+    {
+      "lat": 37.64975,
+      "lon": -12.081
+    },
+    {
+      "lat": 37.620999999999995,
+      "lon": -12.102250000000002
+    },
+    {
+      "lat": 37.512249999999995,
+      "lon": -12.129125
+    },
+    {
+      "lat": 37.129,
+      "lon": -12.2625
+    },
+    {
+      "lat": 36.9725,
+      "lon": -12.317
+    },
+    {
+      "lat": 36.946,
+      "lon": -12.326
+    },
+    {
+      "lat": 36.748,
+      "lon": -12.395
+    },
+    {
+      "lat": 36.46375,
+      "lon": -12.494
+    },
+    {
+      "lat": 36.1345,
+      "lon": -12.6085
+    },
+    {
+      "lat": 35.9985,
+      "lon": -12.65575
+    },
+    {
+      "lat": 35.92775,
+      "lon": -12.6805
+    },
+    {
+      "lat": 35.696,
+      "lon": -12.761
+    },
+    {
+      "lat": 35.47,
+      "lon": -12.83975
+    },
+    {
+      "lat": 35.11175,
+      "lon": -12.9645
+    },
+    {
+      "lat": 34.67975,
+      "lon": -13.115
+    },
+    {
+      "lat": 34.64875,
+      "lon": -13.12575
+    },
+    {
+      "lat": 34.06525,
+      "lon": -13.32875
+    },
+    {
+      "lat": 32.41625,
+      "lon": -13.90275
+    },
+    {
+      "lat": 31.354,
+      "lon": -14.26325
+    },
+    {
+      "lat": 29.87425,
+      "lon": -14.7655
+    },
+    {
+      "lat": 29.6815,
+      "lon": -14.831
+    },
+    {
+      "lat": 28.80775,
+      "lon": -15.1275
+    },
+    {
+      "lat": 28.3,
+      "lon": -15.3
+    },
+    {
+      "lat": 28.2545,
+      "lon": -15.3175
+    },
+    {
+      "lat": 28.155375,
+      "lon": -15.3568125
+    },
+    {
+      "lat": 27.33625,
+      "lon": -15.23275
+    },
+    {
+      "lat": 25.75175,
+      "lon": -16.09425
+    },
+    {
+      "lat": 24.657,
+      "lon": -16.6895
+    },
+    {
+      "lat": 21.14875,
+      "lon": -17.94675
+    },
+    {
+      "lat": 21.00075,
+      "lon": -17.9995
+    },
+    {
+      "lat": 18.02175,
+      "lon": -18.0
+    },
+    {
+      "lat": 15.0,
+      "lon": -18.0
+    },
+    {
+      "lat": 11.008812500000001,
+      "lon": -17.002125
+    },
+    {
+      "lat": 5.53025,
+      "lon": -13.42775
+    },
+    {
+      "lat": 4.3515,
+      "lon": -12.697
+    },
+    {
+      "lat": 0.0,
+      "lon": -10.0
+    },
+    {
+      "lat": -5.58675,
+      "lon": -5.531
+    },
+    {
+      "lat": -10.0145,
+      "lon": -1.98925
+    },
+    {
+      "lat": -11.133625,
+      "lon": -1.0939999999999999
+    },
+    {
+      "lat": -12.50175,
+      "lon": 0.0005
+    },
+    {
+      "lat": -16.92975,
+      "lon": 3.54275
+    },
+    {
+      "lat": -19.56775,
+      "lon": 5.65325
+    },
+    {
+      "lat": -22.36825,
+      "lon": 7.894
+    },
+    {
+      "lat": -25.53225,
+      "lon": 10.42525
+    },
+    {
+      "lat": -28.12525,
+      "lon": 12.49975
+    },
+    {
+      "lat": -33.27375,
+      "lon": 16.619
+    },
+    {
+      "lat": -34.1785,
+      "lon": 17.34275
+    },
+    {
+      "lat": -35.0,
+      "lon": 18.0
+    },
+    {
+      "lat": -35.0,
+      "lon": 22.0
+    },
+    {
+      "lat": -34.50075,
+      "lon": 26.005875
+    },
+    {
+      "lat": -34.36225,
+      "lon": 30.55775
+    },
+    {
+      "lat": -34.066,
+      "lon": 35.0115
+    },
+    {
+      "lat": -33.92375,
+      "lon": 36.39075
+    },
+    {
+      "lat": -33.53175,
+      "lon": 40.0015
+    },
+    {
+      "lat": -33.12875,
+      "lon": 42.87775
+    },
+    {
+      "lat": -32.99,
+      "lon": 43.868
+    },
+    {
+      "lat": -32.27475,
+      "lon": 47.9075
+    },
+    {
+      "lat": -31.83725,
+      "lon": 50.00075
+    },
+    {
+      "lat": -31.535,
+      "lon": 51.41175
+    },
+    {
+      "lat": -31.311,
+      "lon": 52.4575
+    },
+    {
+      "lat": -30.04925,
+      "lon": 57.3645
+    },
+    {
+      "lat": -29.4355,
+      "lon": 59.49075
+    },
+    {
+      "lat": -29.3315,
+      "lon": 59.85075
+    },
+    {
+      "lat": -28.95375,
+      "lon": 61.1075
+    },
+    {
+      "lat": -27.788,
+      "lon": 64.68425
+    },
+    {
+      "lat": -27.19775,
+      "lon": 66.313
+    },
+    {
+      "lat": -26.38,
+      "lon": 68.5685
+    },
+    {
+      "lat": -25.80925,
+      "lon": 70.00125
+    },
+    {
+      "lat": -24.87025,
+      "lon": 72.357
+    },
+    {
+      "lat": -24.18175,
+      "lon": 73.94475
+    },
+    {
+      "lat": -23.2675,
+      "lon": 76.0525
+    },
+    {
+      "lat": -22.54325,
+      "lon": 77.6005
+    },
+    {
+      "lat": -21.40975,
+      "lon": 80.00025
+    },
+    {
+      "lat": -20.95775,
+      "lon": 80.9035
+    },
+    {
+      "lat": -20.038,
+      "lon": 82.7415
+    },
+    {
+      "lat": -17.784,
+      "lon": 86.98975
+    },
+    {
+      "lat": -17.54825,
+      "lon": 87.41075
+    },
+    {
+      "lat": -17.38325,
+      "lon": 87.70512500000001
+    },
+    {
+      "lat": -17.36980042613636,
+      "lon": 87.72928124999999
+    },
+    {
+      "lat": -17.3526640625,
+      "lon": 87.76000390625
+    },
+    {
+      "lat": -17.319125,
+      "lon": 87.82
+    },
+    {
+      "lat": -17.2955,
+      "lon": 87.86225
+    },
+    {
+      "lat": -17.28,
+      "lon": 87.89
+    },
+    {
+      "lat": -17.2396875,
+      "lon": 87.96175
+    },
+    {
+      "lat": -17.219749999999998,
+      "lon": 87.997125
+    },
+    {
+      "lat": -17.2010625,
+      "lon": 88.0306875
+    },
+    {
+      "lat": -17.180125,
+      "lon": 88.06803124999999
+    },
+    {
+      "lat": -17.1135,
+      "lon": 88.18725
+    },
+    {
+      "lat": -17.0035,
+      "lon": 88.383625
+    },
+    {
+      "lat": -16.94025,
+      "lon": 88.4965
+    },
+    {
+      "lat": -16.09725,
+      "lon": 90.0015
+    },
+    {
+      "lat": -13.8835,
+      "lon": 93.735
+    },
+    {
+      "lat": -12.032,
+      "lon": 96.75975
+    },
+    {
+      "lat": -10.003499999999999,
+      "lon": 99.9945
+    },
+    {
+      "lat": -7.001,
+      "lon": 104.0
+    },
+    {
+      "lat": -6.29275,
+      "lon": 105.102
+    },
+    {
+      "lat": -6.203,
+      "lon": 105.493
+    },
+    {
+      "lat": -5.862,
+      "lon": 105.876
+    },
+    {
+      "lat": -5.54725,
+      "lon": 106.45375
+    },
+    {
+      "lat": -5.2,
+      "lon": 106.80025
+    },
+    {
+      "lat": -1.5,
+      "lon": 107.3
+    },
+    {
+      "lat": -1.25575,
+      "lon": 107.4175
+    },
+    {
+      "lat": -0.688,
+      "lon": 107.6905
+    },
+    {
+      "lat": 2.245,
+      "lon": 109.1005
+    },
+    {
+      "lat": 3.69975,
+      "lon": 109.80025
+    },
+    {
+      "lat": 7.5455,
+      "lon": 109.93425
+    },
+    {
+      "lat": 9.79775,
+      "lon": 111.9135
+    },
+    {
+      "lat": 13.36075,
+      "lon": 115.0445
+    },
+    {
+      "lat": 16.90825,
+      "lon": 118.162
+    },
+    {
+      "lat": 17.3565,
+      "lon": 118.55575
+    },
+    {
+      "lat": 18.50475,
+      "lon": 119.56475
+    },
+    {
+      "lat": 18.903,
+      "lon": 119.60825
+    },
+    {
+      "lat": 19.166,
+      "lon": 119.63725
+    },
+    {
+      "lat": 19.44325,
+      "lon": 119.6675
+    },
+    {
+      "lat": 19.7805,
+      "lon": 119.70425
+    },
+    {
+      "lat": 22.08125,
+      "lon": 119.723
+    },
+    {
+      "lat": 22.1985,
+      "lon": 119.724
+    },
+    {
+      "lat": 22.45575,
+      "lon": 119.75325
+    },
+    {
+      "lat": 24.6335,
+      "lon": 120.0
+    },
+    {
+      "lat": 25.43425,
+      "lon": 120.09075
+    },
+    {
+      "lat": 25.7115,
+      "lon": 120.2275
+    },
+    {
+      "lat": 25.842,
+      "lon": 120.29175
+    },
+    {
+      "lat": 26.19575,
+      "lon": 120.46625
+    },
+    {
+      "lat": 27.664,
+      "lon": 121.52025
+    },
+    {
+      "lat": 28.03725,
+      "lon": 121.96525
+    },
+    {
+      "lat": 28.83025,
+      "lon": 122.87175
+    },
+    {
+      "lat": 29.22375,
+      "lon": 122.95675
+    },
+    {
+      "lat": 29.8435,
+      "lon": 123.09075
+    },
+    {
+      "lat": 30.84625,
+      "lon": 123.30725
+    },
+    {
+      "lat": 30.9405,
+      "lon": 123.22275
+    },
+    {
+      "lat": 30.985,
+      "lon": 122.7495
+    },
+    {
+      "lat": 31.039,
+      "lon": 122.34225
+    }
+  ],
+  "departure": {
+    "port": {
+      "aliases": [
+        "로테르담",
+        "Rotterdam"
+      ],
+      "coordinate_source": "wpi",
+      "coordinate_status": "reference",
+      "country_code": "NL",
+      "country_name": "NETHERLANDS",
+      "curated_aliases": [
+        "로테르담"
+      ],
+      "harbor_size": "Large",
+      "harbor_type": "River (Basins)",
+      "id": "unlocode:NLRTM",
+      "kind": "port",
+      "lat": 51.9,
+      "lon": 4.483333,
+      "merge_rule": "exact_unlocode_unique_wpi_within_25km_or_missing_un_coordinate",
+      "name": "Rotterdam",
+      "source_coordinate_distance_km": 2.18,
+      "sources": [
+        {
+          "change": "",
+          "coordinates_raw": "5155N 00430E",
+          "date": "0501",
+          "edition": "2025-1",
+          "file": "release/csv/UNLOCODE CodeListPart2.csv",
+          "function": "12345---",
+          "id": "unlocode",
+          "lat": 51.91666667,
+          "lon": 4.5,
+          "record_key": "NLRTM",
+          "remarks": "",
+          "row": 25587,
+          "status": "AF",
+          "subdivision": "ZH"
+        },
+        {
+          "country_raw": "Netherlands",
+          "edition": "live FeatureServer snapshot",
+          "global_id": "{05C7AD68-A575-481D-90C0-FD17AD560F42}",
+          "id": "wpi",
+          "lat": 51.9,
+          "lon": 4.483333,
+          "object_id": 3725,
+          "record_key": "31140",
+          "unlocode_raw": "NL RTM"
+        }
+      ],
+      "unlocode": "NLRTM",
+      "wpi_id": "31140"
+    },
+    "attachment": {
+      "lon": 4.14125,
+      "lat": 52.01875,
+      "node_id": 12139
+    },
+    "gap_nm": 14.564092747144276,
+    "scope": "reference_gap_not_navigated"
+  },
+  "arrival": {
+    "port": {
+      "aliases": [
+        "상하이",
+        "상해",
+        "Shanghai"
+      ],
+      "coordinate_source": "wpi",
+      "coordinate_status": "reference",
+      "country_code": "CN",
+      "country_name": "CHINA",
+      "curated_aliases": [
+        "상하이",
+        "상해"
+      ],
+      "harbor_size": "Large",
+      "harbor_type": "River (Natural)",
+      "id": "unlocode:CNSGH",
+      "kind": "port",
+      "lat": 31.216667,
+      "lon": 121.5,
+      "merge_rule": "exact_unlocode_unique_wpi_within_25km_or_missing_un_coordinate",
+      "name": "Shanghai",
+      "source_coordinate_distance_km": 2.436,
+      "sources": [
+        {
+          "change": "",
+          "coordinates_raw": "3114N 12129E",
+          "date": "1401",
+          "edition": "2025-1",
+          "file": "release/csv/UNLOCODE CodeListPart1.csv",
+          "function": "12345---",
+          "id": "unlocode",
+          "lat": 31.23333333,
+          "lon": 121.48333333,
+          "record_key": "CNSGH",
+          "remarks": "",
+          "row": 20166,
+          "status": "AS",
+          "subdivision": "SH"
+        },
+        {
+          "country_raw": "China",
+          "edition": "live FeatureServer snapshot",
+          "global_id": "{44B563E3-7AB1-4140-BF97-49200BBC4124}",
+          "id": "wpi",
+          "lat": 31.216667,
+          "lon": 121.5,
+          "object_id": 4819,
+          "record_key": "59970",
+          "unlocode_raw": "CNSGH"
+        }
+      ],
+      "unlocode": "CNSGH",
+      "wpi_id": "59970"
+    },
+    "attachment": {
+      "lon": 122.34225,
+      "lat": 31.039,
+      "node_id": 35214
+    },
+    "gap_nm": 44.660146575658075,
+    "scope": "reference_gap_not_navigated"
+  },
+  "network": {
+    "schema_version": "marnet-manifest-1",
+    "network_id": "eurostat-marnet-5km-e50a60b2bfa866fd",
+    "source_name": "Eurostat SeaRoute / MARNET, 5 km generalized network",
+    "source_url": "https://github.com/eurostat/searoute",
+    "source_commit": "88a2e568a8e0144d1f5a81c3931a7bc2bcce6901",
+    "source_commit_date": "2022-01-10T09:56:46Z",
+    "source_commit_url": "https://github.com/eurostat/searoute/commit/88a2e568a8e0144d1f5a81c3931a7bc2bcce6901",
+    "source_gpkg_last_change": "2021-09-08T13:51:23.453Z",
+    "retrieved_on": "2026-09-12",
+    "retrieval_time_precision": "UTC date only; clock time not recorded",
+    "license": "EUPL-1.2",
+    "license_file": "LICENSE-EUPL-1.2.txt",
+    "graph_file": "network.json",
+    "graph_sha256": "e50a60b2bfa866fdcbcf732977daa74b7c0461bed7f69e838af5458d1df6003a",
+    "builder_file": "build_network.py",
+    "builder_sha256": "59db6298f2b080dbbf06b73de1cd88c91603eeca558b20290b35ab1c81ba15ef",
+    "coordinate_reference_system": "EPSG:4326",
+    "edge_direction": "undirected",
+    "geometry_preservation": "Every original LineString vertex is preserved in source order; no simplification or shortcut edges",
+    "wrapped_longitude_vertices": [
+      {
+        "feature_id": 29787,
+        "vertex_index": 1,
+        "original_lon": 180.7535,
+        "normalized_lon": -179.24649999999997
+      },
+      {
+        "feature_id": 29787,
+        "vertex_index": 2,
+        "original_lon": 180.212,
+        "normalized_lon": -179.788
+      }
+    ],
+    "dateline_policy": "Canonicalize exact +180/-180 endpoints at identical latitude; unmatched endpoints are not joined",
+    "native_endpoint_count": 36121,
+    "node_count": 36109,
+    "edge_count": 72478,
+    "vertex_count": 151169,
+    "self_loop_count": 14,
+    "connected_component_count": 1,
+    "component_node_counts": [
+      36109
+    ],
+    "passage_edge_counts": {
+      "babelmandeb": 3,
+      "bering": 1,
+      "corinth": 1,
+      "dover": 19,
+      "gibraltar": 5,
+      "kiel": 1,
+      "magellan": 26,
+      "malacca": 4,
+      "northeast": 17,
+      "northwest": 17,
+      "panama": 3,
+      "suez": 1
+    },
+    "dateline_matched_latitudes": [
+      -60.0,
+      -50.0,
+      -40.0,
+      -30.0,
+      -20.0,
+      0.0,
+      10.0,
+      20.0,
+      30.0,
+      40.0,
+      62.1,
+      70.0
+    ],
+    "dateline_unmatched_positive_latitudes": [
+      -70.0,
+      -17.8215,
+      -14.492
+    ],
+    "dateline_unmatched_negative_latitudes": [
+      -80.0,
+      -10.0,
+      50.0
+    ],
+    "bounds": {
+      "min_lat": -80.0,
+      "max_lat": 78.2315,
+      "min_lon": -180.0,
+      "max_lon": 180.0
+    },
+    "source_files": [
+      {
+        "file": "marnet_plus_5km.gpkg",
+        "url": "https://raw.githubusercontent.com/eurostat/searoute/88a2e568a8e0144d1f5a81c3931a7bc2bcce6901/modules/core/src/main/resources/marnet/marnet_plus_5km.gpkg",
+        "sha256": "75ca6cc130b3748f568196a9caf62889e9f096ec358f65223b4095ac070be0e7",
+        "bytes": 6963200
+      },
+      {
+        "file": "LICENSE-EUPL-1.2.txt",
+        "url": "https://raw.githubusercontent.com/eurostat/searoute/88a2e568a8e0144d1f5a81c3931a7bc2bcce6901/LICENSE",
+        "sha256": "b2a251cd9bfe08db1891f4f5d771d36e3d4fbd7d4df66df8ece67371b0ffd51f",
+        "bytes": 14147
+      },
+      {
+        "file": "README-upstream.md",
+        "url": "https://raw.githubusercontent.com/eurostat/searoute/88a2e568a8e0144d1f5a81c3931a7bc2bcce6901/README.md",
+        "sha256": "29a2e6d729d0b5d2b84cf8830918cb685c5f1dd40ab2b4750efb4324838563ae",
+        "bytes": 6388
+      }
+    ],
+    "limitations": [
+      "Reference network for maritime transport simulation; not an official nautical chart, maintained fairway, or navigation instruction",
+      "Upstream describes an ORNL Global Shipping Lane Network (2000) base enriched with European coastal AIS lines; source age varies",
+      "5 km is a graph generalization setting, not guaranteed accuracy or coastal clearance",
+      "Graph connectivity does not establish navigability, current canal access, depth, draft, clearance, traffic separation, ice or legal permissions",
+      "Port reference coordinates and nearest graph nodes do not establish verified harbor approach routes",
+      "Upstream Java nearest opposite-dateline zero-cost bridging is deliberately not reproduced for latitude-mismatched nodes"
+    ]
+  },
+  "coast": {
+    "files_sha256": {
+      "ne_10m_land.shp": "4cad3a49bc75c1a4c2f3d7efae04f2f8e63151c96764b2658effabf524331fa6",
+      "ne_10m_land.shx": "f3b02a190c3020eeafd0f48de982619826b57ecd853cbc68e4fc049652891a04",
+      "ne_10m_land.dbf": "e422520372e65c6fb8220888580e5331d04699bcd71c27e53ad42e241a531cbd",
+      "ne_10m_land.prj": "a02a27b1d1982c8516d83398e85a3c8b1aef1713c13ef4d84d7bde17430c07c4"
+    },
+    "source": "Natural Earth v5.1.1 / 1:10 million"
+  },
+  "screening": {
+    "status": "no_land_intersection",
+    "policy": "route-land-geodesic-2nm-v1",
+    "geodesic_spacing_nm_max": 2,
+    "accepted_network_edges": 70173,
+    "total_network_edges": 72478,
+    "route_edges": 259
+  },
+  "constraints": {
+    "blocked_passages": [
+      "corinth",
+      "kiel",
+      "northeast",
+      "northwest",
+      "panama",
+      "suez"
+    ],
+    "used_passages": [
+      "dover"
+    ],
+    "max_attachment_gap_nm": 100
+  },
+  "edge_ids": [
+    54500,
+    50017,
+    9795,
+    46763,
+    17258,
+    30046,
+    67418,
+    3490,
+    17374,
+    568,
+    39072,
+    24367,
+    65700,
+    18063,
+    40668,
+    13314,
+    62470,
+    32564,
+    17284,
+    15768,
+    69859,
+    9924,
+    32435,
+    40403,
+    4731,
+    36426,
+    9698,
+    44829,
+    53612,
+    28640,
+    15437,
+    36582,
+    28888,
+    37049,
+    31522,
+    50324,
+    24444,
+    71812,
+    31455,
+    32440,
+    1504,
+    7694,
+    71314,
+    44194,
+    46175,
+    5509,
+    33876,
+    51033,
+    15593,
+    70903,
+    65787,
+    38677,
+    22258,
+    11155,
+    21099,
+    66260,
+    45256,
+    31151,
+    62349,
+    52780,
+    41980,
+    23670,
+    50429,
+    48215,
+    34125,
+    58969,
+    17773,
+    3176,
+    67370,
+    39296,
+    12195,
+    38274,
+    49259,
+    21186,
+    13496,
+    59395,
+    20116,
+    52682,
+    71098,
+    6677,
+    60280,
+    63413,
+    21392,
+    34679,
+    14835,
+    5874,
+    46739,
+    1790,
+    43091,
+    42968,
+    34169,
+    34055,
+    78,
+    38870,
+    13899,
+    53341,
+    27904,
+    22210,
+    40544,
+    24651,
+    66225,
+    7678,
+    6505,
+    68070,
+    7253,
+    18437,
+    27665,
+    25413,
+    56497,
+    56971,
+    63219,
+    2607,
+    38487,
+    14948,
+    45841,
+    53219,
+    6346,
+    69094,
+    25455,
+    13043,
+    62639,
+    47064,
+    64670,
+    38110,
+    67007,
+    36721,
+    28522,
+    23403,
+    51667,
+    41025,
+    54949,
+    14941,
+    2849,
+    54106,
+    66889,
+    50822,
+    71347,
+    10955,
+    15598,
+    37800,
+    10824,
+    56392,
+    62848,
+    49692,
+    69698,
+    43474,
+    63878,
+    35439,
+    58877,
+    49943,
+    4108,
+    54925,
+    54950,
+    7911,
+    56896,
+    17720,
+    62837,
+    42501,
+    31703,
+    24152,
+    7213,
+    15225,
+    58425,
+    69018,
+    46752,
+    3798,
+    7533,
+    13444,
+    4830,
+    10621,
+    31949,
+    63670,
+    53790,
+    30109,
+    24297,
+    8630,
+    17431,
+    69398,
+    45,
+    13522,
+    45958,
+    967,
+    56939,
+    32009,
+    30023,
+    38731,
+    27057,
+    20037,
+    32217,
+    47984,
+    13413,
+    38665,
+    14606,
+    55136,
+    68083,
+    37252,
+    49918,
+    47385,
+    68689,
+    59043,
+    11352,
+    14838,
+    71783,
+    35776,
+    67646,
+    38854,
+    54782,
+    28285,
+    40343,
+    19774,
+    10501,
+    20608,
+    46481,
+    23869,
+    65502,
+    47776,
+    34552,
+    72425,
+    44963,
+    52229,
+    22380,
+    11609,
+    28250,
+    36994,
+    43693,
+    23786,
+    39688,
+    55860,
+    25827,
+    1999,
+    7262,
+    35797,
+    19584,
+    42350,
+    61424,
+    23146,
+    8626,
+    57013,
+    53397,
+    18792,
+    63085,
+    40340,
+    27286,
+    2733,
+    68040,
+    26398,
+    43012,
+    48065,
+    26754,
+    17688,
+    41737,
+    39386,
+    32460,
+    70751,
+    67174,
+    32834,
+    39653,
+    58340,
+    8175
+  ],
+  "scope": "network_segment_only",
+  "limitations": [
+    "과거 공개 항로망에서 거리 기준으로 계산한 해상 구간 후보입니다. 현재 통항 가능성·수심·흘수·교통분리대는 검증하지 않았습니다.",
+    "항구 대표점과 항로망 접속점 사이의 간격은 위치 차이이며 항행 경로가 아닙니다. 구간 거리·시간·연료에서 제외됩니다.",
+    "해안선은 1:10 million 지도 축척입니다. 해도 수준의 작은 섬·수로·안전 여유를 보증하지 않습니다.",
+    "수에즈·파나마·킬·코린트 운하 및 북서·북동 극지 통로를 제외했습니다. 나머지 통로의 실시간 운영 상태는 확인하지 않습니다.",
+    "가장 가까운 항로망 노드를 선택했습니다. 반도·방파제의 어느 쪽으로 입출항할 수 있는지는 별도 확인이 필요합니다.",
+    "현재 파랑·해류·연료를 최소화한 경로가 아닙니다. 선택한 해상 경로에 예보를 조회하는 단계입니다."
+  ],
+  "schema_version": "sea-route-1.0",
+  "created_at_utc": "2026-09-12T10:06:10.669559+00:00",
+  "request": {
+    "departure_port_id": "unlocode:NLRTM",
+    "arrival_port_id": "unlocode:CNSGH",
+    "avoid_passages": []
+  },
+  "port_catalog": {
+    "catalog_id": "ports-9211d92725cd1f17",
+    "catalog_sha256": "9211d92725cd1f178e5a1c0e7d4f6652ced8de1381d41e4b49914f61c0e3e15c",
+    "sources": [
+      {
+        "edition": "2025-1",
+        "files": [
+          {
+            "bytes": 13507338,
+            "path": "raw/unlocode-2025-1.zip",
+            "retrieved_at": "2026-09-12T08:28:48.450000Z",
+            "sha256": "ad409fc7149b10f98d61190c34d9daf78b78bb8b31464cc66de1a89d09b01b5d",
+            "source": "unlocode",
+            "url": "https://opensource.unicc.org/un/unece/uncefact/vocab-locode/-/jobs/artifacts/2025-1/download?job=package-release"
+          }
+        ],
+        "id": "unlocode",
+        "license": "Official site states UN/CEFACT standards are CC BY 4.0; dataset-specific terms are not separately declared.",
+        "license_url": "https://unlocode.unece.org/terms/",
+        "records": 17520,
+        "retrieved_at": "2026-09-12T08:28:48.450000Z",
+        "sha256": "644c67b6019647877eb9fd89eda1c9c4107c5a96e9eeb90930ef6d57a1972127",
+        "title": "UNECE UN/LOCODE",
+        "url": "https://unlocode.unece.org/publications/"
+      },
+      {
+        "edition": "live FeatureServer snapshot",
+        "files": [
+          {
+            "bytes": 35873,
+            "path": "raw/wpi-layer.json",
+            "retrieved_at": "2026-09-12T08:29:59.970000Z",
+            "sha256": "2e5555734a11af8cde1b8c42a73bc05bfad7e1fa979e73be969f2f5a3c541b9c",
+            "source": "wpi",
+            "url": "https://fgmod.nga.mil/nauticalpubs-feature/rest/services/WPI/WPI_Viewer/FeatureServer/0?f=pjson"
+          },
+          {
+            "bytes": 18,
+            "path": "raw/wpi-count.json",
+            "retrieved_at": "2026-09-12T08:29:59.800000Z",
+            "sha256": "3096b55fa4c9760dc64d7d60c74fe1b7aa1105dbe95ce48001e21af860a0a65e",
+            "source": "wpi",
+            "url": "https://fgmod.nga.mil/nauticalpubs-feature/rest/services/WPI/WPI_Viewer/FeatureServer/0/query?where=1%3D1&returnCountOnly=true&f=pjson"
+          },
+          {
+            "bytes": 2953670,
+            "path": "raw/wpi-features-0.json",
+            "retrieved_at": "2026-09-12T08:30:56.860000Z",
+            "sha256": "13a8175a1c745a0f7051e85ab65cbdabb4365293ccd840bef23b9e891e308c6e",
+            "source": "wpi",
+            "url": "https://fgmod.nga.mil/nauticalpubs-feature/rest/services/WPI/WPI_Viewer/FeatureServer/0/query?where=1%3D1&outFields=%2A&outSR=4326&returnGeometry=true&orderByFields=objectid+ASC&resultOffset=0&resultRecordCount=1000&f=json"
+          },
+          {
+            "bytes": 2992926,
+            "path": "raw/wpi-features-1000.json",
+            "retrieved_at": "2026-09-12T08:30:55.840000Z",
+            "sha256": "7e5c0edf2acf1599a41f3b057a22f32d8c67d4a9ea642686f6ba0e132f02d41f",
+            "source": "wpi",
+            "url": "https://fgmod.nga.mil/nauticalpubs-feature/rest/services/WPI/WPI_Viewer/FeatureServer/0/query?where=1%3D1&outFields=%2A&outSR=4326&returnGeometry=true&orderByFields=objectid+ASC&resultOffset=1000&resultRecordCount=1000&f=json"
+          },
+          {
+            "bytes": 2972954,
+            "path": "raw/wpi-features-2000.json",
+            "retrieved_at": "2026-09-12T08:30:52.820000Z",
+            "sha256": "13a35a5d32796ec9f55dfdb3c895eeb0ad7a60c1764d500ea65cd4ad1d07ecde",
+            "source": "wpi",
+            "url": "https://fgmod.nga.mil/nauticalpubs-feature/rest/services/WPI/WPI_Viewer/FeatureServer/0/query?where=1%3D1&outFields=%2A&outSR=4326&returnGeometry=true&orderByFields=objectid+ASC&resultOffset=2000&resultRecordCount=1000&f=json"
+          },
+          {
+            "bytes": 2415313,
+            "path": "raw/wpi-features-3000.json",
+            "retrieved_at": "2026-09-12T08:31:01.170000Z",
+            "sha256": "49a254a1adf2a15051c562f7be57ced278d04adbe6b8c7220d43f9675d3dfecb",
+            "source": "wpi",
+            "url": "https://fgmod.nga.mil/nauticalpubs-feature/rest/services/WPI/WPI_Viewer/FeatureServer/0/query?where=1%3D1&outFields=%2A&outSR=4326&returnGeometry=true&orderByFields=objectid+ASC&resultOffset=3000&resultRecordCount=1000&f=json"
+          },
+          {
+            "bytes": 18434,
+            "path": "raw/wpi-object-ids.json",
+            "retrieved_at": "2026-09-12T08:41:36.060000Z",
+            "sha256": "d2f002ad55ef058fe7f697b4677d2dbe287bf367c3e5fef37bbac2d2a8423d24",
+            "source": "wpi",
+            "url": "https://fgmod.nga.mil/nauticalpubs-feature/rest/services/WPI/WPI_Viewer/FeatureServer/0/query?where=1%3D1&returnIdsOnly=true&f=json"
+          }
+        ],
+        "id": "wpi",
+        "license": "NGA publicly released reference data; attribution retained",
+        "license_url": "https://msi.nga.mil/Publications/WPI",
+        "records": 3807,
+        "retrieved_at": "2026-09-12T08:41:36.060000Z",
+        "sha256": "d8398ce9623e090bea3664a27d185888ccc4ce7414fb253598aaba7d697277b9",
+        "title": "NGA World Port Index",
+        "url": "https://msi.nga.mil/Publications/WPI"
+      }
+    ]
+  },
+  "plan_id": "3e71ba0ebca2611d8453fa1835e402b9d0daba2041dc2b85d8dbbd2a40680270"
+}

@@ -1,0 +1,42 @@
+# 데이터 레이크 (ADR-003) — 카탈로그가 재취득 경로를 보존한다
+# (data → data.nosync 심볼릭 링크: iCloud 동기화 제외용, PHASE3 §12 참조)
+data
+data.nosync/
+!data/README.md
+
+# Python
+__pycache__/
+*.py[cod]
+.venv
+.venv.nosync/
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+*.egg-info/
+
+# Node / web
+web/node_modules/
+web/dist/
+
+# 노트북 체크포인트
+.ipynb_checkpoints/
+
+# macOS
+.DS_Store
+
+# 로컬 비밀 (API 키는 환경변수 또는 .env — 커밋 금지)
+.env
+*.key
+
+# ── 2026-09-27 git 도입 때 추가 ─────────────────────────────────────
+# T7(exFAT)이 모든 파일 옆에 만드는 AppleDouble 부속 파일
+._*
+# 수동 사본 — git 도입 이전의 되돌리기 수단. 이제 이력은 git 이 맡는다
+backups/
+web/_backup/
+.venv 2/
+# 실행 ID 로 재현 가능한 대용량 산출물 (reports/README.md 의 --resume 명령으로 다시 만든다)
+reports/global-validation-altimeter.csv
+reports/route-voyage-*-result.json
+# 개인 도구 설정
+.claude/settings.local.json

@@ -1,0 +1,1305 @@
+{
+  "built_at": "2026-09-12T08:44:52.124374Z",
+  "catalog_id": "ports-9211d92725cd1f17",
+  "catalog_sha256": "9211d92725cd1f178e5a1c0e7d4f6652ced8de1381d41e4b49914f61c0e3e15c",
+  "coordinate_policy": "NGA reference preferred for eligible consolidation. Authoritative UN DDMMN DDDMME otherwise. Never infer, geocode, or snap coordinates.",
+  "count_unit": "port_location_and_facility_records",
+  "countries": [
+    {
+      "code": "AE",
+      "count": 50,
+      "name": "UNITED ARAB EMIRATES (THE)"
+    },
+    {
+      "code": "AF",
+      "count": 3,
+      "name": "AFGHANISTAN"
+    },
+    {
+      "code": "AG",
+      "count": 5,
+      "name": "ANTIGUA AND BARBUDA"
+    },
+    {
+      "code": "AI",
+      "count": 7,
+      "name": "ANGUILLA"
+    },
+    {
+      "code": "AL",
+      "count": 7,
+      "name": "ALBANIA"
+    },
+    {
+      "code": "AM",
+      "count": 1,
+      "name": "ARMENIA"
+    },
+    {
+      "code": "AO",
+      "count": 42,
+      "name": "ANGOLA"
+    },
+    {
+      "code": "AQ",
+      "count": 42,
+      "name": "ANTARCTICA"
+    },
+    {
+      "code": "AR",
+      "count": 110,
+      "name": "ARGENTINA"
+    },
+    {
+      "code": "AS",
+      "count": 2,
+      "name": "AMERICAN SAMOA"
+    },
+    {
+      "code": "AT",
+      "count": 111,
+      "name": "AUSTRIA"
+    },
+    {
+      "code": "AU",
+      "count": 381,
+      "name": "AUSTRALIA"
+    },
+    {
+      "code": "AW",
+      "count": 6,
+      "name": "ARUBA"
+    },
+    {
+      "code": "AX",
+      "count": 1,
+      "name": "ÅLAND ISLANDS"
+    },
+    {
+      "code": "AZ",
+      "count": 6,
+      "name": "AZERBAIJAN"
+    },
+    {
+      "code": "BA",
+      "count": 10,
+      "name": "BOSNIA AND HERZEGOVINA"
+    },
+    {
+      "code": "BB",
+      "count": 2,
+      "name": "BARBADOS"
+    },
+    {
+      "code": "BD",
+      "count": 12,
+      "name": "BANGLADESH"
+    },
+    {
+      "code": "BE",
+      "count": 474,
+      "name": "BELGIUM"
+    },
+    {
+      "code": "BF",
+      "count": 1,
+      "name": "BURKINA FASO"
+    },
+    {
+      "code": "BG",
+      "count": 23,
+      "name": "BULGARIA"
+    },
+    {
+      "code": "BH",
+      "count": 6,
+      "name": "BAHRAIN"
+    },
+    {
+      "code": "BI",
+      "count": 1,
+      "name": "BURUNDI"
+    },
+    {
+      "code": "BJ",
+      "count": 3,
+      "name": "BENIN"
+    },
+    {
+      "code": "BL",
+      "count": 1,
+      "name": "SAINT BARTHÉLEMY"
+    },
+    {
+      "code": "BM",
+      "count": 10,
+      "name": "BERMUDA"
+    },
+    {
+      "code": "BN",
+      "count": 6,
+      "name": "BRUNEI DARUSSALAM"
+    },
+    {
+      "code": "BO",
+      "count": 12,
+      "name": "BOLIVIA, PLURINATIONAL STATE OF"
+    },
+    {
+      "code": "BQ",
+      "count": 8,
+      "name": "BONAIRE, SINT EUSTATIUS AND SABA"
+    },
+    {
+      "code": "BR",
+      "count": 217,
+      "name": "BRAZIL"
+    },
+    {
+      "code": "BS",
+      "count": 36,
+      "name": "BAHAMAS"
+    },
+    {
+      "code": "BW",
+      "count": 2,
+      "name": "BOTSWANA"
+    },
+    {
+      "code": "BY",
+      "count": 6,
+      "name": "BELARUS"
+    },
+    {
+      "code": "BZ",
+      "count": 5,
+      "name": "BELIZE"
+    },
+    {
+      "code": "CA",
+      "count": 723,
+      "name": "CANADA"
+    },
+    {
+      "code": "CC",
+      "count": 1,
+      "name": "COCOS (KEELING) ISLANDS"
+    },
+    {
+      "code": "CD",
+      "count": 7,
+      "name": "CONGO, THE DEMOCRATIC REPUBLIC OF THE"
+    },
+    {
+      "code": "CF",
+      "count": 1,
+      "name": "CENTRAL AFRICAN REPUBLIC"
+    },
+    {
+      "code": "CG",
+      "count": 8,
+      "name": "CONGO"
+    },
+    {
+      "code": "CH",
+      "count": 68,
+      "name": "SWITZERLAND"
+    },
+    {
+      "code": "CI",
+      "count": 13,
+      "name": "CÔTE D'IVOIRE"
+    },
+    {
+      "code": "CK",
+      "count": 7,
+      "name": "COOK ISLANDS"
+    },
+    {
+      "code": "CL",
+      "count": 112,
+      "name": "CHILE"
+    },
+    {
+      "code": "CM",
+      "count": 12,
+      "name": "CAMEROON"
+    },
+    {
+      "code": "CN",
+      "count": 781,
+      "name": "CHINA"
+    },
+    {
+      "code": "CO",
+      "count": 37,
+      "name": "COLOMBIA"
+    },
+    {
+      "code": "CR",
+      "count": 59,
+      "name": "COSTA RICA"
+    },
+    {
+      "code": "CU",
+      "count": 44,
+      "name": "CUBA"
+    },
+    {
+      "code": "CV",
+      "count": 4,
+      "name": "CAPE VERDE"
+    },
+    {
+      "code": "CW",
+      "count": 6,
+      "name": "CURAÇAO"
+    },
+    {
+      "code": "CX",
+      "count": 1,
+      "name": "CHRISTMAS ISLAND"
+    },
+    {
+      "code": "CY",
+      "count": 14,
+      "name": "CYPRUS"
+    },
+    {
+      "code": "CZ",
+      "count": 105,
+      "name": "CZECHIA"
+    },
+    {
+      "code": "DE",
+      "count": 881,
+      "name": "GERMANY"
+    },
+    {
+      "code": "DJ",
+      "count": 4,
+      "name": "DJIBOUTI"
+    },
+    {
+      "code": "DK",
+      "count": 244,
+      "name": "DENMARK"
+    },
+    {
+      "code": "DM",
+      "count": 4,
+      "name": "DOMINICA"
+    },
+    {
+      "code": "DO",
+      "count": 35,
+      "name": "DOMINICAN REPUBLIC"
+    },
+    {
+      "code": "DZ",
+      "count": 27,
+      "name": "ALGERIA"
+    },
+    {
+      "code": "EC",
+      "count": 30,
+      "name": "ECUADOR"
+    },
+    {
+      "code": "EE",
+      "count": 221,
+      "name": "ESTONIA"
+    },
+    {
+      "code": "EG",
+      "count": 53,
+      "name": "EGYPT"
+    },
+    {
+      "code": "EH",
+      "count": 3,
+      "name": "WESTERN SAHARA"
+    },
+    {
+      "code": "ER",
+      "count": 2,
+      "name": "ERITREA"
+    },
+    {
+      "code": "ES",
+      "count": 436,
+      "name": "SPAIN"
+    },
+    {
+      "code": "FI",
+      "count": 188,
+      "name": "FINLAND"
+    },
+    {
+      "code": "FJ",
+      "count": 16,
+      "name": "FIJI"
+    },
+    {
+      "code": "FK",
+      "count": 2,
+      "name": "FALKLAND ISLANDS (MALVINAS)"
+    },
+    {
+      "code": "FM",
+      "count": 18,
+      "name": "MICRONESIA, FEDERATED STATES OF"
+    },
+    {
+      "code": "FO",
+      "count": 24,
+      "name": "FAROE ISLANDS"
+    },
+    {
+      "code": "FR",
+      "count": 816,
+      "name": "FRANCE"
+    },
+    {
+      "code": "GA",
+      "count": 14,
+      "name": "GABON"
+    },
+    {
+      "code": "GB",
+      "count": 1363,
+      "name": "UNITED KINGDOM"
+    },
+    {
+      "code": "GD",
+      "count": 3,
+      "name": "GRENADA"
+    },
+    {
+      "code": "GE",
+      "count": 7,
+      "name": "GEORGIA"
+    },
+    {
+      "code": "GF",
+      "count": 8,
+      "name": "FRENCH GUIANA"
+    },
+    {
+      "code": "GG",
+      "count": 4,
+      "name": "GUERNSEY"
+    },
+    {
+      "code": "GH",
+      "count": 11,
+      "name": "GHANA"
+    },
+    {
+      "code": "GI",
+      "count": 2,
+      "name": "GIBRALTAR"
+    },
+    {
+      "code": "GL",
+      "count": 36,
+      "name": "GREENLAND"
+    },
+    {
+      "code": "GM",
+      "count": 2,
+      "name": "GAMBIA"
+    },
+    {
+      "code": "GN",
+      "count": 13,
+      "name": "GUINEA"
+    },
+    {
+      "code": "GP",
+      "count": 16,
+      "name": "GUADELOUPE"
+    },
+    {
+      "code": "GQ",
+      "count": 10,
+      "name": "EQUATORIAL GUINEA"
+    },
+    {
+      "code": "GR",
+      "count": 363,
+      "name": "GREECE"
+    },
+    {
+      "code": "GS",
+      "count": 4,
+      "name": "SOUTH GEORGIA AND THE SOUTH SANDWICH ISLANDS"
+    },
+    {
+      "code": "GT",
+      "count": 13,
+      "name": "GUATEMALA"
+    },
+    {
+      "code": "GU",
+      "count": 3,
+      "name": "GUAM"
+    },
+    {
+      "code": "GW",
+      "count": 7,
+      "name": "GUINEA-BISSAU"
+    },
+    {
+      "code": "GY",
+      "count": 6,
+      "name": "GUYANA"
+    },
+    {
+      "code": "HK",
+      "count": 13,
+      "name": "HONG KONG"
+    },
+    {
+      "code": "HM",
+      "count": 2,
+      "name": "HEARD ISLAND AND MCDONALD ISLANDS"
+    },
+    {
+      "code": "HN",
+      "count": 15,
+      "name": "HONDURAS"
+    },
+    {
+      "code": "HR",
+      "count": 171,
+      "name": "CROATIA"
+    },
+    {
+      "code": "HT",
+      "count": 14,
+      "name": "HAITI"
+    },
+    {
+      "code": "HU",
+      "count": 61,
+      "name": "HUNGARY"
+    },
+    {
+      "code": "ID",
+      "count": 332,
+      "name": "INDONESIA"
+    },
+    {
+      "code": "IE",
+      "count": 132,
+      "name": "IRELAND"
+    },
+    {
+      "code": "IL",
+      "count": 22,
+      "name": "ISRAEL"
+    },
+    {
+      "code": "IM",
+      "count": 7,
+      "name": "ISLE OF MAN"
+    },
+    {
+      "code": "IN",
+      "count": 290,
+      "name": "INDIA"
+    },
+    {
+      "code": "IO",
+      "count": 1,
+      "name": "BRITISH INDIAN OCEAN TERRITORY"
+    },
+    {
+      "code": "IQ",
+      "count": 24,
+      "name": "IRAQ"
+    },
+    {
+      "code": "IR",
+      "count": 49,
+      "name": "IRAN, ISLAMIC REPUBLIC OF"
+    },
+    {
+      "code": "IS",
+      "count": 84,
+      "name": "ICELAND"
+    },
+    {
+      "code": "IT",
+      "count": 336,
+      "name": "ITALY"
+    },
+    {
+      "code": "JE",
+      "count": 3,
+      "name": "JERSEY"
+    },
+    {
+      "code": "JM",
+      "count": 21,
+      "name": "JAMAICA"
+    },
+    {
+      "code": "JO",
+      "count": 2,
+      "name": "JORDAN"
+    },
+    {
+      "code": "JP",
+      "count": 1573,
+      "name": "JAPAN"
+    },
+    {
+      "code": "KE",
+      "count": 8,
+      "name": "KENYA"
+    },
+    {
+      "code": "KH",
+      "count": 6,
+      "name": "CAMBODIA"
+    },
+    {
+      "code": "KI",
+      "count": 12,
+      "name": "KIRIBATI"
+    },
+    {
+      "code": "KM",
+      "count": 5,
+      "name": "COMOROS"
+    },
+    {
+      "code": "KN",
+      "count": 3,
+      "name": "SAINT KITTS AND NEVIS"
+    },
+    {
+      "code": "KP",
+      "count": 16,
+      "name": "KOREA, DEMOCRATIC PEOPLE'S REPUBLIC OF"
+    },
+    {
+      "code": "KR",
+      "count": 77,
+      "name": "KOREA, REPUBLIC OF"
+    },
+    {
+      "code": "KW",
+      "count": 13,
+      "name": "KUWAIT"
+    },
+    {
+      "code": "KY",
+      "count": 2,
+      "name": "CAYMAN ISLANDS"
+    },
+    {
+      "code": "KZ",
+      "count": 3,
+      "name": "KAZAKHSTAN"
+    },
+    {
+      "code": "LB",
+      "count": 17,
+      "name": "LEBANON"
+    },
+    {
+      "code": "LC",
+      "count": 3,
+      "name": "SAINT LUCIA"
+    },
+    {
+      "code": "LK",
+      "count": 22,
+      "name": "SRI LANKA"
+    },
+    {
+      "code": "LR",
+      "count": 16,
+      "name": "LIBERIA"
+    },
+    {
+      "code": "LT",
+      "count": 5,
+      "name": "LITHUANIA"
+    },
+    {
+      "code": "LU",
+      "count": 9,
+      "name": "LUXEMBOURG"
+    },
+    {
+      "code": "LV",
+      "count": 11,
+      "name": "LATVIA"
+    },
+    {
+      "code": "LY",
+      "count": 33,
+      "name": "LIBYA"
+    },
+    {
+      "code": "MA",
+      "count": 31,
+      "name": "MOROCCO"
+    },
+    {
+      "code": "MC",
+      "count": 2,
+      "name": "MONACO"
+    },
+    {
+      "code": "MD",
+      "count": 2,
+      "name": "MOLDOVA, REPUBLIC OF"
+    },
+    {
+      "code": "ME",
+      "count": 11,
+      "name": "MONTENEGRO"
+    },
+    {
+      "code": "MF",
+      "count": 2,
+      "name": "SAINT MARTIN (FRENCH PART)"
+    },
+    {
+      "code": "MG",
+      "count": 35,
+      "name": "MADAGASCAR"
+    },
+    {
+      "code": "MH",
+      "count": 4,
+      "name": "MARSHALL ISLANDS (THE)"
+    },
+    {
+      "code": "MK",
+      "count": 4,
+      "name": "NORTH MACEDONIA"
+    },
+    {
+      "code": "MM",
+      "count": 27,
+      "name": "MYANMAR"
+    },
+    {
+      "code": "MO",
+      "count": 1,
+      "name": "MACAO"
+    },
+    {
+      "code": "MP",
+      "count": 3,
+      "name": "NORTHERN MARIANA ISLANDS (THE)"
+    },
+    {
+      "code": "MQ",
+      "count": 8,
+      "name": "MARTINIQUE"
+    },
+    {
+      "code": "MR",
+      "count": 4,
+      "name": "MAURITANIA"
+    },
+    {
+      "code": "MS",
+      "count": 2,
+      "name": "MONTSERRAT"
+    },
+    {
+      "code": "MT",
+      "count": 19,
+      "name": "MALTA"
+    },
+    {
+      "code": "MU",
+      "count": 6,
+      "name": "MAURITIUS"
+    },
+    {
+      "code": "MV",
+      "count": 17,
+      "name": "MALDIVES"
+    },
+    {
+      "code": "MW",
+      "count": 2,
+      "name": "MALAWI"
+    },
+    {
+      "code": "MX",
+      "count": 116,
+      "name": "MEXICO"
+    },
+    {
+      "code": "MY",
+      "count": 184,
+      "name": "MALAYSIA"
+    },
+    {
+      "code": "MZ",
+      "count": 22,
+      "name": "MOZAMBIQUE"
+    },
+    {
+      "code": "NA",
+      "count": 3,
+      "name": "NAMIBIA"
+    },
+    {
+      "code": "NC",
+      "count": 17,
+      "name": "NEW CALEDONIA"
+    },
+    {
+      "code": "NF",
+      "count": 1,
+      "name": "NORFOLK ISLAND"
+    },
+    {
+      "code": "NG",
+      "count": 52,
+      "name": "NIGERIA"
+    },
+    {
+      "code": "NI",
+      "count": 14,
+      "name": "NICARAGUA"
+    },
+    {
+      "code": "NL",
+      "count": 532,
+      "name": "NETHERLANDS"
+    },
+    {
+      "code": "NO",
+      "count": 766,
+      "name": "NORWAY"
+    },
+    {
+      "code": "NP",
+      "count": 1,
+      "name": "NEPAL"
+    },
+    {
+      "code": "NR",
+      "count": 1,
+      "name": "NAURU"
+    },
+    {
+      "code": "NU",
+      "count": 2,
+      "name": "NIUE"
+    },
+    {
+      "code": "NZ",
+      "count": 50,
+      "name": "NEW ZEALAND"
+    },
+    {
+      "code": "OM",
+      "count": 18,
+      "name": "OMAN"
+    },
+    {
+      "code": "PA",
+      "count": 39,
+      "name": "PANAMA"
+    },
+    {
+      "code": "PE",
+      "count": 44,
+      "name": "PERU"
+    },
+    {
+      "code": "PF",
+      "count": 19,
+      "name": "FRENCH POLYNESIA"
+    },
+    {
+      "code": "PG",
+      "count": 87,
+      "name": "PAPUA NEW GUINEA"
+    },
+    {
+      "code": "PH",
+      "count": 389,
+      "name": "PHILIPPINES (THE)"
+    },
+    {
+      "code": "PK",
+      "count": 12,
+      "name": "PAKISTAN"
+    },
+    {
+      "code": "PL",
+      "count": 81,
+      "name": "POLAND"
+    },
+    {
+      "code": "PM",
+      "count": 2,
+      "name": "SAINT PIERRE AND MIQUELON"
+    },
+    {
+      "code": "PN",
+      "count": 1,
+      "name": "PITCAIRN"
+    },
+    {
+      "code": "PR",
+      "count": 16,
+      "name": "PUERTO RICO"
+    },
+    {
+      "code": "PT",
+      "count": 125,
+      "name": "PORTUGAL"
+    },
+    {
+      "code": "PW",
+      "count": 3,
+      "name": "PALAU"
+    },
+    {
+      "code": "PY",
+      "count": 18,
+      "name": "PARAGUAY"
+    },
+    {
+      "code": "QA",
+      "count": 13,
+      "name": "QATAR"
+    },
+    {
+      "code": "RE",
+      "count": 10,
+      "name": "RÉUNION"
+    },
+    {
+      "code": "RO",
+      "count": 60,
+      "name": "ROMANIA"
+    },
+    {
+      "code": "RS",
+      "count": 15,
+      "name": "SERBIA"
+    },
+    {
+      "code": "RU",
+      "count": 272,
+      "name": "RUSSIAN FEDERATION (THE)"
+    },
+    {
+      "code": "RW",
+      "count": 3,
+      "name": "RWANDA"
+    },
+    {
+      "code": "SA",
+      "count": 45,
+      "name": "SAUDI ARABIA"
+    },
+    {
+      "code": "SB",
+      "count": 19,
+      "name": "SOLOMON ISLANDS"
+    },
+    {
+      "code": "SC",
+      "count": 3,
+      "name": "SEYCHELLES"
+    },
+    {
+      "code": "SD",
+      "count": 6,
+      "name": "SUDAN (THE)"
+    },
+    {
+      "code": "SE",
+      "count": 325,
+      "name": "SWEDEN"
+    },
+    {
+      "code": "SG",
+      "count": 16,
+      "name": "SINGAPORE"
+    },
+    {
+      "code": "SH",
+      "count": 7,
+      "name": "SAINT HELENA, ASCENSION AND TRISTAN DA CUNHA"
+    },
+    {
+      "code": "SI",
+      "count": 36,
+      "name": "SLOVENIA"
+    },
+    {
+      "code": "SJ",
+      "count": 4,
+      "name": "SVALBARD AND JAN MAYEN"
+    },
+    {
+      "code": "SK",
+      "count": 26,
+      "name": "SLOVAKIA"
+    },
+    {
+      "code": "SL",
+      "count": 6,
+      "name": "SIERRA LEONE"
+    },
+    {
+      "code": "SM",
+      "count": 1,
+      "name": "SAN MARINO"
+    },
+    {
+      "code": "SN",
+      "count": 9,
+      "name": "SENEGAL"
+    },
+    {
+      "code": "SO",
+      "count": 9,
+      "name": "SOMALIA"
+    },
+    {
+      "code": "SR",
+      "count": 8,
+      "name": "SURINAME"
+    },
+    {
+      "code": "ST",
+      "count": 3,
+      "name": "SAO TOME AND PRINCIPE"
+    },
+    {
+      "code": "SV",
+      "count": 13,
+      "name": "EL SALVADOR"
+    },
+    {
+      "code": "SX",
+      "count": 5,
+      "name": "SINT MAARTEN (DUTCH PART)"
+    },
+    {
+      "code": "SY",
+      "count": 8,
+      "name": "SYRIAN ARAB REPUBLIC (THE)"
+    },
+    {
+      "code": "SZ",
+      "count": 3,
+      "name": "ESWATINI"
+    },
+    {
+      "code": "TC",
+      "count": 6,
+      "name": "TURKS AND CAICOS ISLANDS (THE)"
+    },
+    {
+      "code": "TF",
+      "count": 1,
+      "name": "FRENCH SOUTHERN TERRITORIES"
+    },
+    {
+      "code": "TG",
+      "count": 3,
+      "name": "TOGO"
+    },
+    {
+      "code": "TH",
+      "count": 73,
+      "name": "THAILAND"
+    },
+    {
+      "code": "TK",
+      "count": 3,
+      "name": "TOKELAU"
+    },
+    {
+      "code": "TL",
+      "count": 1,
+      "name": "TIMOR-LESTE"
+    },
+    {
+      "code": "TM",
+      "count": 6,
+      "name": "TURKMENISTAN"
+    },
+    {
+      "code": "TN",
+      "count": 26,
+      "name": "TUNISIA"
+    },
+    {
+      "code": "TO",
+      "count": 4,
+      "name": "TONGA"
+    },
+    {
+      "code": "TR",
+      "count": 155,
+      "name": "TÜRKIYE"
+    },
+    {
+      "code": "TT",
+      "count": 20,
+      "name": "TRINIDAD AND TOBAGO"
+    },
+    {
+      "code": "TV",
+      "count": 1,
+      "name": "TUVALU"
+    },
+    {
+      "code": "TW",
+      "count": 25,
+      "name": "TAIWAN (PROVINCE OF CHINA)"
+    },
+    {
+      "code": "TZ",
+      "count": 22,
+      "name": "TANZANIA, UNITED REPUBLIC OF"
+    },
+    {
+      "code": "UA",
+      "count": 33,
+      "name": "UKRAINE"
+    },
+    {
+      "code": "UG",
+      "count": 3,
+      "name": "UGANDA"
+    },
+    {
+      "code": "UM",
+      "count": 6,
+      "name": "UNITED STATES MINOR OUTLYING ISLANDS"
+    },
+    {
+      "code": "US",
+      "count": 2191,
+      "name": "UNITED STATES OF AMERICA (THE)"
+    },
+    {
+      "code": "UY",
+      "count": 15,
+      "name": "URUGUAY"
+    },
+    {
+      "code": "UZ",
+      "count": 2,
+      "name": "UZBEKISTAN"
+    },
+    {
+      "code": "VC",
+      "count": 8,
+      "name": "SAINT VINCENT AND THE GRENADINES"
+    },
+    {
+      "code": "VE",
+      "count": 66,
+      "name": "VENEZUELA (BOLIVARIAN REPUBLIC OF)"
+    },
+    {
+      "code": "VG",
+      "count": 7,
+      "name": "VIRGIN ISLANDS (BRITISH)"
+    },
+    {
+      "code": "VI",
+      "count": 9,
+      "name": "VIRGIN ISLANDS (U.S.)"
+    },
+    {
+      "code": "VN",
+      "count": 136,
+      "name": "VIET NAM"
+    },
+    {
+      "code": "VU",
+      "count": 5,
+      "name": "VANUATU"
+    },
+    {
+      "code": "WF",
+      "count": 3,
+      "name": "WALLIS AND FUTUNA"
+    },
+    {
+      "code": "WS",
+      "count": 2,
+      "name": "SAMOA"
+    },
+    {
+      "code": "XZ",
+      "count": 24,
+      "name": "INSTALLATIONS IN INTERNATIONAL WATERS"
+    },
+    {
+      "code": "YE",
+      "count": 22,
+      "name": "YEMEN"
+    },
+    {
+      "code": "YT",
+      "count": 4,
+      "name": "MAYOTTE"
+    },
+    {
+      "code": "ZA",
+      "count": 60,
+      "name": "SOUTH AFRICA"
+    },
+    {
+      "code": "ZM",
+      "count": 1,
+      "name": "ZAMBIA"
+    },
+    {
+      "code": "ZW",
+      "count": 5,
+      "name": "ZIMBABWE"
+    }
+  ],
+  "limitations": [
+    "총계는 항구·항만 위치·시설 레코드 수입니다. 같은 UN/LOCODE의 개별 WPI 시설은 별도로 포함될 수 있습니다.",
+    "UN/LOCODE의 항만 기능과 NGA WPI 수록 범위를 합쳤으며 모든 어항·마리나·신규 항만의 완전 수록을 보증하지 않습니다.",
+    "좌표는 위치 참조점입니다. UN/LOCODE는 도시·지역 대표점(1분 단위)일 수 있고 선석·항구 입구·안전한 항로점이 아닙니다.",
+    "항구 선택은 출발·도착 참조점만 입력합니다. 중간 항로·항만 접근·수심·통항 가능성은 별도로 검토해야 합니다.",
+    "항만 기능1에는 과거 판본의 내륙 수운항이 남아 있을 수 있으므로 해항/내륙항을 추정해 분류하지 않았습니다.",
+    "좌표 누락·불일치 자료는 검색에 남기며 지도나 항로 입력에 추정 좌표를 사용하지 않습니다."
+  ],
+  "located": 14057,
+  "merge_policy": "Exact UN/LOCODE only, one WPI candidate, coordinates within 25km or missing UN reference. Multiple facilities and conflicts remain separate; no fuzzy name merging.",
+  "missing_coordinates": 4525,
+  "quality": {
+    "consolidation": {
+      "consolidated_unique_code": 2745,
+      "distant_same_code_preserved": 69
+    },
+    "unlocode": {
+      "coordinate_conflict_codes": 0,
+      "duplicate_listing_rows": 76,
+      "excluded_deleted_or_pending": 4,
+      "missing_or_invalid_coordinate_rows": 5802,
+      "port_function_rows": 17600,
+      "raw_rows": 116533
+    },
+    "wpi": {
+      "raw_features": 3807,
+      "references_to_deleted_unlocodes": 3,
+      "reused_wpi_numbers": 2,
+      "unlocode_country_conflicts": 9
+    }
+  },
+  "schema_version": "ports-1.0",
+  "sources": [
+    {
+      "edition": "2025-1",
+      "files": [
+        {
+          "bytes": 13507338,
+          "path": "raw/unlocode-2025-1.zip",
+          "retrieved_at": "2026-09-12T08:28:48.450000Z",
+          "sha256": "ad409fc7149b10f98d61190c34d9daf78b78bb8b31464cc66de1a89d09b01b5d",
+          "source": "unlocode",
+          "url": "https://opensource.unicc.org/un/unece/uncefact/vocab-locode/-/jobs/artifacts/2025-1/download?job=package-release"
+        }
+      ],
+      "id": "unlocode",
+      "license": "Official site states UN/CEFACT standards are CC BY 4.0; dataset-specific terms are not separately declared.",
+      "license_url": "https://unlocode.unece.org/terms/",
+      "records": 17520,
+      "retrieved_at": "2026-09-12T08:28:48.450000Z",
+      "sha256": "644c67b6019647877eb9fd89eda1c9c4107c5a96e9eeb90930ef6d57a1972127",
+      "title": "UNECE UN/LOCODE",
+      "url": "https://unlocode.unece.org/publications/"
+    },
+    {
+      "edition": "live FeatureServer snapshot",
+      "files": [
+        {
+          "bytes": 35873,
+          "path": "raw/wpi-layer.json",
+          "retrieved_at": "2026-09-12T08:29:59.970000Z",
+          "sha256": "2e5555734a11af8cde1b8c42a73bc05bfad7e1fa979e73be969f2f5a3c541b9c",
+          "source": "wpi",
+          "url": "https://fgmod.nga.mil/nauticalpubs-feature/rest/services/WPI/WPI_Viewer/FeatureServer/0?f=pjson"
+        },
+        {
+          "bytes": 18,
+          "path": "raw/wpi-count.json",
+          "retrieved_at": "2026-09-12T08:29:59.800000Z",
+          "sha256": "3096b55fa4c9760dc64d7d60c74fe1b7aa1105dbe95ce48001e21af860a0a65e",
+          "source": "wpi",
+          "url": "https://fgmod.nga.mil/nauticalpubs-feature/rest/services/WPI/WPI_Viewer/FeatureServer/0/query?where=1%3D1&returnCountOnly=true&f=pjson"
+        },
+        {
+          "bytes": 2953670,
+          "path": "raw/wpi-features-0.json",
+          "retrieved_at": "2026-09-12T08:30:56.860000Z",
+          "sha256": "13a8175a1c745a0f7051e85ab65cbdabb4365293ccd840bef23b9e891e308c6e",
+          "source": "wpi",
+          "url": "https://fgmod.nga.mil/nauticalpubs-feature/rest/services/WPI/WPI_Viewer/FeatureServer/0/query?where=1%3D1&outFields=%2A&outSR=4326&returnGeometry=true&orderByFields=objectid+ASC&resultOffset=0&resultRecordCount=1000&f=json"
+        },
+        {
+          "bytes": 2992926,
+          "path": "raw/wpi-features-1000.json",
+          "retrieved_at": "2026-09-12T08:30:55.840000Z",
+          "sha256": "7e5c0edf2acf1599a41f3b057a22f32d8c67d4a9ea642686f6ba0e132f02d41f",
+          "source": "wpi",
+          "url": "https://fgmod.nga.mil/nauticalpubs-feature/rest/services/WPI/WPI_Viewer/FeatureServer/0/query?where=1%3D1&outFields=%2A&outSR=4326&returnGeometry=true&orderByFields=objectid+ASC&resultOffset=1000&resultRecordCount=1000&f=json"
+        },
+        {
+          "bytes": 2972954,
+          "path": "raw/wpi-features-2000.json",
+          "retrieved_at": "2026-09-12T08:30:52.820000Z",
+          "sha256": "13a35a5d32796ec9f55dfdb3c895eeb0ad7a60c1764d500ea65cd4ad1d07ecde",
+          "source": "wpi",
+          "url": "https://fgmod.nga.mil/nauticalpubs-feature/rest/services/WPI/WPI_Viewer/FeatureServer/0/query?where=1%3D1&outFields=%2A&outSR=4326&returnGeometry=true&orderByFields=objectid+ASC&resultOffset=2000&resultRecordCount=1000&f=json"
+        },
+        {
+          "bytes": 2415313,
+          "path": "raw/wpi-features-3000.json",
+          "retrieved_at": "2026-09-12T08:31:01.170000Z",
+          "sha256": "49a254a1adf2a15051c562f7be57ced278d04adbe6b8c7220d43f9675d3dfecb",
+          "source": "wpi",
+          "url": "https://fgmod.nga.mil/nauticalpubs-feature/rest/services/WPI/WPI_Viewer/FeatureServer/0/query?where=1%3D1&outFields=%2A&outSR=4326&returnGeometry=true&orderByFields=objectid+ASC&resultOffset=3000&resultRecordCount=1000&f=json"
+        },
+        {
+          "bytes": 18434,
+          "path": "raw/wpi-object-ids.json",
+          "retrieved_at": "2026-09-12T08:41:36.060000Z",
+          "sha256": "d2f002ad55ef058fe7f697b4677d2dbe287bf367c3e5fef37bbac2d2a8423d24",
+          "source": "wpi",
+          "url": "https://fgmod.nga.mil/nauticalpubs-feature/rest/services/WPI/WPI_Viewer/FeatureServer/0/query?where=1%3D1&returnIdsOnly=true&f=json"
+        }
+      ],
+      "id": "wpi",
+      "license": "NGA publicly released reference data; attribution retained",
+      "license_url": "https://msi.nga.mil/Publications/WPI",
+      "records": 3807,
+      "retrieved_at": "2026-09-12T08:41:36.060000Z",
+      "sha256": "d8398ce9623e090bea3664a27d185888ccc4ce7414fb253598aaba7d697277b9",
+      "title": "NGA World Port Index",
+      "url": "https://msi.nga.mil/Publications/WPI"
+    }
+  ],
+  "status": "ready",
+  "total": 18582
+}

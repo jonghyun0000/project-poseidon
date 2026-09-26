@@ -1,0 +1,39 @@
+{
+  "source": "global",
+  "cycle": "20260911T06",
+  "departure_utc": "2026-09-11T06:00:00Z",
+  "waypoints": [
+    {
+      "lat": 35,
+      "lon": 142
+    },
+    {
+      "lat": 42,
+      "lon": 170
+    },
+    {
+      "lat": 42,
+      "lon": -160
+    },
+    {
+      "lat": 37,
+      "lon": -124
+    }
+  ],
+  "scenarios": [
+    {
+      "name": "기준",
+      "speed_kn": 18
+    },
+    {
+      "name": "6시간 후 출항",
+      "speed_kn": 18,
+      "departure_offset_h": 6
+    },
+    {
+      "name": "감속",
+      "speed_kn": 16
+    }
+  ],
+  "hs_threshold_m": 3
+}

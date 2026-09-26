@@ -1,0 +1,73 @@
+{
+  "name": "가상 연료 곡선 기능 시험 · 실선 아님",
+  "cycle": "20260906T18",
+  "departure_utc": "2026-09-06T18:00:00Z",
+  "waypoints": [
+    {
+      "lat": 34.5,
+      "lon": 129,
+      "name": ""
+    },
+    {
+      "lat": 33.5,
+      "lon": 128,
+      "name": ""
+    },
+    {
+      "lat": 31,
+      "lon": 127,
+      "name": ""
+    },
+    {
+      "lat": 28,
+      "lon": 126,
+      "name": ""
+    }
+  ],
+  "scenarios": [
+    {
+      "name": "기준",
+      "speed_kn": 14,
+      "departure_offset_h": 0
+    },
+    {
+      "name": "6시간 후 출항",
+      "speed_kn": 14,
+      "departure_offset_h": 6
+    },
+    {
+      "name": "감속",
+      "speed_kn": 12,
+      "departure_offset_h": 0
+    }
+  ],
+  "hs_threshold_m": 3,
+  "arrival_deadline_utc": "2026-09-08T04:00:00Z",
+  "performance_profile": {
+    "name": "가상 연료 곡선 · 기능 시험용",
+    "source": "Poseidon synthetic tutorial data; no real vessel evidence",
+    "source_kind": "synthetic_example",
+    "load_condition": "가상 조건 · 실선 미검증",
+    "fuel_type": "hfo",
+    "assume_zero_current": true,
+    "rate_scope": "total_at_sea_single_fuel",
+    "curve": [
+      {
+        "speed_stw_kn": 8,
+        "fuel_t_day": 8
+      },
+      {
+        "speed_stw_kn": 12,
+        "fuel_t_day": 18
+      },
+      {
+        "speed_stw_kn": 14,
+        "fuel_t_day": 28
+      },
+      {
+        "speed_stw_kn": 16,
+        "fuel_t_day": 42
+      }
+    ]
+  }
+}

@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Poseidon · 해양 분석 워크스페이스</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='5' fill='%230d3449'/%3E%3Cpath d='M4 10q4-5 8 0t8 0M4 16q4-5 8 0t8 0' fill='none' stroke='%235cddd1' stroke-width='2'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/maplibre-gl@5.7.1/dist/maplibre-gl.css">
+<script src="https://cdn.jsdelivr.net/npm/maplibre-gl@5.7.1/dist/maplibre-gl.js"></script>
+<link rel="stylesheet" href="/console-assets/style.css">
+</head>
+<body>
+<header class="topbar">
+ <a class="brand" href="/console"><svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="6"/><path d="M6 12q5-6 10 0t10 0M6 20q5-6 10 0t10 0"/></svg><span>POSEIDON<small>OCEAN OPERATIONS</small></span></a>
+ <nav aria-label="주요 메뉴"><button data-view="analysis" class="active">해역 분석</button><button data-view="voyage">항로 시뮬레이션</button><button data-view="ports">세계 항구</button><button data-view="validation">예측 검증</button><button data-view="operations">데이터 운영</button></nav>
+ <div class="topright"><span class="pill">검증 단계</span><time id="clock">UTC</time><button id="refresh" class="iconbtn" aria-label="데이터 새로고침">↻</button></div>
+</header>
+<div class="statusbar" role="status"><span class="statusdot"></span><strong id="forecast-state">예보 상태 확인 중</strong><span id="forecast-period"></span><button id="new-cycle" hidden>새 예보로 전환</button><a href="/legacy" class="legacy">기존 분석 화면 ↗</a></div>
+<div class="scopebar"><label>예보 범위 <select id="source-select"><option value="global">전 세계 · NOAA GFS-Wave</option><option value="regional">동아시아 · Poseidon 지역 모델</option></select></label><span id="source-note">전 지구 자료 확인 중</span></div>
+<main id="analysis-view" class="workspace">
+ <aside class="sidebar">
+  <div class="section-label">WORKSPACE <span>01</span></div><h1>해역 분석</h1><p class="muted intro">관심 지점의 해상조건과 예측 근거</p>
+  <div class="section-head"><h2>관심 지점</h2><span id="point-count">0 / 8</span></div>
+  <form id="point-form"><div class="coord-inputs"><label>위도 · 북위 + / 남위 −<input id="lat" type="number" step="any" min="-90" max="90" placeholder="34.50" required></label><label>경도 · 동경 + / 서경 −<input id="lon" type="number" step="any" min="-180" max="360" placeholder="129.00" required></label></div><button class="outline" type="submit">지점 추가</button></form>
+  <p class="micro">지도에서 바다를 선택해도 추가됩니다.</p><div id="point-error" class="inline-error" role="alert"></div><div id="point-list"></div>
+  <div class="sidebar-bottom"><h2>비교 기준</h2><label class="threshold">관심 파고 <span><input id="threshold" type="number" value="3" min="0.1" max="30" step="0.1"> m</span></label><p class="micro">사용자가 정한 비교선입니다.<br>선박의 안전 한계를 의미하지 않습니다.</p><button id="export" class="primary" disabled>분석 자료 내보내기</button><div class="links"><a href="/bridge">선교 시뮬레이션 ↗</a><a href="/docs">API 문서 ↗</a></div></div>
+ </aside>
+ <section class="map-column" aria-label="지도 및 시계열">
+  <div class="map-toolbar"><div><strong id="map-domain">전 세계</strong><span id="map-resolution" class="muted">NOAA · 0.25°</span><select id="ocean-view" aria-label="해역 이동"><option value="world">전 세계</option><option value="pacific">태평양</option><option value="atlantic">대서양</option><option value="indian">인도양</option><option value="mediterranean">지중해</option><option value="southern">남반구</option></select></div><div class="segmented"><button id="wave-layer" class="selected" aria-pressed="true">파고</button><button id="station-layer" aria-pressed="false">검증 관측소</button><button id="fit-map">해역 전체</button></div></div>
+  <div class="map-stage"><div id="map" aria-label="파고 예보 지도"></div><div id="map-error" class="map-error" hidden></div><div class="map-caption"><span class="tiny-label">VALID TIME</span><strong id="map-time">—</strong><span id="map-lead">—</span></div><div class="map-legend"><b>유의파고 <span>m</span></b><div class="colorbar"></div><div class="legend-ticks" id="legend-ticks"></div></div></div>
+  <div class="timeline"><button id="prev" aria-label="이전 예보 시각">‹</button><div class="timeline-main"><div class="timeline-title"><strong id="lead-label">+0 h</strong><span id="valid-label">예보 불러오는 중</span><label>표시 시각 <select id="timezone"><option value="UTC">UTC</option><option value="Asia/Seoul">KST</option></select></label></div><input id="lead" type="range" min="0" max="24" value="0" step="1" aria-label="예보 리드"><div id="timeline-ticks" class="timeline-ticks"></div></div><button id="next" aria-label="다음 예보 시각">›</button></div>
+  <div class="chart-panel"><div class="chart-head"><h2>지점별 예측 추세 <span id="chart-location"></span></h2><div class="segmented" id="chart-tabs"><button data-var="hs" class="selected">파고 m</button><button data-var="tp">주기 s</button><button data-var="dirp">파향 °</button></div></div><div id="chart" class="chart"><div class="empty">지점을 선택하면 선택 예보의 추세가 표시됩니다.</div></div><div class="chart-foot"><span id="chart-note">실선은 물리 예측값, 세로선은 선택 시각입니다.</span><button id="show-table">수치표</button></div></div>
+ </section>
+ <aside class="inspector">
+  <div class="section-label">POINT INSIGHT</div><div class="inspector-heading"><h2 id="selected-name">지점을 선택하세요</h2><span id="point-level">L1</span></div><p id="selected-coords" class="muted">관심 지점 또는 지도에서 선택</p>
+  <div class="primary-metric"><span>유의파고 Hs</span><div><strong id="hs-value">—</strong><small>m</small></div><p id="threshold-state">—</p></div>
+  <div class="secondary-metrics"><div><span id="period-title">주 파주기 PERPW</span><b id="tp-value">—</b><small id="period-note">s · 원천 정의</small></div><div><span id="direction-title">주 파향 DIRPW</span><b id="dir-value">—</b><small id="direction-note">° · NOAA 원천</small></div></div>
+  <section class="insight-section"><h3>선택 시각의 데이터 근거</h3><div id="applicability" class="assessment">지점 미선택</div><dl id="evidence"><dt>예보 기준</dt><dd>—</dd><dt>유효 시각</dt><dd>—</dd></dl></section>
+  <section class="insight-section"><h3>관측 대조</h3><div id="observation"><p class="muted">관측소를 선택하면 실측값을 대조합니다.</p></div></section>
+  <section class="insight-section"><h3>자료 출처</h3><div id="source-chain" class="lineage-chain"><span>NOAA GFS / GFS-Wave</span><i>↓</i><span>Poseidon 물리 예보</span><i>↓</i><span>지점 샘플링 · L1</span></div><p id="corrector-note" class="micro">AI 보정 여부 확인 중</p></section>
+  <p class="qualification">연구·검증용 분석. 고파랑·원양 검증과 항해 적합성은 확보되지 않았습니다.</p>
+ </aside>
+</main>
+
+<main id="voyage-view" class="voyage-view" hidden>
+ <aside class="voyage-inputs">
+  <div class="section-label">VOYAGE SIMULATION</div><h1>항로 시뮬레이션</h1><p class="muted intro">이동하는 선박이 만날 해상조건</p>
+  <form id="voy-form">
+   <label class="field" id="voy-template-field">전 세계 해상 구간 예제<select id="voy-template"><option value="pacific">북태평양 · 날짜변경선 횡단</option><option value="atlantic">북대서양</option><option value="indian">인도양 · 남반구</option></select></label>
+   <label class="field">분석 이름<input id="voy-name" value="대한해협–동중국해 해상 구간" maxlength="80" required></label>
+   <button type="button" id="voy-open-ports" class="outline">항구에서 선택</button><div id="voy-port-context" class="voy-port-context" hidden></div>
+   <section id="routing-section" class="routing-section" aria-labelledby="routing-heading">
+    <div class="routing-heading"><h2 id="routing-heading">해상 항로 자동 계산</h2><span>항로망 후보</span></div>
+    <p class="micro">출발항과 도착항을 고르면 해상 항로망에서 연결 구간을 찾습니다.</p>
+    <div id="routing-departure-picker" class="routing-picker">
+     <label class="field" for="routing-departure">출발항 찾기</label>
+     <input id="routing-departure" type="search" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="routing-departure-results" aria-describedby="routing-departure-selected" autocomplete="off" maxlength="160" placeholder="부산, Busan, KRPUS">
+     <div id="routing-departure-results" class="routing-options" role="listbox" aria-label="출발항 검색 결과" hidden></div>
+     <p id="routing-departure-selected" class="routing-selected" role="status">검색 결과의 항구를 선택하세요.</p>
+    </div>
+    <div id="routing-arrival-picker" class="routing-picker">
+     <label class="field" for="routing-arrival">도착항 찾기</label>
+     <input id="routing-arrival" type="search" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="routing-arrival-results" aria-describedby="routing-arrival-selected" autocomplete="off" maxlength="160" placeholder="Singapore, SGSIN">
+     <div id="routing-arrival-results" class="routing-options" role="listbox" aria-label="도착항 검색 결과" hidden></div>
+     <p id="routing-arrival-selected" class="routing-selected" role="status">검색 결과의 항구를 선택하세요.</p>
+    </div>
+    <details class="routing-avoid-details"><summary>추가 해협 회피 · 선택</summary><div id="routing-avoid" class="routing-avoid"><label><input type="checkbox" value="malacca"> 말라카 해협</label><label><input type="checkbox" value="gibraltar"> 지브롤터 해협</label><label><input type="checkbox" value="babelmandeb"> 바브엘만데브 해협</label><label><input type="checkbox" value="dover"> 도버 해협</label><label><input type="checkbox" value="bering"> 베링 해협</label><label><input type="checkbox" value="magellan"> 마젤란 해협</label></div></details>
+    <p class="routing-fixed-note">수에즈·파나마·킬·코린트 운하와 북서·북동 극지 항로는 항상 제외합니다.</p>
+    <p id="routing-regional-note" class="routing-scope" hidden>자동 항로 계산은 전 세계 예보 범위에서 사용할 수 있습니다. 상단 예보 범위를 전 세계로 전환하세요.</p>
+    <button id="routing-calculate" type="button" class="routing-calculate" disabled>해상 항로 계산</button>
+    <p id="routing-status" class="routing-status" role="status" aria-live="polite"></p><p id="routing-error" class="inline-error" role="alert"></p>
+    <button id="routing-retry" type="button" class="outline" hidden>해상 항로 다시 계산</button>
+    <div id="routing-result" class="routing-result" hidden></div><button id="routing-clear" type="button" class="routing-clear" hidden>자동 항로 해제</button>
+   </section>
+   <div class="section-head"><h2>웨이포인트</h2><button type="button" id="voy-example">예제 복원</button></div>
+   <label class="field"><span>위도, 경도 · 출발부터 도착 순서</span><textarea id="voy-waypoints" rows="5" spellcheck="false" required>34.5, 129.0
+33.5, 128.0
+31.0, 127.0
+28.0, 126.0</textarea></label>
+   <div class="waypoint-actions"><button type="button" id="voy-map-add" aria-pressed="false">지도에서 추가</button><small id="voy-point-limit">2–20개 지점</small></div>
+   <label class="field"><span id="voy-departure-label">출항 시각 · UTC</span><input id="voy-departure" type="datetime-local" step="60" required></label>
+   <button type="button" id="voy-cycle-start" class="text-button">예보 시작 시각 사용</button>
+   <div class="voy-fields"><label class="field">대지속력 · kn<input id="voy-speed" type="number" min="1" max="40" value="14" step="0.1" required></label><label class="field">파고 비교선 · m<input id="voy-threshold" type="number" min="0.1" max="30" value="3" step="0.1" required></label></div>
+   <label class="voy-check"><input id="voy-compare" type="checkbox" checked> 시작 시각·속력 대안 함께 비교</label>
+   <p class="micro">기준 / 6시간 지연 / 2 kn 감속<br>일정한 SOG 가정 · 기상 감속 제외</p>
+   <label class="field voy-deadline">도착 마감 · UTC (선택)<input id="voy-deadline" type="datetime-local" step="60"></label>
+   <details class="performance-form"><summary>선박 연료 기준선 · 선택</summary>
+    <p class="micro">실제 선박의 정온 해상 운항 곡선을 입력하세요. 풍파 저항·해류·출항 대기 연료를 제외한 기준값입니다.</p>
+    <label class="voy-check"><input id="perf-enabled" type="checkbox"> 제공 곡선으로 연료 계산</label>
+    <div id="perf-fields" hidden>
+     <label class="field">선박 / 곡선 이름<input id="perf-name" maxlength="80" placeholder="선박명 · 성능표 버전"></label>
+     <label class="field">자료 구분 · 제공자 기재<select id="perf-kind"><option value="user_assumption">사용자 가정</option><option value="measured">운항·시운전 측정 자료</option><option value="manufacturer">제조사·조선소 자료</option><option value="synthetic_example">가상 기능 시험 예제</option></select></label>
+     <label class="field">출처 · 문서명 / 측정 기간<input id="perf-source" maxlength="500" placeholder="출처와 버전·측정 기간"></label>
+     <label class="field">적재·흘수·운항 조건<input id="perf-load" maxlength="200" placeholder="성능표의 적용 조건"></label>
+     <label class="field">단일 연료 종류<select id="perf-fuel"><option value="hfo">HFO · 중유</option><option value="lfo">LFO · 경질 연료유</option><option value="mdo">Diesel / Gas oil</option></select></label>
+     <label class="field">대수속력 kn, 총 연료 t/day<textarea id="perf-curve" rows="4" spellcheck="false" placeholder="실제 성능표의 값을 입력하세요"></textarea></label>
+     <label class="voy-check"><input id="perf-zero" type="checkbox"> 해류 0 가정으로 SOG = STW 적용</label>
+     <p id="perf-example-note" class="inline-error" hidden>가상 숫자로 만든 기능 시험용 곡선입니다. 실제 선박 성능이나 절감 근거가 아닙니다.</p>
+    </div>
+    <button id="perf-example" type="button" class="outline">가상 곡선으로 기능 시험</button>
+   </details>
+   <button class="primary" id="voy-run" type="submit">항로 분석 실행</button>
+  </form>
+  <p id="voy-error" class="inline-error" role="alert"></p>
+  <div class="voy-save"><button id="voy-csv" disabled>CSV 결과</button><button id="voy-json" disabled>분석 저장</button><label class="import-label">입력 불러오기<input id="voy-import" type="file" accept="application/json,.json" hidden></label></div>
+  <p class="qualification">입력한 해상 구간을 분석합니다. 항행 가능한 항로의 추천·승인을 의미하지 않습니다.</p>
+ </aside>
+ <section class="voyage-results">
+  <div class="voyage-topline"><div><strong id="voy-cycle">예보 기준 확인 중</strong><p id="voy-context">예보와 이동 시각을 함께 계산합니다.</p></div><span class="pill" id="voy-level">WGS84 · GLOBAL</span></div>
+  <div id="voy-result-message" class="voy-message">예제 항로를 실행하거나 웨이포인트를 입력하세요. 지도에서 지점을 추가할 수 있습니다.</div>
+  <div class="voy-map-stage"><div id="voy-map" aria-label="항로 시뮬레이션 지도"></div><div class="voy-map-caption"><b id="voy-vessel-time">출항 전</b><span id="voy-vessel-position">해상 구간 예제</span></div><div class="voy-map-legend"><i></i>파고 비교선 이하 <i class="exceed"></i>초과 <i class="missing"></i>결측</div></div>
+  <div class="voy-player"><button id="voy-play" disabled>재생</button><input id="voy-position" type="range" min="0" max="1" value="0" step="1" aria-label="항로 이동 위치" disabled><span id="voy-progress">0 / 0</span></div>
+  <div id="voy-now" class="voy-now"><span>지점·이동 시각별 값이 여기에 표시됩니다.</span></div>
+  <div id="voy-comparison"></div>
+  <section class="voy-detail" id="voy-detail" hidden><div class="chart-head"><h2>항로를 따라 만나는 파고</h2><span id="voy-scenario-label" class="muted"></span></div><div id="voy-chart" class="voy-chart"></div><p class="micro">가로축: 구간 시작 후 시간 · 점선: 사용자 비교선 · 결측 구간은 연결하지 않습니다.</p></section>
+  <details class="voy-detail" id="voy-table-panel" hidden><summary>구간별 수치와 검증 근거</summary><div id="voy-table" class="table-wrap"></div></details>
+  <div id="voy-methods" class="voy-methods"></div>
+ </section>
+</main>
+<main id="ports-view" class="ports-view" hidden>
+ <header class="ports-heading"><div><div class="section-label">WORLD PORT CATALOG</div><h1>세계 항구</h1><p>항구를 찾고 출발·도착·경유 지점으로 연결하세요.</p></div><div id="ports-metrics" class="ports-metrics" aria-label="항구 등록 범위"><div><span>항만 위치·시설</span><strong>—</strong></div><div><span>좌표 보유</span><strong>—</strong></div><div><span>국가·지역</span><strong>—</strong></div></div><button type="button" id="ports-refresh" class="report-button">카탈로그 새로고침</button></header>
+ <div class="ports-workspace">
+  <section class="ports-search-panel" aria-label="항구 검색">
+   <form id="ports-search-form"><label class="field">항구 이름 · UN/LOCODE<input id="ports-query" type="search" maxlength="160" placeholder="부산, Rotterdam, SGSIN" autocomplete="off"></label><label class="field">국가·지역<select id="ports-country"><option value="">전 세계 모든 국가·지역</option></select></label><div class="ports-search-actions"><button type="submit">항구 검색</button><button type="button" id="ports-clear">초기화</button></div></form>
+   <div class="ports-quick" aria-label="항구 검색 예제"><span>빠른 검색</span><button type="button" data-port-query="부산">부산</button><button type="button" data-port-query="Rotterdam">Rotterdam</button><button type="button" data-port-query="SGSIN">Singapore</button></div>
+   <div class="ports-list-heading"><h2>검색 결과</h2><p id="ports-search-status" role="status" aria-live="polite">카탈로그 확인 중</p></div>
+   <div id="ports-list" class="ports-list"></div><button type="button" id="ports-retry" class="outline" hidden>목록 다시 불러오기</button>
+   <div class="ports-pagination"><button type="button" id="ports-prev" aria-label="항구 목록 이전 페이지" disabled>이전</button><span id="ports-page">0 / 0</span><button type="button" id="ports-next" aria-label="항구 목록 다음 페이지" disabled>다음</button></div>
+  </section>
+  <section class="ports-map-column" aria-label="항구 지도와 수록 범위">
+   <div class="ports-map-toolbar"><div><strong>항구 분포</strong><span id="ports-map-count" role="status">전 세계</span></div><button type="button" id="ports-world">세계 보기</button></div>
+   <div class="ports-map-stage"><div id="ports-map" aria-label="세계 항구 분포 지도"></div><div class="ports-map-hint">원을 확대하면 개별 항구가 표시됩니다.</div><p id="ports-map-error" class="map-error" hidden></p><button type="button" id="ports-map-retry" hidden>항구 위치 다시 불러오기</button></div>
+   <div class="ports-map-foot"><span><i></i>항구·시설 대표 위치</span><span>지도: 국가 범위 전체 · 목록: 검색어 적용</span></div>
+   <details class="ports-data-note"><summary>수록 범위와 자료 원천</summary><p id="ports-coverage-note">공식 원천의 수록 범위와 판본을 확인하고 있습니다.</p><div id="ports-sources"></div><p>좌표는 항구를 식별하는 참고 위치입니다. 항행 가능한 접근로, 수심, 접안 여건을 보증하지 않습니다.</p></details>
+  </section>
+  <aside id="ports-detail" class="ports-detail" aria-label="선택 항구 상세"></aside>
+ </div>
+</main>
+
+<main id="validation-view" class="report-view" hidden><div class="report-heading"><div class="section-label">MODEL VERIFICATION</div><h1>예측 검증</h1><p>실제 관측과의 대조 결과. 테스트 통과와 예측 정확도는 별개의 지표입니다.</p></div><div id="validation-body"></div></main>
+<main id="operations-view" class="report-view" hidden><div class="report-heading"><div class="section-label">DATA OPERATIONS</div><h1>데이터 운영</h1><p>자료 확보부터 예보 생산까지의 사이클 이력. 실행 여부는 카탈로그 기록만으로 보장하지 않습니다.</p></div><div id="operations-body"></div></main>
+<footer><span>POSEIDON · ANALYST WORKSPACE</span><span id="sync-time">동기화 중</span><span>로컬 분석 환경 · 항해용 해도 아님</span></footer>
+<dialog id="data-dialog"><div class="dialog-head"><h2>선택 지점 예측 수치</h2><button id="close-dialog" aria-label="닫기">닫기</button></div><div id="data-table"></div></dialog>
+<script type="module" src="/console-assets/app.js"></script>
+</body></html>

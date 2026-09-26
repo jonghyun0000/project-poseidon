@@ -1,0 +1,1859 @@
+{
+  "analysis_id": "24f98570-7668-4c52-b705-ab6a0a5ae5e3",
+  "schema_version": "voyage-1.3",
+  "created_at_utc": "2026-09-12T08:46:44.636956+00:00",
+  "request": {
+    "source": "global",
+    "name": "부산–울산 항만 대표점 연결 시험",
+    "cycle": "20260912T00",
+    "departure_utc": "2026-09-12T00:00:00Z",
+    "waypoints": [
+      {
+        "lat": 35.1,
+        "lon": 129.033333,
+        "name": "Busan",
+        "port_id": "unlocode:KRPUS"
+      },
+      {
+        "lat": 35.45,
+        "lon": 129.4,
+        "name": "Ulsan",
+        "port_id": "unlocode:KRUSN"
+      }
+    ],
+    "scenarios": [
+      {
+        "name": "기준",
+        "speed_kn": 14.0,
+        "departure_offset_h": 0.0
+      }
+    ],
+    "hs_threshold_m": 3.0,
+    "arrival_deadline_utc": null,
+    "performance_profile": null
+  },
+  "source": "global",
+  "cycle": "20260912T00",
+  "level": "GLOBAL",
+  "produced_at": null,
+  "retrieved_at": "2026-09-12T08:40:04.560351+00:00",
+  "corrected": false,
+  "engine": {
+    "provider": "NOAA GFS-Wave / WAVEWATCH III global 0.25°",
+    "source_id": "noaa-gfswave-global-0p25",
+    "definitions": {
+      "hs": "HTSGW significant combined wind-wave and swell height [m]",
+      "primary_period": "PERPW primary wave mean period [s]",
+      "primary_direction": "DIRPW primary wave direction [degree true]",
+      "wind": "UGRD/VGRD surface forcing wind [m/s]; GRIB level=surface"
+    }
+  },
+  "units": {
+    "distance": "nautical_mile",
+    "speed": "knot_SOG",
+    "wind_speed": "m/s surface forcing wind",
+    "primary_period": "second",
+    "primary_direction": "degree true; NOAA DIRPW",
+    "fuel": "metric_tonne",
+    "co2": "metric_tonne combustion CO2"
+  },
+  "forecast_period": {
+    "first": "2026-09-12T00:00:00+00:00",
+    "last": "2026-09-28T00:00:00+00:00",
+    "covers_now": true
+  },
+  "distance_nm": 27.642006434206017,
+  "legs_nm": [
+    27.642006434206017
+  ],
+  "screening": {
+    "status": "land_detected",
+    "land_count": 26,
+    "unknown_count": 0,
+    "points": [
+      {
+        "lat": 35.09999999999999,
+        "lon": 129.033333,
+        "leg": 1
+      },
+      {
+        "lat": 35.11251942129279,
+        "lon": 129.04637408200807,
+        "leg": 1
+      },
+      {
+        "lat": 35.12503741333653,
+        "lon": 129.05941915365347,
+        "leg": 1
+      },
+      {
+        "lat": 35.137553975055546,
+        "lon": 129.0724682175599,
+        "leg": 1
+      },
+      {
+        "lat": 35.150069105373426,
+        "lon": 129.08552127635224,
+        "leg": 1
+      },
+      {
+        "lat": 35.162582803212935,
+        "lon": 129.0985783326567,
+        "leg": 1
+      },
+      {
+        "lat": 35.17509506749606,
+        "lon": 129.1116393891007,
+        "leg": 1
+      },
+      {
+        "lat": 35.18760589714399,
+        "lon": 129.12470444831294,
+        "leg": 1
+      },
+      {
+        "lat": 35.200115291077125,
+        "lon": 129.13777351292333,
+        "leg": 1
+      },
+      {
+        "lat": 35.21262324821509,
+        "lon": 129.15084658556313,
+        "leg": 1
+      },
+      {
+        "lat": 35.22512976747667,
+        "lon": 129.16392366886475,
+        "leg": 1
+      },
+      {
+        "lat": 35.2376348477799,
+        "lon": 129.17700476546193,
+        "leg": 1
+      },
+      {
+        "lat": 35.250138488042005,
+        "lon": 129.19008987798966,
+        "leg": 1
+      },
+      {
+        "lat": 35.26264068717939,
+        "lon": 129.20317900908415,
+        "leg": 1
+      },
+      {
+        "lat": 35.275141444107696,
+        "lon": 129.21627216138288,
+        "leg": 1
+      },
+      {
+        "lat": 35.28764075774176,
+        "lon": 129.22936933752462,
+        "leg": 1
+      },
+      {
+        "lat": 35.3001386269956,
+        "lon": 129.24247054014938,
+        "leg": 1
+      },
+      {
+        "lat": 35.312635050782454,
+        "lon": 129.2555757718984,
+        "leg": 1
+      },
+      {
+        "lat": 35.325130028014776,
+        "lon": 129.26868503541422,
+        "leg": 1
+      },
+      {
+        "lat": 35.33762355760416,
+        "lon": 129.28179833334062,
+        "leg": 1
+      },
+      {
+        "lat": 35.350115638461475,
+        "lon": 129.29491566832263,
+        "leg": 1
+      },
+      {
+        "lat": 35.36260626949672,
+        "lon": 129.30803704300652,
+        "leg": 1
+      },
+      {
+        "lat": 35.375095449619174,
+        "lon": 129.3211624600399,
+        "leg": 1
+      },
+      {
+        "lat": 35.38758317773719,
+        "lon": 129.33429192207151,
+        "leg": 1
+      },
+      {
+        "lat": 35.40006945275846,
+        "lon": 129.34742543175147,
+        "leg": 1
+      },
+      {
+        "lat": 35.41255427358975,
+        "lon": 129.3605629917311,
+        "leg": 1
+      }
+    ],
+    "sample_spacing_nm_max": 1,
+    "source": "Natural Earth land v5.1.1 / 1:10 million map scale",
+    "note": "전 지구 육지 표본 검사. 작은 섬·수로·수심 여유·항로 규제·공식 해도는 검증하지 않습니다."
+  },
+  "scenarios": [
+    {
+      "name": "기준",
+      "speed_kn": 14.0,
+      "departure_offset_h": 0,
+      "departure_utc": "2026-09-12T00:00:00+00:00",
+      "arrival_utc": "2026-09-12T01:58:27.944511652+00:00",
+      "status": "invalid_route",
+      "points": [
+        {
+          "lat": 35.09999999999999,
+          "lon": 129.033333,
+          "distance_nm": 0.0,
+          "course_deg": 40.560396828837156,
+          "leg": 1,
+          "values": {
+            "hs": 0.48448919108685135,
+            "tp": null,
+            "dirp": null,
+            "tm02": null,
+            "dirm": null,
+            "primary_period": 4.960000038146973,
+            "primary_direction": 80.55999755859375
+          },
+          "missing": {
+            "tp": "not_provided",
+            "dirp": "not_provided",
+            "tm02": "not_provided",
+            "dirm": "not_provided"
+          },
+          "status": "ok",
+          "lead_h": 0.0,
+          "wind": {
+            "status": "ok",
+            "u10_ms": null,
+            "v10_ms": null,
+            "u_ms": -2.526938541347634,
+            "v_ms": -4.131423479257675,
+            "speed_ms": 4.842941085405614,
+            "from_deg": 31.451570157055436,
+            "apparent_speed_ms": 12.008590563238155,
+            "apparent_from_deg": 36.89986564815405,
+            "reference_level": "surface forcing wind, NOAA GRIB level=surface"
+          },
+          "applicability": {
+            "verdict": "no_coverage",
+            "reasons": [
+              "global_provider_not_locally_validated"
+            ],
+            "note": "부이 관측 대조 결과는 /v1/global/validation에서 확인할 수 있습니다. 이 지점·조건의 정확도는 확정되지 않았습니다."
+          },
+          "primary_valid_time": "2026-09-12T00:00:00+00:00",
+          "valid_time": "2026-09-12T00:00:00+00:00",
+          "elapsed_h": 0.0,
+          "relative_wave_deg": null
+        },
+        {
+          "lat": 35.15841172983055,
+          "lon": 129.09422553622505,
+          "distance_nm": 4.6070010723676695,
+          "course_deg": 40.59543575397879,
+          "leg": 1,
+          "values": {
+            "hs": 0.6078790584951183,
+            "tp": null,
+            "dirp": null,
+            "tm02": null,
+            "dirm": null,
+            "primary_period": 4.889999866485596,
+            "primary_direction": 64.83999633789062
+          },
+          "missing": {
+            "tp": "not_provided",
+            "dirp": "not_provided",
+            "tm02": "not_provided",
+            "dirm": "not_provided"
+          },
+          "status": "ok",
+          "lead_h": 0.329071505,
+          "wind": {
+            "status": "ok",
+            "u10_ms": null,
+            "v10_ms": null,
+            "u_ms": -2.4962625354996075,
+            "v_ms": -5.065987987900947,
+            "speed_ms": 5.64761550919462,
+            "from_deg": 26.231745181524065,
+            "apparent_speed_ms": 12.750503947002107,
+            "apparent_from_deg": 34.28698043058688,
+            "reference_level": "surface forcing wind, NOAA GRIB level=surface"
+          },
+          "applicability": {
+            "verdict": "no_coverage",
+            "reasons": [
+              "global_provider_not_locally_validated"
+            ],
+            "note": "부이 관측 대조 결과는 /v1/global/validation에서 확인할 수 있습니다. 이 지점·조건의 정확도는 확정되지 않았습니다."
+          },
+          "primary_valid_time": "2026-09-12T00:00:00+00:00",
+          "valid_time": "2026-09-12T00:19:44.657418608+00:00",
+          "elapsed_h": 0.32907150516911926,
+          "relative_wave_deg": null
+        },
+        {
+          "lat": 35.21679224778641,
+          "lon": 129.1552051675712,
+          "distance_nm": 9.214002144735339,
+          "course_deg": 40.63057560774559,
+          "leg": 1,
+          "values": {
+            "hs": 0.6715408335516134,
+            "tp": null,
+            "dirp": null,
+            "tm02": null,
+            "dirm": null,
+            "primary_period": 4.889999866485596,
+            "primary_direction": 64.83999633789062
+          },
+          "missing": {
+            "tp": "not_provided",
+            "dirp": "not_provided",
+            "tm02": "not_provided",
+            "dirm": "not_provided"
+          },
+          "status": "ok",
+          "lead_h": 0.6581430102777778,
+          "wind": {
+            "status": "ok",
+            "u10_ms": null,
+            "v10_ms": null,
+            "u_ms": -2.1432776222520804,
+            "v_ms": -5.538495129695324,
+            "speed_ms": 5.938734483684664,
+            "from_deg": 21.155357840620827,
+            "apparent_speed_ms": 12.95339339906221,
+            "apparent_from_deg": 31.838260472470203,
+            "reference_level": "surface forcing wind, NOAA GRIB level=surface"
+          },
+          "applicability": {
+            "verdict": "no_coverage",
+            "reasons": [
+              "global_provider_not_locally_validated"
+            ],
+            "note": "부이 관측 대조 결과는 /v1/global/validation에서 확인할 수 있습니다. 이 지점·조건의 정확도는 확정되지 않았습니다."
+          },
+          "primary_valid_time": "2026-09-12T00:00:00+00:00",
+          "valid_time": "2026-09-12T00:39:29.314837217+00:00",
+          "elapsed_h": 0.6581430103382385,
+          "relative_wave_deg": null
+        },
+        {
+          "lat": 35.275141444107696,
+          "lon": 129.21627216138288,
+          "distance_nm": 13.821003217103007,
+          "course_deg": 40.66581662579498,
+          "leg": 1,
+          "values": {
+            "hs": 0.6782268062780343,
+            "tp": null,
+            "dirp": null,
+            "tm02": null,
+            "dirm": null,
+            "primary_period": 4.889999866485596,
+            "primary_direction": 64.83999633789062
+          },
+          "missing": {
+            "tp": "not_provided",
+            "dirp": "not_provided",
+            "tm02": "not_provided",
+            "dirm": "not_provided"
+          },
+          "status": "ok",
+          "lead_h": 0.9872145152777778,
+          "wind": {
+            "status": "ok",
+            "u10_ms": null,
+            "v10_ms": null,
+            "u_ms": -2.0209391137267696,
+            "v_ms": -5.495864695209388,
+            "speed_ms": 5.855657405402037,
+            "from_deg": 20.18948220869507,
+            "apparent_speed_ms": 12.852193296778884,
+            "apparent_from_deg": 31.494696789725683,
+            "reference_level": "surface forcing wind, NOAA GRIB level=surface"
+          },
+          "applicability": {
+            "verdict": "no_coverage",
+            "reasons": [
+              "global_provider_not_locally_validated"
+            ],
+            "note": "부이 관측 대조 결과는 /v1/global/validation에서 확인할 수 있습니다. 이 지점·조건의 정확도는 확정되지 않았습니다."
+          },
+          "primary_valid_time": "2026-09-12T00:00:00+00:00",
+          "valid_time": "2026-09-12T00:59:13.972255826+00:00",
+          "elapsed_h": 0.9872145155073576,
+          "relative_wave_deg": null
+        },
+        {
+          "lat": 35.33345920865746,
+          "lon": 129.27742678560074,
+          "distance_nm": 18.428004289470678,
+          "course_deg": 40.70115904443304,
+          "leg": 1,
+          "values": {
+            "hs": 0.6883686534828017,
+            "tp": null,
+            "dirp": null,
+            "tm02": null,
+            "dirm": null,
+            "primary_period": 4.889999866485596,
+            "primary_direction": 64.83999633789062
+          },
+          "missing": {
+            "tp": "not_provided",
+            "dirp": "not_provided",
+            "tm02": "not_provided",
+            "dirm": "not_provided"
+          },
+          "status": "ok",
+          "lead_h": 1.3162860205555555,
+          "wind": {
+            "status": "ok",
+            "u10_ms": null,
+            "v10_ms": null,
+            "u_ms": -2.298821292647001,
+            "v_ms": -5.336627387536374,
+            "speed_ms": 5.81069455477833,
+            "from_deg": 23.30458642354783,
+            "apparent_speed_ms": 12.864968852305461,
+            "apparent_from_deg": 32.9401469382027,
+            "reference_level": "surface forcing wind, NOAA GRIB level=surface"
+          },
+          "applicability": {
+            "verdict": "no_coverage",
+            "reasons": [
+              "global_provider_not_locally_validated"
+            ],
+            "note": "부이 관측 대조 결과는 /v1/global/validation에서 확인할 수 있습니다. 이 지점·조건의 정확도는 확정되지 않았습니다."
+          },
+          "primary_valid_time": "2026-09-12T00:00:00+00:00",
+          "valid_time": "2026-09-12T01:18:58.629674435+00:00",
+          "elapsed_h": 1.316286020676477,
+          "relative_wave_deg": null
+        },
+        {
+          "lat": 35.39174543092011,
+          "lon": 129.3386693087619,
+          "distance_nm": 23.035005361838348,
+          "course_deg": 40.736603100614424,
+          "leg": 1,
+          "values": {
+            "hs": 0.6886688146472522,
+            "tp": null,
+            "dirp": null,
+            "tm02": null,
+            "dirm": null,
+            "primary_period": 4.889999866485596,
+            "primary_direction": 64.83999633789062
+          },
+          "missing": {
+            "tp": "not_provided",
+            "dirp": "not_provided",
+            "tm02": "not_provided",
+            "dirm": "not_provided"
+          },
+          "status": "ok",
+          "lead_h": 1.6453575258333333,
+          "wind": {
+            "status": "ok",
+            "u10_ms": null,
+            "v10_ms": null,
+            "u_ms": -2.5062910805854077,
+            "v_ms": -4.986106400540436,
+            "speed_ms": 5.5805691482260364,
+            "from_deg": 26.686615996198274,
+            "apparent_speed_ms": 12.688379774814482,
+            "apparent_from_deg": 34.6072356136369,
+            "reference_level": "surface forcing wind, NOAA GRIB level=surface"
+          },
+          "applicability": {
+            "verdict": "no_coverage",
+            "reasons": [
+              "global_provider_not_locally_validated"
+            ],
+            "note": "부이 관측 대조 결과는 /v1/global/validation에서 확인할 수 있습니다. 이 지점·조건의 정확도는 확정되지 않았습니다."
+          },
+          "primary_valid_time": "2026-09-12T00:00:00+00:00",
+          "valid_time": "2026-09-12T01:38:43.287093044+00:00",
+          "elapsed_h": 1.6453575258455964,
+          "relative_wave_deg": null
+        },
+        {
+          "lat": 35.449999999999996,
+          "lon": 129.4,
+          "distance_nm": 27.642006434206014,
+          "course_deg": 40.7721490319424,
+          "leg": 1,
+          "values": {
+            "hs": 0.6611895542534285,
+            "tp": null,
+            "dirp": null,
+            "tm02": null,
+            "dirm": null,
+            "primary_period": 4.880000114440918,
+            "primary_direction": 64.63999938964844
+          },
+          "missing": {
+            "tp": "not_provided",
+            "dirp": "not_provided",
+            "tm02": "not_provided",
+            "dirm": "not_provided"
+          },
+          "status": "ok",
+          "lead_h": 1.9744290308333332,
+          "wind": {
+            "status": "ok",
+            "u10_ms": null,
+            "v10_ms": null,
+            "u_ms": -2.4477658618450455,
+            "v_ms": -4.545257529612322,
+            "speed_ms": 5.162453266123726,
+            "from_deg": 28.303877904201627,
+            "apparent_speed_ms": 12.293551927723826,
+            "apparent_from_deg": 35.57040891906626,
+            "reference_level": "surface forcing wind, NOAA GRIB level=surface"
+          },
+          "applicability": {
+            "verdict": "no_coverage",
+            "reasons": [
+              "global_provider_not_locally_validated"
+            ],
+            "note": "부이 관측 대조 결과는 /v1/global/validation에서 확인할 수 있습니다. 이 지점·조건의 정확도는 확정되지 않았습니다."
+          },
+          "primary_valid_time": "2026-09-12T00:00:00+00:00",
+          "valid_time": "2026-09-12T01:58:27.944511652+00:00",
+          "elapsed_h": 1.9744290310147152,
+          "relative_wave_deg": null
+        }
+      ],
+      "summary": {
+        "duration_h": 1.9744290310147152,
+        "covered_duration_h": 1.9744290310147152,
+        "coverage_pct": 100.0,
+        "above_threshold_h": 0.0,
+        "max_hs_m": 0.6886688146472522,
+        "mean_hs_m": 0.6512539231874932,
+        "valid_points": 7,
+        "total_points": 7,
+        "max_wind_ms": 5.938734483684664,
+        "wind_coverage_pct": 100.0
+      },
+      "fuel": {
+        "status": "not_configured",
+        "fuel_t": null,
+        "co2_t": null,
+        "fuel_rate_t_day": null,
+        "profile_name": null,
+        "source_kind": null
+      },
+      "arrival_constraint": {
+        "status": "not_configured",
+        "deadline_utc": null,
+        "margin_h": null
+      }
+    }
+  ],
+  "environment": {
+    "wind": {
+      "status": "available",
+      "source": "NOAA GFS-Wave / WAVEWATCH III global 0.25° surface forcing wind",
+      "cycle": "20260912T00"
+    },
+    "current": {
+      "status": "not_available"
+    }
+  },
+  "source_records": [
+    {
+      "lead_h": 0,
+      "retrieved_at": "2026-09-12T08:37:55.861611+00:00",
+      "sha256_grib": "61fc21e2644ba0ebf5d763041804268b0134082791fadcee2aa9df0e1b4e441e",
+      "request": {
+        "dir": "/gfs.20260912/00/wave/gridded",
+        "file": "gfswave.t00z.global.0p25.f000.grib2",
+        "lev_surface": "on",
+        "var_HTSGW": "on",
+        "var_PERPW": "on",
+        "var_DIRPW": "on",
+        "var_UGRD": "on",
+        "var_VGRD": "on"
+      }
+    },
+    {
+      "lead_h": 6,
+      "retrieved_at": "2026-09-12T08:37:57.692531+00:00",
+      "sha256_grib": "9177a58a5e7b31c0df8c24a0229dd3f570399582460ab33bb9a7ea3df57daeef",
+      "request": {
+        "dir": "/gfs.20260912/00/wave/gridded",
+        "file": "gfswave.t00z.global.0p25.f006.grib2",
+        "lev_surface": "on",
+        "var_HTSGW": "on",
+        "var_PERPW": "on",
+        "var_DIRPW": "on",
+        "var_UGRD": "on",
+        "var_VGRD": "on"
+      }
+    },
+    {
+      "lead_h": 12,
+      "retrieved_at": "2026-09-12T08:37:59.592072+00:00",
+      "sha256_grib": "21cc6d7cc34af748139c3aa0fda853aab4b21cdbd51809d42bfde4e521d7f79c",
+      "request": {
+        "dir": "/gfs.20260912/00/wave/gridded",
+        "file": "gfswave.t00z.global.0p25.f012.grib2",
+        "lev_surface": "on",
+        "var_HTSGW": "on",
+        "var_PERPW": "on",
+        "var_DIRPW": "on",
+        "var_UGRD": "on",
+        "var_VGRD": "on"
+      }
+    },
+    {
+      "lead_h": 18,
+      "retrieved_at": "2026-09-12T08:38:01.396318+00:00",
+      "sha256_grib": "ae9247b02a0580f35570b52eecae97dc64b0fd6b00c89b4b11762ae066eca198",
+      "request": {
+        "dir": "/gfs.20260912/00/wave/gridded",
+        "file": "gfswave.t00z.global.0p25.f018.grib2",
+        "lev_surface": "on",
+        "var_HTSGW": "on",
+        "var_PERPW": "on",
+        "var_DIRPW": "on",
+        "var_UGRD": "on",
+        "var_VGRD": "on"
+      }
+    },
+    {
+      "lead_h": 24,
+      "retrieved_at": "2026-09-12T08:38:03.136295+00:00",
+      "sha256_grib": "a6260d71ae9219abe4601e9fe710b66e08b55ad833a382bc6bee7cfab3d4bcd5",
+      "request": {
+        "dir": "/gfs.20260912/00/wave/gridded",
+        "file": "gfswave.t00z.global.0p25.f024.grib2",
+        "lev_surface": "on",
+        "var_HTSGW": "on",
+        "var_PERPW": "on",
+        "var_DIRPW": "on",
+        "var_UGRD": "on",
+        "var_VGRD": "on"
+      }
+    },
+    {
+      "lead_h": 30,
+      "retrieved_at": "2026-09-12T08:38:05.041386+00:00",
+      "sha256_grib": "29290a3acf30b0eb9925e539ecdb947babea48581d3425f17b324b2467629160",
+      "request": {
+        "dir": "/gfs.20260912/00/wave/gridded",
+        "file": "gfswave.t00z.global.0p25.f030.grib2",
+        "lev_surface": "on",
+        "var_HTSGW": "on",
+        "var_PERPW": "on",
+        "var_DIRPW": "on",
+        "var_UGRD": "on",
+        "var_VGRD": "on"
+      }
+    },
+    {
+      "lead_h": 36,
+      "retrieved_at": "2026-09-12T08:38:06.815376+00:00",
+      "sha256_grib": "c5b14eda72b688f6e2651023e74951470ebeda74a8ecb62df87f03112c412a81",
+      "request": {
+        "dir": "/gfs.20260912/00/wave/gridded",
+        "file": "gfswave.t00z.global.0p25.f036.grib2",
+        "lev_surface": "on",
+        "var_HTSGW": "on",
+        "var_PERPW": "on",
+        "var_DIRPW": "on",
+        "var_UGRD": "on",
+        "var_VGRD": "on"
+      }
+    },
+    {
+      "lead_h": 42,
+      "retrieved_at": "2026-09-12T08:38:08.595344+00:00",
+      "sha256_grib": "13bbb834cdc03e317784ec7a2b73930bdd8ebbdb3d77243cb9a3792e279f99df",
+      "request": {
+        "dir": "/gfs.20260912/00/wave/gridded",
+        "file": "gfswave.t00z.global.0p25.f042.grib2",
+        "lev_surface": "on",
+        "var_HTSGW": "on",
+        "var_PERPW": "on",
+        "var_DIRPW": "on",
+        "var_UGRD": "on",
+        "var_VGRD": "on"
+      }
+    },
+    {
+      "lead_h": 48,
+      "retrieved_at": "2026-09-12T08:38:10.445215+00:00",
+      "sha256_grib": "3f6f58e3710fc019bcf875c99a806142aace359cf328e8dafd4da3d4a0685b86",
+      "request": {
+        "dir": "/gfs.20260912/00/wave/gridded",
+        "file": "gfswave.t00z.global.0p25.f048.grib2",
+        "lev_surface": "on",
+        "var_HTSGW": "on",
+        "var_PERPW": "on",
+        "var_DIRPW": "on",
+        "var_UGRD": "on",
+        "var_VGRD": "on"
+      }
+    },
+    {
+      "lead_h": 54,
+      "retrieved_at": "2026-09-12T08:38:12.232270+00:00",
+      "sha256_grib": "789364b637053865ded3a34df5d5e69a1b52febe8110f6282c461e0f35d8586a",
+      "request": {
+        "dir": "/gfs.20260912/00/wave/gridded",
+        "file": "gfswave.t00z.global.0p25.f054.grib2",
+        "lev_surface": "on",
+        "var_HTSGW": "on",
+        "var_PERPW": "on",
+        "var_DIRPW": "on",
+        "var_UGRD": "on",
+        "var_VGRD": "on"
+      }
+    },
+    {
+      "lead_h": 60,
+      "retrieved_at": "2026-09-12T08:38:14.025127+00:00",
+      "sha256_grib": "41622d8ab7e8e46f42bb5f599f88c300fcbcb9bcaebf5213becb4946ad86f0f6",
+      "request": {
+        "dir": "/gfs.20260912/00/wave/gridded",
+        "file": "gfswave.t00z.global.0p25.f060.grib2",
+        "lev_surface": "on",
+        "var_HTSGW": "on",
+        "var_PERPW": "on",
+        "var_DIRPW": "on",
+        "var_UGRD": "on",
+        "var_VGRD": "on"
+      }
+    },
+    {
+      "lead_h": 66,
+      "retrieved_at": "2026-09-12T08:38:15.905533+00:00",
+      "sha256_grib": "40851a3cc94ae2027e8c0f8f41557ef169cfd44ab77a4c1dac0456347e934f82",
+      "request": {
+        "dir": "/gfs.20260912/00/wave/gridded",
+        "file": "gfswave.t00z.global.0p25.f066.grib2",
+        "lev_surface": "on",
+        "var_HTSGW": "on",
+        "var_PERPW": "on",
+        "var_DIRPW": "on",
+        "var_UGRD": "on",
+        "var_VGRD": "on"
+      }
+    },
+    {
+      "lead_h": 72,
+      "retrieved_at": "2026-09-12T08:38:17.659679+00:00",
+      "sha256_grib": "20ed3c82be7ec0bb9544a75645fc657781b9a22f4813cc793270d52e3c9f90aa",
+      "request": {
+        "dir": "/gfs.20260912/00/wave/gridded",
+        "file": "gfswave.t00z.global.0p25.f072.grib2",
+        "lev_surface": "on",
+        "var_HTSGW": "on",
+        "var_PERPW": "on",
+        "var_DIRPW": "on",
+        "var_UGRD": "on",
+        "var_VGRD": "on"
+      }
+    },
+    {
+      "lead_h": 78,
+      "retrieved_at": "2026-09-12T08:38:19.474482+00:00",
+      "sha256_grib": "6916305f0892d2e430b054e774c9bdd6cfd0255b5c08ed88686443655afaedc4",
+      "request": {
+        "dir": "/gfs.20260912/00/wave/gridded",
+        "file": "gfswave.t00z.global.0p25.f078.grib2",
+        "lev_surface": "on",
+        "var_HTSGW": "on",
+        "var_PERPW": "on",
+        "var_DIRPW": "on",
+        "var_UGRD": "on",
+        "var_VGRD": "on"
+      }
+    },
+    {
+      "lead_h": 84,
+      "retrieved_at": "2026-09-12T08:38:21.674442+00:00",
+      "sha256_grib": "fff3f813bde70b2fc6c6aa3c08e70341bf8406dec5cc79c63683aeea50574323",
+      "request": {
+        "dir": "/gfs.20260912/00/wave/gridded",
+        "file": "gfswave.t00z.global.0p25.f084.grib2",
+        "lev_surface": "on",
+        "var_HTSGW": "on",
+        "var_PERPW": "on",
+        "var_DIRPW": "on",
+        "var_UGRD": "on",
+        "var_VGRD": "on"
+      }
+    },
+    {
+      "lead_h": 90,
+      "retrieved_at": "2026-09-12T08:38:23.433692+00:00",
+      "sha256_grib": "e3d6676958fe83bd54c69eb5f61161d4dc19cb18714f15b3b87785f55b18db08",
+      "request": {
+        "dir": "/gfs.20260912/00/wave/gridded",
+        "file": "gfswave.t00z.global.0p25.f090.grib2",
+        "lev_surface": "on",
+        "var_HTSGW": "on",
+        "var_PERPW": "on",
+        "var_DIRPW": "on",
+        "var_UGRD": "on",
+        "var_VGRD": "on"
+      }
+    },
+    {
+      "lead_h": 96,
+      "retrieved_at": "2026-09-12T08:38:25.184021+00:00",
+      "sha256_grib": "371f1e15f824ea812b643394d9f31168fbf54f74d1aacedfc4d1b2b81facdf03",
+      "request": {
+        "dir": "/gfs.20260912/00/wave/gridded",
+        "file": "gfswave.t00z.global.0p25.f096.grib2",
+        "lev_surface": "on",
+        "var_HTSGW": "on",
+        "var_PERPW": "on",
+        "var_DIRPW": "on",
+        "var_UGRD": "on",
+        "var_VGRD": "on"
+      }
+    },
+    {
+      "lead_h": 102,
+      "retrieved_at": "2026-09-12T08:38:26.932787+00:00",
+      "sha256_grib": "d70fccdd5e8532e745991eeba18b751f5f9c856c5f6d95a700956f46fba2f53d",
+      "request": {
+        "dir": "/gfs.20260912/00/wave/gridded",
+        "file": "gfswave.t00z.global.0p25.f102.grib2",
+        "lev_surface": "on",
+        "var_HTSGW": "on",
+        "var_PERPW": "on",
+        "var_DIRPW": "on",
+        "var_UGRD": "on",
+        "var_VGRD": "on"
+      }
+    },
+    {
+      "lead_h": 108,
+      "retrieved_at": "2026-09-12T08:38:28.800241+00:00",
+      "sha256_grib": "fe5756265c453f848cdfd639321570d30509fc816f5331bd38dc798be404229c",
+      "request": {
+        "dir": "/gfs.20260912/00/wave/gridded",
+        "file": "gfswave.t00z.global.0p25.f108.grib2",
+        "lev_surface": "on",
+        "var_HTSGW": "on",
+        "var_PERPW": "on",
+        "var_DIRPW": "on",
+        "var_UGRD": "on",
+        "var_VGRD": "on"
+      }
+    },
+    {
+      "lead_h": 114,
+      "retrieved_at": "2026-09-12T08:38:30.649573+00:00",
+      "sha256_grib": "2235dfebd01537d103724b956b845abc8d2eae0e383b87c782f60541888fdcdf",
+      "request": {
+        "dir": "/gfs.20260912/00/wave/gridded",
+        "file": "gfswave.t00z.global.0p25.f114.grib2",
+        "lev_surface": "on",
+        "var_HTSGW": "on",
+        "var_PERPW": "on",
+        "var_DIRPW": "on",
+        "var_UGRD": "on",
+        "var_VGRD": "on"
+      }
+    },
+    {
+      "lead_h": 120,
+      "retrieved_at": "2026-09-12T08:38:32.408970+00:00",
+      "sha256_grib": "6b4cc198347c9776ade269126966c08a40443d9bd2f69b865627b809c9bae95b",
+      "request": {
+        "dir": "/gfs.20260912/00/wave/gridded",
+        "file": "gfswave.t00z.global.0p25.f120.grib2",
+        "lev_surface": "on",
+        "var_HTSGW": "on",
+        "var_PERPW": "on",
+        "var_DIRPW": "on",
+        "var_UGRD": "on",
+        "var_VGRD": "on"
+      }
+    },
+    {
+      "lead_h": 126,
+      "retrieved_at": "2026-09-12T08:38:34.252530+00:00",
+      "sha256_grib": "862aa21e9a44b7193ec1f654f8a8e85fcf17d61a1de42fd5ecb52f32dce95cad",
+      "request": {
+        "dir": "/gfs.20260912/00/wave/gridded",
+        "file": "gfswave.t00z.global.0p25.f126.grib2",
+        "lev_surface": "on",
+        "var_HTSGW": "on",
+        "var_PERPW": "on",
+        "var_DIRPW": "on",
+        "var_UGRD": "on",
+        "var_VGRD": "on"
+      }
+    },
+    {
+      "lead_h": 132,
+      "retrieved_at": "2026-09-12T08:38:36.223611+00:00",
+      "sha256_grib": "9837705288cb2ade0d0dcfd93a4586567b5f803b1e6e54e2f0540dcbf9cddbef",
+      "request": {
+        "dir": "/gfs.20260912/00/wave/gridded",
+        "file": "gfswave.t00z.global.0p25.f132.grib2",
+        "lev_surface": "on",
+        "var_HTSGW": "on",
+        "var_PERPW": "on",
+        "var_DIRPW": "on",
+        "var_UGRD": "on",
+        "var_VGRD": "on"
+      }
+    },
+    {
+      "lead_h": 138,
+      "retrieved_at": "2026-09-12T08:38:38.914751+00:00",
+      "sha256_grib": "4d8b7be50371a55eb9f6cddc942dd8ab3eb07bfa25fefac8477d62a859f0ec36",
+      "request": {
+        "dir": "/gfs.20260912/00/wave/gridded",
+        "file": "gfswave.t00z.global.0p25.f138.grib2",
+        "lev_surface": "on",
+        "var_HTSGW": "on",
+        "var_PERPW": "on",
+        "var_DIRPW": "on",
+        "var_UGRD": "on",
+        "var_VGRD": "on"
+      }
+    },
+    {
+      "lead_h": 144,
+      "retrieved_at": "2026-09-12T08:38:40.692269+00:00",
+      "sha256_grib": "bf6aa882a707e45bedeb30a517c022f16bd3d86bbaaf1b9db1913b8637a486f3",
+      "request": {
+        "dir": "/gfs.20260912/00/wave/gridded",
+        "file": "gfswave.t00z.global.0p25.f144.grib2",
+        "lev_surface": "on",
+        "var_HTSGW": "on",
+        "var_PERPW": "on",
+        "var_DIRPW": "on",
+        "var_UGRD": "on",
+        "var_VGRD": "on"
+      }
+    },
+    {
+      "lead_h": 150,
+      "retrieved_at": "2026-09-12T08:38:42.567016+00:00",
+      "sha256_grib": "7dd242fe780d18fee04bc7cca392964cdebb97b3f60b1af1432236660ff0292e",
+      "request": {
+        "dir": "/gfs.20260912/00/wave/gridded",
+        "file": "gfswave.t00z.global.0p25.f150.grib2",
+        "lev_surface": "on",
+        "var_HTSGW": "on",
+        "var_PERPW": "on",
+        "var_DIRPW": "on",
+        "var_UGRD": "on",
+        "var_VGRD": "on"
+      }
+    },
+    {
+      "lead_h": 156,
+      "retrieved_at": "2026-09-12T08:38:44.414698+00:00",
+      "sha256_grib": "5438cc81e66969f08624d566c330c3b7f98a135c19e74cac7d12be542daeeeb6",
+      "request": {
+        "dir": "/gfs.20260912/00/wave/gridded",
+        "file": "gfswave.t00z.global.0p25.f156.grib2",
+        "lev_surface": "on",
+        "var_HTSGW": "on",
+        "var_PERPW": "on",
+        "var_DIRPW": "on",
+        "var_UGRD": "on",
+        "var_VGRD": "on"
+      }
+    },
+    {
+      "lead_h": 162,
+      "retrieved_at": "2026-09-12T08:38:46.357798+00:00",
+      "sha256_grib": "a3edf741dc7a8455bf0ffb89f082dd6c22f78475d6874f03ebb5d3523b09ff10",
+      "request": {
+        "dir": "/gfs.20260912/00/wave/gridded",
+        "file": "gfswave.t00z.global.0p25.f162.grib2",
+        "lev_surface": "on",
+        "var_HTSGW": "on",
+        "var_PERPW": "on",
+        "var_DIRPW": "on",
+        "var_UGRD": "on",
+        "var_VGRD": "on"
+      }
+    },
+    {
+      "lead_h": 168,
+      "retrieved_at": "2026-09-12T08:38:48.089707+00:00",
+      "sha256_grib": "9f622d9dc149b2809182bcf4b425222ade8a9861e4f782bc25b6f0baac7fdbd6",
+      "request": {
+        "dir": "/gfs.20260912/00/wave/gridded",
+        "file": "gfswave.t00z.global.0p25.f168.grib2",
+        "lev_surface": "on",
+        "var_HTSGW": "on",
+        "var_PERPW": "on",
+        "var_DIRPW": "on",
+        "var_UGRD": "on",
+        "var_VGRD": "on"
+      }
+    },
+    {
+      "lead_h": 174,
+      "retrieved_at": "2026-09-12T08:38:49.869764+00:00",
+      "sha256_grib": "2ec057a7d258f5f7c5e078a887e881ea06f385138d8baa35efa466df9524a3a6",
+      "request": {
+        "dir": "/gfs.20260912/00/wave/gridded",
+        "file": "gfswave.t00z.global.0p25.f174.grib2",
+        "lev_surface": "on",
+        "var_HTSGW": "on",
+        "var_PERPW": "on",
+        "var_DIRPW": "on",
+        "var_UGRD": "on",
+        "var_VGRD": "on"
+      }
+    },
+    {
+      "lead_h": 180,
+      "retrieved_at": "2026-09-12T08:38:51.592057+00:00",
+      "sha256_grib": "29948f9ea09e470a4bb63178da6eb0f43a0e13e2fdfbeac0ad5cc8f3bb5e063e",
+      "request": {
+        "dir": "/gfs.20260912/00/wave/gridded",
+        "file": "gfswave.t00z.global.0p25.f180.grib2",
+        "lev_surface": "on",
+        "var_HTSGW": "on",
+        "var_PERPW": "on",
+        "var_DIRPW": "on",
+        "var_UGRD": "on",
+        "var_VGRD": "on"
+      }
+    },
+    {
+      "lead_h": 186,
+      "retrieved_at": "2026-09-12T08:38:53.342533+00:00",
+      "sha256_grib": "6cddbf704539694abbd0b34deeaa273a005f1fa7766d44277620b5d9b4d4a19b",
+      "request": {
+        "dir": "/gfs.20260912/00/wave/gridded",
+        "file": "gfswave.t00z.global.0p25.f186.grib2",
+        "lev_surface": "on",
+        "var_HTSGW": "on",
+        "var_PERPW": "on",
+        "var_DIRPW": "on",
+        "var_UGRD": "on",
+        "var_VGRD": "on"
+      }
+    },
+    {
+      "lead_h": 192,
+      "retrieved_at": "2026-09-12T08:38:55.066270+00:00",
+      "sha256_grib": "bac91ddc5711e27a8ea6f2f500ad75ed6ad0e39fcb90989b7190869fc62aa040",
+      "request": {
+        "dir": "/gfs.20260912/00/wave/gridded",
+        "file": "gfswave.t00z.global.0p25.f192.grib2",
+        "lev_surface": "on",
+        "var_HTSGW": "on",
+        "var_PERPW": "on",
+        "var_DIRPW": "on",
+        "var_UGRD": "on",
+        "var_VGRD": "on"
+      }
+    },
+    {
+      "lead_h": 198,
+      "retrieved_at": "2026-09-12T08:38:56.975105+00:00",
+      "sha256_grib": "efa0ad9332674b7bca2615f749fde96f2fd6b6c0d09e2406b5e36e7bb6ecc590",
+      "request": {
+        "dir": "/gfs.20260912/00/wave/gridded",
+        "file": "gfswave.t00z.global.0p25.f198.grib2",
+        "lev_surface": "on",
+        "var_HTSGW": "on",
+        "var_PERPW": "on",
+        "var_DIRPW": "on",
+        "var_UGRD": "on",
+        "var_VGRD": "on"
+      }
+    },
+    {
+      "lead_h": 204,
+      "retrieved_at": "2026-09-12T08:38:58.742239+00:00",
+      "sha256_grib": "2b1c6c2cabf2ce90c3bf0f5097ab7ce724fd6768b6450af9c36a638c5cbcac2b",
+      "request": {
+        "dir": "/gfs.20260912/00/wave/gridded",
+        "file": "gfswave.t00z.global.0p25.f204.grib2",
+        "lev_surface": "on",
+        "var_HTSGW": "on",
+        "var_PERPW": "on",
+        "var_DIRPW": "on",
+        "var_UGRD": "on",
+        "var_VGRD": "on"
+      }
+    },
+    {
+      "lead_h": 210,
+      "retrieved_at": "2026-09-12T08:39:00.468399+00:00",
+      "sha256_grib": "7d67d485e40d843f14c9efc1155b421a1130dabeb65fa894835dcccc3682a037",
+      "request": {
+        "dir": "/gfs.20260912/00/wave/gridded",
+        "file": "gfswave.t00z.global.0p25.f210.grib2",
+        "lev_surface": "on",
+        "var_HTSGW": "on",
+        "var_PERPW": "on",
+        "var_DIRPW": "on",
+        "var_UGRD": "on",
+        "var_VGRD": "on"
+      }
+    },
+    {
+      "lead_h": 216,
+      "retrieved_at": "2026-09-12T08:39:02.245123+00:00",
+      "sha256_grib": "3fefefcb709f88c802d457bf7156e687daaaea174b421f8672fa762d6269c589",
+      "request": {
+        "dir": "/gfs.20260912/00/wave/gridded",
+        "file": "gfswave.t00z.global.0p25.f216.grib2",
+        "lev_surface": "on",
+        "var_HTSGW": "on",
+        "var_PERPW": "on",
+        "var_DIRPW": "on",
+        "var_UGRD": "on",
+        "var_VGRD": "on"
+      }
+    },
+    {
+      "lead_h": 222,
+      "retrieved_at": "2026-09-12T08:39:04.309452+00:00",
+      "sha256_grib": "a979e4fa51366fd4a152967af5c09ce9b97a8e9d0f263360cba643e8d287fbbb",
+      "request": {
+        "dir": "/gfs.20260912/00/wave/gridded",
+        "file": "gfswave.t00z.global.0p25.f222.grib2",
+        "lev_surface": "on",
+        "var_HTSGW": "on",
+        "var_PERPW": "on",
+        "var_DIRPW": "on",
+        "var_UGRD": "on",
+        "var_VGRD": "on"
+      }
+    },
+    {
+      "lead_h": 228,
+      "retrieved_at": "2026-09-12T08:39:06.036394+00:00",
+      "sha256_grib": "5de5a905aad31fdc3fe6435b02e47be828d8e08f63111cad715c30412b67b1e0",
+      "request": {
+        "dir": "/gfs.20260912/00/wave/gridded",
+        "file": "gfswave.t00z.global.0p25.f228.grib2",
+        "lev_surface": "on",
+        "var_HTSGW": "on",
+        "var_PERPW": "on",
+        "var_DIRPW": "on",
+        "var_UGRD": "on",
+        "var_VGRD": "on"
+      }
+    },
+    {
+      "lead_h": 234,
+      "retrieved_at": "2026-09-12T08:39:08.884786+00:00",
+      "sha256_grib": "65e8a57ae6cd095651004e0761bbb2b2b406bc9dea634411eeaa1a861825d929",
+      "request": {
+        "dir": "/gfs.20260912/00/wave/gridded",
+        "file": "gfswave.t00z.global.0p25.f234.grib2",
+        "lev_surface": "on",
+        "var_HTSGW": "on",
+        "var_PERPW": "on",
+        "var_DIRPW": "on",
+        "var_UGRD": "on",
+        "var_VGRD": "on"
+      }
+    },
+    {
+      "lead_h": 240,
+      "retrieved_at": "2026-09-12T08:39:10.604036+00:00",
+      "sha256_grib": "9867cb9d3a76e02e8a16eaad6c9774cfdc63910100625c7e9066a218640dfc01",
+      "request": {
+        "dir": "/gfs.20260912/00/wave/gridded",
+        "file": "gfswave.t00z.global.0p25.f240.grib2",
+        "lev_surface": "on",
+        "var_HTSGW": "on",
+        "var_PERPW": "on",
+        "var_DIRPW": "on",
+        "var_UGRD": "on",
+        "var_VGRD": "on"
+      }
+    },
+    {
+      "lead_h": 246,
+      "retrieved_at": "2026-09-12T08:39:12.313656+00:00",
+      "sha256_grib": "a8849d1a16df37386cca2704ad9f49e57b82c42286bfc3071ea52698a5671f78",
+      "request": {
+        "dir": "/gfs.20260912/00/wave/gridded",
+        "file": "gfswave.t00z.global.0p25.f246.grib2",
+        "lev_surface": "on",
+        "var_HTSGW": "on",
+        "var_PERPW": "on",
+        "var_DIRPW": "on",
+        "var_UGRD": "on",
+        "var_VGRD": "on"
+      }
+    },
+    {
+      "lead_h": 252,
+      "retrieved_at": "2026-09-12T08:39:14.815527+00:00",
+      "sha256_grib": "dca088c9c692e7638f6520e7651b549733e87f1bcdc1134c30c27edd41520f17",
+      "request": {
+        "dir": "/gfs.20260912/00/wave/gridded",
+        "file": "gfswave.t00z.global.0p25.f252.grib2",
+        "lev_surface": "on",
+        "var_HTSGW": "on",
+        "var_PERPW": "on",
+        "var_DIRPW": "on",
+        "var_UGRD": "on",
+        "var_VGRD": "on"
+      }
+    },
+    {
+      "lead_h": 258,
+      "retrieved_at": "2026-09-12T08:39:16.591126+00:00",
+      "sha256_grib": "35dd0f827f8d9d5efc95fee0ef410b9629955061344c544a605e2440fd7d48d0",
+      "request": {
+        "dir": "/gfs.20260912/00/wave/gridded",
+        "file": "gfswave.t00z.global.0p25.f258.grib2",
+        "lev_surface": "on",
+        "var_HTSGW": "on",
+        "var_PERPW": "on",
+        "var_DIRPW": "on",
+        "var_UGRD": "on",
+        "var_VGRD": "on"
+      }
+    },
+    {
+      "lead_h": 264,
+      "retrieved_at": "2026-09-12T08:39:19.365765+00:00",
+      "sha256_grib": "611b6f0359ec869ad8df715a4b21e9443a64e320827e914f3497ece6f7b4b2cb",
+      "request": {
+        "dir": "/gfs.20260912/00/wave/gridded",
+        "file": "gfswave.t00z.global.0p25.f264.grib2",
+        "lev_surface": "on",
+        "var_HTSGW": "on",
+        "var_PERPW": "on",
+        "var_DIRPW": "on",
+        "var_UGRD": "on",
+        "var_VGRD": "on"
+      }
+    },
+    {
+      "lead_h": 270,
+      "retrieved_at": "2026-09-12T08:39:21.136791+00:00",
+      "sha256_grib": "d36e5c1719f7acb4ac4f98470c7e7bd7356a3c5754bf90c236b7e778d6f478d1",
+      "request": {
+        "dir": "/gfs.20260912/00/wave/gridded",
+        "file": "gfswave.t00z.global.0p25.f270.grib2",
+        "lev_surface": "on",
+        "var_HTSGW": "on",
+        "var_PERPW": "on",
+        "var_DIRPW": "on",
+        "var_UGRD": "on",
+        "var_VGRD": "on"
+      }
+    },
+    {
+      "lead_h": 276,
+      "retrieved_at": "2026-09-12T08:39:22.857864+00:00",
+      "sha256_grib": "0102c3eb55bd4e15c76ac4bca8b32e56f1beb103895f5dd1faf009354ff66b10",
+      "request": {
+        "dir": "/gfs.20260912/00/wave/gridded",
+        "file": "gfswave.t00z.global.0p25.f276.grib2",
+        "lev_surface": "on",
+        "var_HTSGW": "on",
+        "var_PERPW": "on",
+        "var_DIRPW": "on",
+        "var_UGRD": "on",
+        "var_VGRD": "on"
+      }
+    },
+    {
+      "lead_h": 282,
+      "retrieved_at": "2026-09-12T08:39:24.583874+00:00",
+      "sha256_grib": "2029d918d57fbf6db63d6caac7f57a2e9ae222b27dec7fcac2ec61ea208a63c1",
+      "request": {
+        "dir": "/gfs.20260912/00/wave/gridded",
+        "file": "gfswave.t00z.global.0p25.f282.grib2",
+        "lev_surface": "on",
+        "var_HTSGW": "on",
+        "var_PERPW": "on",
+        "var_DIRPW": "on",
+        "var_UGRD": "on",
+        "var_VGRD": "on"
+      }
+    },
+    {
+      "lead_h": 288,
+      "retrieved_at": "2026-09-12T08:39:26.311877+00:00",
+      "sha256_grib": "c55e89bf995e24dfcdc13a980eeebe703aa71529d200aa202a90d26b506c8c16",
+      "request": {
+        "dir": "/gfs.20260912/00/wave/gridded",
+        "file": "gfswave.t00z.global.0p25.f288.grib2",
+        "lev_surface": "on",
+        "var_HTSGW": "on",
+        "var_PERPW": "on",
+        "var_DIRPW": "on",
+        "var_UGRD": "on",
+        "var_VGRD": "on"
+      }
+    },
+    {
+      "lead_h": 294,
+      "retrieved_at": "2026-09-12T08:39:28.036967+00:00",
+      "sha256_grib": "2f64ecaa125f1754231c268feaceedd8afe55cf335d35c4c78a30a822de7ba5c",
+      "request": {
+        "dir": "/gfs.20260912/00/wave/gridded",
+        "file": "gfswave.t00z.global.0p25.f294.grib2",
+        "lev_surface": "on",
+        "var_HTSGW": "on",
+        "var_PERPW": "on",
+        "var_DIRPW": "on",
+        "var_UGRD": "on",
+        "var_VGRD": "on"
+      }
+    },
+    {
+      "lead_h": 300,
+      "retrieved_at": "2026-09-12T08:39:30.804437+00:00",
+      "sha256_grib": "fdb4e9bc272e02cd39984d6a8864f7cc99654b4e0f1ce4f1da76c3767f5d236a",
+      "request": {
+        "dir": "/gfs.20260912/00/wave/gridded",
+        "file": "gfswave.t00z.global.0p25.f300.grib2",
+        "lev_surface": "on",
+        "var_HTSGW": "on",
+        "var_PERPW": "on",
+        "var_DIRPW": "on",
+        "var_UGRD": "on",
+        "var_VGRD": "on"
+      }
+    },
+    {
+      "lead_h": 306,
+      "retrieved_at": "2026-09-12T08:39:32.890307+00:00",
+      "sha256_grib": "bbdf04d58be81e05e1661b63c49d8458dec44dea6a90812e88cfcde00235e0d8",
+      "request": {
+        "dir": "/gfs.20260912/00/wave/gridded",
+        "file": "gfswave.t00z.global.0p25.f306.grib2",
+        "lev_surface": "on",
+        "var_HTSGW": "on",
+        "var_PERPW": "on",
+        "var_DIRPW": "on",
+        "var_UGRD": "on",
+        "var_VGRD": "on"
+      }
+    },
+    {
+      "lead_h": 312,
+      "retrieved_at": "2026-09-12T08:39:34.636572+00:00",
+      "sha256_grib": "0cb3cfafb7d5ff52c3cd838e157b63d072915fdab1ea02f7d9631eac1531520a",
+      "request": {
+        "dir": "/gfs.20260912/00/wave/gridded",
+        "file": "gfswave.t00z.global.0p25.f312.grib2",
+        "lev_surface": "on",
+        "var_HTSGW": "on",
+        "var_PERPW": "on",
+        "var_DIRPW": "on",
+        "var_UGRD": "on",
+        "var_VGRD": "on"
+      }
+    },
+    {
+      "lead_h": 318,
+      "retrieved_at": "2026-09-12T08:39:37.376994+00:00",
+      "sha256_grib": "099b33f5b31245f7f67ea600ba0106e1706c9ca9cf5db4582d08ad5773c4444d",
+      "request": {
+        "dir": "/gfs.20260912/00/wave/gridded",
+        "file": "gfswave.t00z.global.0p25.f318.grib2",
+        "lev_surface": "on",
+        "var_HTSGW": "on",
+        "var_PERPW": "on",
+        "var_DIRPW": "on",
+        "var_UGRD": "on",
+        "var_VGRD": "on"
+      }
+    },
+    {
+      "lead_h": 324,
+      "retrieved_at": "2026-09-12T08:39:40.123462+00:00",
+      "sha256_grib": "cc285e0f543c6c47656ccbc701bdf92633f4070f5e17d0a4142004475d624ca9",
+      "request": {
+        "dir": "/gfs.20260912/00/wave/gridded",
+        "file": "gfswave.t00z.global.0p25.f324.grib2",
+        "lev_surface": "on",
+        "var_HTSGW": "on",
+        "var_PERPW": "on",
+        "var_DIRPW": "on",
+        "var_UGRD": "on",
+        "var_VGRD": "on"
+      }
+    },
+    {
+      "lead_h": 330,
+      "retrieved_at": "2026-09-12T08:39:41.864280+00:00",
+      "sha256_grib": "a541ed4614545dae2c4103156819ddf7cc12f5bb44444cfe3936b4d6864ec3f9",
+      "request": {
+        "dir": "/gfs.20260912/00/wave/gridded",
+        "file": "gfswave.t00z.global.0p25.f330.grib2",
+        "lev_surface": "on",
+        "var_HTSGW": "on",
+        "var_PERPW": "on",
+        "var_DIRPW": "on",
+        "var_UGRD": "on",
+        "var_VGRD": "on"
+      }
+    },
+    {
+      "lead_h": 336,
+      "retrieved_at": "2026-09-12T08:39:43.591592+00:00",
+      "sha256_grib": "757dcd12cff8ab646346388a4373f1865c27c40fc45205679510f1d507ec1601",
+      "request": {
+        "dir": "/gfs.20260912/00/wave/gridded",
+        "file": "gfswave.t00z.global.0p25.f336.grib2",
+        "lev_surface": "on",
+        "var_HTSGW": "on",
+        "var_PERPW": "on",
+        "var_DIRPW": "on",
+        "var_UGRD": "on",
+        "var_VGRD": "on"
+      }
+    },
+    {
+      "lead_h": 342,
+      "retrieved_at": "2026-09-12T08:39:46.025221+00:00",
+      "sha256_grib": "a38d334fcd57dfc7847e37412713ad879c628e489e0aefb502beb6b297f1c631",
+      "request": {
+        "dir": "/gfs.20260912/00/wave/gridded",
+        "file": "gfswave.t00z.global.0p25.f342.grib2",
+        "lev_surface": "on",
+        "var_HTSGW": "on",
+        "var_PERPW": "on",
+        "var_DIRPW": "on",
+        "var_UGRD": "on",
+        "var_VGRD": "on"
+      }
+    },
+    {
+      "lead_h": 348,
+      "retrieved_at": "2026-09-12T08:39:48.791797+00:00",
+      "sha256_grib": "86a19662e3c4b07c17c5dedbd765c375edf19a661f39c27c2b0c27a0e3a39325",
+      "request": {
+        "dir": "/gfs.20260912/00/wave/gridded",
+        "file": "gfswave.t00z.global.0p25.f348.grib2",
+        "lev_surface": "on",
+        "var_HTSGW": "on",
+        "var_PERPW": "on",
+        "var_DIRPW": "on",
+        "var_UGRD": "on",
+        "var_VGRD": "on"
+      }
+    },
+    {
+      "lead_h": 354,
+      "retrieved_at": "2026-09-12T08:39:51.653785+00:00",
+      "sha256_grib": "dfd7f13b83dd55e2ddc169dc25c3136c0d0ee957da8a28ac72a047d968a4ddaa",
+      "request": {
+        "dir": "/gfs.20260912/00/wave/gridded",
+        "file": "gfswave.t00z.global.0p25.f354.grib2",
+        "lev_surface": "on",
+        "var_HTSGW": "on",
+        "var_PERPW": "on",
+        "var_DIRPW": "on",
+        "var_UGRD": "on",
+        "var_VGRD": "on"
+      }
+    },
+    {
+      "lead_h": 360,
+      "retrieved_at": "2026-09-12T08:39:54.383283+00:00",
+      "sha256_grib": "998d239a8fdb09581b83628dfddd6f8011f855fb9dca75d7c82cddf505828583",
+      "request": {
+        "dir": "/gfs.20260912/00/wave/gridded",
+        "file": "gfswave.t00z.global.0p25.f360.grib2",
+        "lev_surface": "on",
+        "var_HTSGW": "on",
+        "var_PERPW": "on",
+        "var_DIRPW": "on",
+        "var_UGRD": "on",
+        "var_VGRD": "on"
+      }
+    },
+    {
+      "lead_h": 366,
+      "retrieved_at": "2026-09-12T08:39:56.806516+00:00",
+      "sha256_grib": "e5526533e5bc8b3049c5f66e20d5610ff05d2c37639df3f530c545a84e9258e5",
+      "request": {
+        "dir": "/gfs.20260912/00/wave/gridded",
+        "file": "gfswave.t00z.global.0p25.f366.grib2",
+        "lev_surface": "on",
+        "var_HTSGW": "on",
+        "var_PERPW": "on",
+        "var_DIRPW": "on",
+        "var_UGRD": "on",
+        "var_VGRD": "on"
+      }
+    },
+    {
+      "lead_h": 372,
+      "retrieved_at": "2026-09-12T08:39:59.588758+00:00",
+      "sha256_grib": "7c1ca8404acd5c7a2d31f85ce817c1054bc7504efb878d01b7b3300cdde1e086",
+      "request": {
+        "dir": "/gfs.20260912/00/wave/gridded",
+        "file": "gfswave.t00z.global.0p25.f372.grib2",
+        "lev_surface": "on",
+        "var_HTSGW": "on",
+        "var_PERPW": "on",
+        "var_DIRPW": "on",
+        "var_UGRD": "on",
+        "var_VGRD": "on"
+      }
+    },
+    {
+      "lead_h": 378,
+      "retrieved_at": "2026-09-12T08:40:01.308578+00:00",
+      "sha256_grib": "1c67fa7f1b60eeddd4dbb5c53b3699b85c5bc358edc7c9a47069eb64bffbbce6",
+      "request": {
+        "dir": "/gfs.20260912/00/wave/gridded",
+        "file": "gfswave.t00z.global.0p25.f378.grib2",
+        "lev_surface": "on",
+        "var_HTSGW": "on",
+        "var_PERPW": "on",
+        "var_DIRPW": "on",
+        "var_UGRD": "on",
+        "var_VGRD": "on"
+      }
+    },
+    {
+      "lead_h": 384,
+      "retrieved_at": "2026-09-12T08:40:04.041087+00:00",
+      "sha256_grib": "f0a3a2b378d402a6504dcecf6276069b69d7b7184c0941db83b86d07bf83d58f",
+      "request": {
+        "dir": "/gfs.20260912/00/wave/gridded",
+        "file": "gfswave.t00z.global.0p25.f384.grib2",
+        "lev_surface": "on",
+        "var_HTSGW": "on",
+        "var_PERPW": "on",
+        "var_DIRPW": "on",
+        "var_UGRD": "on",
+        "var_VGRD": "on"
+      }
+    }
+  ],
+  "methods": {
+    "geometry": "WGS84 / GeographicLib; periodic longitude",
+    "motion": "constant SOG; instantaneous waypoint turns",
+    "hs": "finite ocean-cell normalized spatial weights; linear time; no extrapolation",
+    "primary_wave": "maximum finite ocean weight cell; nearest forecast time, ties earlier",
+    "wind": "surface forcing u/v, normalized finite spatial weights, linear time; apparent=wind minus SOG vector",
+    "sample_spacing_nm_max": 5,
+    "sample_interval_h_max": 1,
+    "provider_time_interval_h": 6
+  },
+  "limitations": [
+    "NOAA 전 지구 원천 예보입니다. Poseidon 동아시아 모델의 검증 성적은 적용되지 않습니다.",
+    "원자료는 0.25도·6시간 간격입니다. 지점 수를 늘려도 원자료 해상도가 높아지지 않습니다.",
+    "육지·해빙·원천 결측을 임의로 채우지 않습니다. 최대 16일 예보 범위 밖은 결측입니다.",
+    "주 파주기/파향은 NOAA PERPW/DIRPW입니다. Tp·평균주기 Tm02와 동일한 변수로 취급하지 않습니다.",
+    "바람은 GFS-Wave GRIB surface 강제장입니다. 갑판 풍속·돌풍·풍저항은 계산하지 않습니다.",
+    "항로는 사용자 입력입니다. Natural Earth 육지 표본 검사는 항행 가능 승인·공식 해도가 아닙니다.",
+    "일정 SOG 도착 시각입니다. 해류·기상 감속·선회·입출항 대기는 제외합니다.",
+    "연료는 제공 곡선의 정온·무해류 해상 항해 기준값입니다. 연소 CO₂만 계산합니다.",
+    "항구 좌표는 항만 목록의 대표 위치이며 입항점·선석·항행 가능 경로가 아닙니다. 출입항 수로와 중간 웨이포인트는 별도로 확인해야 합니다."
+  ],
+  "port_references": [
+    {
+      "waypoint_index": 0,
+      "port_id": "unlocode:KRPUS",
+      "catalog_id": "ports-9211d92725cd1f17",
+      "catalog_sha256": "9211d92725cd1f178e5a1c0e7d4f6652ced8de1381d41e4b49914f61c0e3e15c",
+      "name": "Busan",
+      "country_code": "KR",
+      "unlocode": "KRPUS",
+      "wpi_id": "60390",
+      "lat": 35.1,
+      "lon": 129.033333,
+      "coordinate_source": "wpi",
+      "coordinate_conflict": null,
+      "unlocode_status": null,
+      "sources": [
+        {
+          "change": "",
+          "coordinates_raw": "3508N 12903E",
+          "date": "1001",
+          "edition": "2025-1",
+          "file": "release/csv/UNLOCODE CodeListPart2.csv",
+          "function": "1234567-",
+          "id": "unlocode",
+          "lat": 35.13333333,
+          "lon": 129.05,
+          "record_key": "KRPUS",
+          "remarks": "",
+          "row": 20571,
+          "status": "AF",
+          "subdivision": "26"
+        },
+        {
+          "country_raw": "South Korea",
+          "edition": "live FeatureServer snapshot",
+          "global_id": "{0DCCE984-DD0D-4CA1-B475-A97EC167A28C}",
+          "id": "wpi",
+          "lat": 35.1,
+          "lon": 129.033333,
+          "object_id": 5379,
+          "record_key": "60390",
+          "unlocode_raw": "KR PUS"
+        }
+      ],
+      "reference_only": true,
+      "source_snapshots": [
+        {
+          "edition": "2025-1",
+          "files": [
+            {
+              "bytes": 13507338,
+              "path": "raw/unlocode-2025-1.zip",
+              "retrieved_at": "2026-09-12T08:28:48.450000Z",
+              "sha256": "ad409fc7149b10f98d61190c34d9daf78b78bb8b31464cc66de1a89d09b01b5d",
+              "source": "unlocode",
+              "url": "https://opensource.unicc.org/un/unece/uncefact/vocab-locode/-/jobs/artifacts/2025-1/download?job=package-release"
+            }
+          ],
+          "id": "unlocode",
+          "license": "Official site states UN/CEFACT standards are CC BY 4.0; dataset-specific terms are not separately declared.",
+          "license_url": "https://unlocode.unece.org/terms/",
+          "records": 17520,
+          "retrieved_at": "2026-09-12T08:28:48.450000Z",
+          "sha256": "644c67b6019647877eb9fd89eda1c9c4107c5a96e9eeb90930ef6d57a1972127",
+          "title": "UNECE UN/LOCODE",
+          "url": "https://unlocode.unece.org/publications/"
+        },
+        {
+          "edition": "live FeatureServer snapshot",
+          "files": [
+            {
+              "bytes": 35873,
+              "path": "raw/wpi-layer.json",
+              "retrieved_at": "2026-09-12T08:29:59.970000Z",
+              "sha256": "2e5555734a11af8cde1b8c42a73bc05bfad7e1fa979e73be969f2f5a3c541b9c",
+              "source": "wpi",
+              "url": "https://fgmod.nga.mil/nauticalpubs-feature/rest/services/WPI/WPI_Viewer/FeatureServer/0?f=pjson"
+            },
+            {
+              "bytes": 18,
+              "path": "raw/wpi-count.json",
+              "retrieved_at": "2026-09-12T08:29:59.800000Z",
+              "sha256": "3096b55fa4c9760dc64d7d60c74fe1b7aa1105dbe95ce48001e21af860a0a65e",
+              "source": "wpi",
+              "url": "https://fgmod.nga.mil/nauticalpubs-feature/rest/services/WPI/WPI_Viewer/FeatureServer/0/query?where=1%3D1&returnCountOnly=true&f=pjson"
+            },
+            {
+              "bytes": 2953670,
+              "path": "raw/wpi-features-0.json",
+              "retrieved_at": "2026-09-12T08:30:56.860000Z",
+              "sha256": "13a8175a1c745a0f7051e85ab65cbdabb4365293ccd840bef23b9e891e308c6e",
+              "source": "wpi",
+              "url": "https://fgmod.nga.mil/nauticalpubs-feature/rest/services/WPI/WPI_Viewer/FeatureServer/0/query?where=1%3D1&outFields=%2A&outSR=4326&returnGeometry=true&orderByFields=objectid+ASC&resultOffset=0&resultRecordCount=1000&f=json"
+            },
+            {
+              "bytes": 2992926,
+              "path": "raw/wpi-features-1000.json",
+              "retrieved_at": "2026-09-12T08:30:55.840000Z",
+              "sha256": "7e5c0edf2acf1599a41f3b057a22f32d8c67d4a9ea642686f6ba0e132f02d41f",
+              "source": "wpi",
+              "url": "https://fgmod.nga.mil/nauticalpubs-feature/rest/services/WPI/WPI_Viewer/FeatureServer/0/query?where=1%3D1&outFields=%2A&outSR=4326&returnGeometry=true&orderByFields=objectid+ASC&resultOffset=1000&resultRecordCount=1000&f=json"
+            },
+            {
+              "bytes": 2972954,
+              "path": "raw/wpi-features-2000.json",
+              "retrieved_at": "2026-09-12T08:30:52.820000Z",
+              "sha256": "13a35a5d32796ec9f55dfdb3c895eeb0ad7a60c1764d500ea65cd4ad1d07ecde",
+              "source": "wpi",
+              "url": "https://fgmod.nga.mil/nauticalpubs-feature/rest/services/WPI/WPI_Viewer/FeatureServer/0/query?where=1%3D1&outFields=%2A&outSR=4326&returnGeometry=true&orderByFields=objectid+ASC&resultOffset=2000&resultRecordCount=1000&f=json"
+            },
+            {
+              "bytes": 2415313,
+              "path": "raw/wpi-features-3000.json",
+              "retrieved_at": "2026-09-12T08:31:01.170000Z",
+              "sha256": "49a254a1adf2a15051c562f7be57ced278d04adbe6b8c7220d43f9675d3dfecb",
+              "source": "wpi",
+              "url": "https://fgmod.nga.mil/nauticalpubs-feature/rest/services/WPI/WPI_Viewer/FeatureServer/0/query?where=1%3D1&outFields=%2A&outSR=4326&returnGeometry=true&orderByFields=objectid+ASC&resultOffset=3000&resultRecordCount=1000&f=json"
+            },
+            {
+              "bytes": 18434,
+              "path": "raw/wpi-object-ids.json",
+              "retrieved_at": "2026-09-12T08:41:36.060000Z",
+              "sha256": "d2f002ad55ef058fe7f697b4677d2dbe287bf367c3e5fef37bbac2d2a8423d24",
+              "source": "wpi",
+              "url": "https://fgmod.nga.mil/nauticalpubs-feature/rest/services/WPI/WPI_Viewer/FeatureServer/0/query?where=1%3D1&returnIdsOnly=true&f=json"
+            }
+          ],
+          "id": "wpi",
+          "license": "NGA publicly released reference data; attribution retained",
+          "license_url": "https://msi.nga.mil/Publications/WPI",
+          "records": 3807,
+          "retrieved_at": "2026-09-12T08:41:36.060000Z",
+          "sha256": "d8398ce9623e090bea3664a27d185888ccc4ce7414fb253598aaba7d697277b9",
+          "title": "NGA World Port Index",
+          "url": "https://msi.nga.mil/Publications/WPI"
+        }
+      ]
+    },
+    {
+      "waypoint_index": 1,
+      "port_id": "unlocode:KRUSN",
+      "catalog_id": "ports-9211d92725cd1f17",
+      "catalog_sha256": "9211d92725cd1f178e5a1c0e7d4f6652ced8de1381d41e4b49914f61c0e3e15c",
+      "name": "Ulsan",
+      "country_code": "KR",
+      "unlocode": "KRUSN",
+      "wpi_id": "60400",
+      "lat": 35.45,
+      "lon": 129.4,
+      "coordinate_source": "wpi",
+      "coordinate_conflict": null,
+      "unlocode_status": null,
+      "sources": [
+        {
+          "change": "",
+          "coordinates_raw": "3532N 12919E",
+          "date": "0507",
+          "edition": "2025-1",
+          "file": "release/csv/UNLOCODE CodeListPart2.csv",
+          "function": "1234----",
+          "id": "unlocode",
+          "lat": 35.53333333,
+          "lon": 129.31666667,
+          "record_key": "KRUSN",
+          "remarks": "",
+          "row": 20623,
+          "status": "AF",
+          "subdivision": "31"
+        },
+        {
+          "country_raw": "South Korea",
+          "edition": "live FeatureServer snapshot",
+          "global_id": "{03BFC8AB-F0F8-4854-821C-FA681C0B29F5}",
+          "id": "wpi",
+          "lat": 35.45,
+          "lon": 129.4,
+          "object_id": 5373,
+          "record_key": "60400",
+          "unlocode_raw": "KR USN"
+        }
+      ],
+      "reference_only": true,
+      "source_snapshots": [
+        {
+          "edition": "2025-1",
+          "files": [
+            {
+              "bytes": 13507338,
+              "path": "raw/unlocode-2025-1.zip",
+              "retrieved_at": "2026-09-12T08:28:48.450000Z",
+              "sha256": "ad409fc7149b10f98d61190c34d9daf78b78bb8b31464cc66de1a89d09b01b5d",
+              "source": "unlocode",
+              "url": "https://opensource.unicc.org/un/unece/uncefact/vocab-locode/-/jobs/artifacts/2025-1/download?job=package-release"
+            }
+          ],
+          "id": "unlocode",
+          "license": "Official site states UN/CEFACT standards are CC BY 4.0; dataset-specific terms are not separately declared.",
+          "license_url": "https://unlocode.unece.org/terms/",
+          "records": 17520,
+          "retrieved_at": "2026-09-12T08:28:48.450000Z",
+          "sha256": "644c67b6019647877eb9fd89eda1c9c4107c5a96e9eeb90930ef6d57a1972127",
+          "title": "UNECE UN/LOCODE",
+          "url": "https://unlocode.unece.org/publications/"
+        },
+        {
+          "edition": "live FeatureServer snapshot",
+          "files": [
+            {
+              "bytes": 35873,
+              "path": "raw/wpi-layer.json",
+              "retrieved_at": "2026-09-12T08:29:59.970000Z",
+              "sha256": "2e5555734a11af8cde1b8c42a73bc05bfad7e1fa979e73be969f2f5a3c541b9c",
+              "source": "wpi",
+              "url": "https://fgmod.nga.mil/nauticalpubs-feature/rest/services/WPI/WPI_Viewer/FeatureServer/0?f=pjson"
+            },
+            {
+              "bytes": 18,
+              "path": "raw/wpi-count.json",
+              "retrieved_at": "2026-09-12T08:29:59.800000Z",
+              "sha256": "3096b55fa4c9760dc64d7d60c74fe1b7aa1105dbe95ce48001e21af860a0a65e",
+              "source": "wpi",
+              "url": "https://fgmod.nga.mil/nauticalpubs-feature/rest/services/WPI/WPI_Viewer/FeatureServer/0/query?where=1%3D1&returnCountOnly=true&f=pjson"
+            },
+            {
+              "bytes": 2953670,
+              "path": "raw/wpi-features-0.json",
+              "retrieved_at": "2026-09-12T08:30:56.860000Z",
+              "sha256": "13a8175a1c745a0f7051e85ab65cbdabb4365293ccd840bef23b9e891e308c6e",
+              "source": "wpi",
+              "url": "https://fgmod.nga.mil/nauticalpubs-feature/rest/services/WPI/WPI_Viewer/FeatureServer/0/query?where=1%3D1&outFields=%2A&outSR=4326&returnGeometry=true&orderByFields=objectid+ASC&resultOffset=0&resultRecordCount=1000&f=json"
+            },
+            {
+              "bytes": 2992926,
+              "path": "raw/wpi-features-1000.json",
+              "retrieved_at": "2026-09-12T08:30:55.840000Z",
+              "sha256": "7e5c0edf2acf1599a41f3b057a22f32d8c67d4a9ea642686f6ba0e132f02d41f",
+              "source": "wpi",
+              "url": "https://fgmod.nga.mil/nauticalpubs-feature/rest/services/WPI/WPI_Viewer/FeatureServer/0/query?where=1%3D1&outFields=%2A&outSR=4326&returnGeometry=true&orderByFields=objectid+ASC&resultOffset=1000&resultRecordCount=1000&f=json"
+            },
+            {
+              "bytes": 2972954,
+              "path": "raw/wpi-features-2000.json",
+              "retrieved_at": "2026-09-12T08:30:52.820000Z",
+              "sha256": "13a35a5d32796ec9f55dfdb3c895eeb0ad7a60c1764d500ea65cd4ad1d07ecde",
+              "source": "wpi",
+              "url": "https://fgmod.nga.mil/nauticalpubs-feature/rest/services/WPI/WPI_Viewer/FeatureServer/0/query?where=1%3D1&outFields=%2A&outSR=4326&returnGeometry=true&orderByFields=objectid+ASC&resultOffset=2000&resultRecordCount=1000&f=json"
+            },
+            {
+              "bytes": 2415313,
+              "path": "raw/wpi-features-3000.json",
+              "retrieved_at": "2026-09-12T08:31:01.170000Z",
+              "sha256": "49a254a1adf2a15051c562f7be57ced278d04adbe6b8c7220d43f9675d3dfecb",
+              "source": "wpi",
+              "url": "https://fgmod.nga.mil/nauticalpubs-feature/rest/services/WPI/WPI_Viewer/FeatureServer/0/query?where=1%3D1&outFields=%2A&outSR=4326&returnGeometry=true&orderByFields=objectid+ASC&resultOffset=3000&resultRecordCount=1000&f=json"
+            },
+            {
+              "bytes": 18434,
+              "path": "raw/wpi-object-ids.json",
+              "retrieved_at": "2026-09-12T08:41:36.060000Z",
+              "sha256": "d2f002ad55ef058fe7f697b4677d2dbe287bf367c3e5fef37bbac2d2a8423d24",
+              "source": "wpi",
+              "url": "https://fgmod.nga.mil/nauticalpubs-feature/rest/services/WPI/WPI_Viewer/FeatureServer/0/query?where=1%3D1&returnIdsOnly=true&f=json"
+            }
+          ],
+          "id": "wpi",
+          "license": "NGA publicly released reference data; attribution retained",
+          "license_url": "https://msi.nga.mil/Publications/WPI",
+          "records": 3807,
+          "retrieved_at": "2026-09-12T08:41:36.060000Z",
+          "sha256": "d8398ce9623e090bea3664a27d185888ccc4ce7414fb253598aaba7d697277b9",
+          "title": "NGA World Port Index",
+          "url": "https://msi.nga.mil/Publications/WPI"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+name: CI
+on:
+  push:
+  pull_request:
+  schedule:
+    - cron: "0 15 * * *"   # nightly 00:00 KST — scientific/integration
+
+jobs:
+  lint-type-unit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+        with: { python-version: "3.12" }
+      - run: uv sync --all-groups
+      - run: uv run ruff check .
+      - run: uv run ruff format --check .
+      - run: uv run mypy
+      - run: uv run pytest -m unit -q
+
+  scientific:
+    if: github.event_name == 'schedule'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+        with: { python-version: "3.12" }
+      - run: uv sync --all-groups
+      - run: uv run pytest -m "scientific or integration" -q

@@ -1,0 +1,720 @@
+{
+  "status": "candidate",
+  "distance_nm": 5793.022371958902,
+  "waypoints": [
+    {
+      "lat": 35.09175,
+      "lon": 129.037
+    },
+    {
+      "lat": 34.9485,
+      "lon": 129.09725
+    },
+    {
+      "lat": 35.0,
+      "lon": 129.2
+    },
+    {
+      "lat": 36.4,
+      "lon": 130.0
+    },
+    {
+      "lat": 36.52525,
+      "lon": 130.13375
+    },
+    {
+      "lat": 39.22675,
+      "lon": 133.019
+    },
+    {
+      "lat": 40.86325,
+      "lon": 134.7665
+    },
+    {
+      "lat": 42.02675,
+      "lon": 136.2585
+    },
+    {
+      "lat": 45.074749999999995,
+      "lon": 140.1536875
+    },
+    {
+      "lat": 45.26675,
+      "lon": 140.23425
+    },
+    {
+      "lat": 45.842,
+      "lon": 140.47525
+    },
+    {
+      "lat": 45.64025,
+      "lon": 141.0265
+    },
+    {
+      "lat": 45.71125,
+      "lon": 141.40525
+    },
+    {
+      "lat": 45.70125,
+      "lon": 141.74625
+    },
+    {
+      "lat": 45.6545,
+      "lon": 143.0895
+    },
+    {
+      "lat": 47.21825,
+      "lon": 145.973
+    },
+    {
+      "lat": 47.51325,
+      "lon": 146.5165
+    },
+    {
+      "lat": 48.4905,
+      "lon": 149.09275
+    },
+    {
+      "lat": 50.062,
+      "lon": 154.6455
+    },
+    {
+      "lat": 49.7215,
+      "lon": 155.3235
+    },
+    {
+      "lat": 50.674,
+      "lon": 156.838875
+    },
+    {
+      "lat": 50.7,
+      "lon": 156.9
+    },
+    {
+      "lat": 54.7,
+      "lon": 163.1
+    },
+    {
+      "lat": 58.99075,
+      "lon": 168.1745
+    },
+    {
+      "lat": 59.472,
+      "lon": 169.736
+    },
+    {
+      "lat": 62.02025,
+      "lon": 179.61425
+    },
+    {
+      "lat": 62.1,
+      "lon": -180
+    },
+    {
+      "lat": 58.0,
+      "lon": -178.0
+    },
+    {
+      "lat": 56.6975,
+      "lon": -171.666
+    },
+    {
+      "lat": 55.42675,
+      "lon": -167.0
+    },
+    {
+      "lat": 55.1,
+      "lon": -165.8
+    },
+    {
+      "lat": 54.744,
+      "lon": -165.307
+    },
+    {
+      "lat": 54.64275,
+      "lon": -165.16675
+    },
+    {
+      "lat": 54.45575,
+      "lon": -164.908
+    },
+    {
+      "lat": 54.14075,
+      "lon": -164.47175
+    },
+    {
+      "lat": 54.05575,
+      "lon": -164.256
+    },
+    {
+      "lat": 54.27275,
+      "lon": -162.55975
+    },
+    {
+      "lat": 53.792,
+      "lon": -156.38425
+    },
+    {
+      "lat": 53.7905,
+      "lon": -155.05875
+    },
+    {
+      "lat": 53.0605,
+      "lon": -152.4545
+    },
+    {
+      "lat": 52.5455,
+      "lon": -150.6185
+    },
+    {
+      "lat": 52.3135,
+      "lon": -149.792
+    },
+    {
+      "lat": 50.70275,
+      "lon": -144.04925
+    },
+    {
+      "lat": 50.0,
+      "lon": -140.8515
+    },
+    {
+      "lat": 49.8495,
+      "lon": -140.16725
+    },
+    {
+      "lat": 49.81275,
+      "lon": -140.0
+    },
+    {
+      "lat": 49.75575,
+      "lon": -139.7405
+    },
+    {
+      "lat": 49.03175,
+      "lon": -136.4465
+    },
+    {
+      "lat": 47.4585,
+      "lon": -132.826
+    },
+    {
+      "lat": 47.2785,
+      "lon": -132.41125
+    },
+    {
+      "lat": 45.7195,
+      "lon": -130.959
+    },
+    {
+      "lat": 45.6465,
+      "lon": -130.892
+    },
+    {
+      "lat": 44.6915,
+      "lon": -130.00275
+    },
+    {
+      "lat": 44.10325,
+      "lon": -129.45525
+    },
+    {
+      "lat": 42.2925,
+      "lon": -127.753
+    },
+    {
+      "lat": 42.20475,
+      "lon": -127.6705
+    },
+    {
+      "lat": 38.65575,
+      "lon": -124.329
+    },
+    {
+      "lat": 38.52825,
+      "lon": -124.20975
+    },
+    {
+      "lat": 38.467,
+      "lon": -124.1525
+    },
+    {
+      "lat": 38.131,
+      "lon": -123.60325
+    },
+    {
+      "lat": 37.7,
+      "lon": -122.90025
+    },
+    {
+      "lat": 37.379,
+      "lon": -122.70175
+    },
+    {
+      "lat": 34.43625,
+      "lon": -120.88425
+    },
+    {
+      "lat": 34.0785,
+      "lon": -119.267
+    },
+    {
+      "lat": 33.7055,
+      "lon": -118.48675
+    },
+    {
+      "lat": 33.6365,
+      "lon": -118.46475
+    },
+    {
+      "lat": 33.62825,
+      "lon": -118.179
+    }
+  ],
+  "departure": {
+    "port": {
+      "aliases": [
+        "부산",
+        "부산항",
+        "Busan",
+        "Busan; Pusan"
+      ],
+      "coordinate_source": "wpi",
+      "coordinate_status": "reference",
+      "country_code": "KR",
+      "country_name": "KOREA, REPUBLIC OF",
+      "curated_aliases": [
+        "부산",
+        "부산항",
+        "Busan"
+      ],
+      "harbor_size": "Large",
+      "harbor_type": "Coastal (Breakwater)",
+      "id": "unlocode:KRPUS",
+      "kind": "port",
+      "lat": 35.1,
+      "lon": 129.033333,
+      "merge_rule": "exact_unlocode_unique_wpi_within_25km_or_missing_un_coordinate",
+      "name": "Busan",
+      "source_coordinate_distance_km": 3.998,
+      "sources": [
+        {
+          "change": "",
+          "coordinates_raw": "3508N 12903E",
+          "date": "1001",
+          "edition": "2025-1",
+          "file": "release/csv/UNLOCODE CodeListPart2.csv",
+          "function": "1234567-",
+          "id": "unlocode",
+          "lat": 35.13333333,
+          "lon": 129.05,
+          "record_key": "KRPUS",
+          "remarks": "",
+          "row": 20571,
+          "status": "AF",
+          "subdivision": "26"
+        },
+        {
+          "country_raw": "South Korea",
+          "edition": "live FeatureServer snapshot",
+          "global_id": "{0DCCE984-DD0D-4CA1-B475-A97EC167A28C}",
+          "id": "wpi",
+          "lat": 35.1,
+          "lon": 129.033333,
+          "object_id": 5379,
+          "record_key": "60390",
+          "unlocode_raw": "KR PUS"
+        }
+      ],
+      "unlocode": "KRPUS",
+      "wpi_id": "60390"
+    },
+    "attachment": {
+      "lon": 129.037,
+      "lat": 35.09175,
+      "node_id": 35356
+    },
+    "gap_nm": 0.5261533135180315,
+    "scope": "reference_gap_not_navigated"
+  },
+  "arrival": {
+    "port": {
+      "aliases": [
+        "롱비치",
+        "Long Beach"
+      ],
+      "coordinate_source": "wpi",
+      "coordinate_status": "reference",
+      "country_code": "US",
+      "country_name": "UNITED STATES OF AMERICA (THE)",
+      "curated_aliases": [
+        "롱비치"
+      ],
+      "harbor_size": "Medium",
+      "harbor_type": "Coastal (Breakwater)",
+      "id": "unlocode:USLGB",
+      "kind": "port",
+      "lat": 33.766667,
+      "lon": -118.183333,
+      "merge_rule": "exact_unlocode_unique_wpi_within_25km_or_missing_un_coordinate",
+      "name": "Long Beach",
+      "source_coordinate_distance_km": 0.0,
+      "sources": [
+        {
+          "change": "",
+          "coordinates_raw": "3346N 11811W",
+          "date": "0307",
+          "edition": "2025-1",
+          "file": "release/csv/UNLOCODE CodeListPart3.csv",
+          "function": "1234----",
+          "id": "unlocode",
+          "lat": 33.76666667,
+          "lon": -118.18333333,
+          "record_key": "USLGB",
+          "remarks": "",
+          "row": 21338,
+          "status": "AI",
+          "subdivision": "CA"
+        },
+        {
+          "country_raw": "United States",
+          "edition": "live FeatureServer snapshot",
+          "global_id": "{4549355B-99A9-42B2-84F1-EB209F33E8D9}",
+          "id": "wpi",
+          "lat": 33.766667,
+          "lon": -118.183333,
+          "object_id": 1142,
+          "record_key": "16070",
+          "unlocode_raw": "US LGB"
+        }
+      ],
+      "unlocode": "USLGB",
+      "wpi_id": "16070"
+    },
+    "attachment": {
+      "lon": -118.179,
+      "lat": 33.62825,
+      "node_id": 902
+    },
+    "gap_nm": 8.292680289154967,
+    "scope": "reference_gap_not_navigated"
+  },
+  "network": {
+    "schema_version": "marnet-manifest-1",
+    "network_id": "eurostat-marnet-5km-e50a60b2bfa866fd",
+    "source_name": "Eurostat SeaRoute / MARNET, 5 km generalized network",
+    "source_url": "https://github.com/eurostat/searoute",
+    "source_commit": "88a2e568a8e0144d1f5a81c3931a7bc2bcce6901",
+    "source_commit_date": "2022-01-10T09:56:46Z",
+    "source_commit_url": "https://github.com/eurostat/searoute/commit/88a2e568a8e0144d1f5a81c3931a7bc2bcce6901",
+    "source_gpkg_last_change": "2021-09-08T13:51:23.453Z",
+    "retrieved_on": "2026-09-12",
+    "retrieval_time_precision": "UTC date only; clock time not recorded",
+    "license": "EUPL-1.2",
+    "license_file": "LICENSE-EUPL-1.2.txt",
+    "graph_file": "network.json",
+    "graph_sha256": "e50a60b2bfa866fdcbcf732977daa74b7c0461bed7f69e838af5458d1df6003a",
+    "builder_file": "build_network.py",
+    "builder_sha256": "59db6298f2b080dbbf06b73de1cd88c91603eeca558b20290b35ab1c81ba15ef",
+    "coordinate_reference_system": "EPSG:4326",
+    "edge_direction": "undirected",
+    "geometry_preservation": "Every original LineString vertex is preserved in source order; no simplification or shortcut edges",
+    "wrapped_longitude_vertices": [
+      {
+        "feature_id": 29787,
+        "vertex_index": 1,
+        "original_lon": 180.7535,
+        "normalized_lon": -179.24649999999997
+      },
+      {
+        "feature_id": 29787,
+        "vertex_index": 2,
+        "original_lon": 180.212,
+        "normalized_lon": -179.788
+      }
+    ],
+    "dateline_policy": "Canonicalize exact +180/-180 endpoints at identical latitude; unmatched endpoints are not joined",
+    "native_endpoint_count": 36121,
+    "node_count": 36109,
+    "edge_count": 72478,
+    "vertex_count": 151169,
+    "self_loop_count": 14,
+    "connected_component_count": 1,
+    "component_node_counts": [
+      36109
+    ],
+    "passage_edge_counts": {
+      "babelmandeb": 3,
+      "bering": 1,
+      "corinth": 1,
+      "dover": 19,
+      "gibraltar": 5,
+      "kiel": 1,
+      "magellan": 26,
+      "malacca": 4,
+      "northeast": 17,
+      "northwest": 17,
+      "panama": 3,
+      "suez": 1
+    },
+    "dateline_matched_latitudes": [
+      -60.0,
+      -50.0,
+      -40.0,
+      -30.0,
+      -20.0,
+      0.0,
+      10.0,
+      20.0,
+      30.0,
+      40.0,
+      62.1,
+      70.0
+    ],
+    "dateline_unmatched_positive_latitudes": [
+      -70.0,
+      -17.8215,
+      -14.492
+    ],
+    "dateline_unmatched_negative_latitudes": [
+      -80.0,
+      -10.0,
+      50.0
+    ],
+    "bounds": {
+      "min_lat": -80.0,
+      "max_lat": 78.2315,
+      "min_lon": -180.0,
+      "max_lon": 180.0
+    },
+    "source_files": [
+      {
+        "file": "marnet_plus_5km.gpkg",
+        "url": "https://raw.githubusercontent.com/eurostat/searoute/88a2e568a8e0144d1f5a81c3931a7bc2bcce6901/modules/core/src/main/resources/marnet/marnet_plus_5km.gpkg",
+        "sha256": "75ca6cc130b3748f568196a9caf62889e9f096ec358f65223b4095ac070be0e7",
+        "bytes": 6963200
+      },
+      {
+        "file": "LICENSE-EUPL-1.2.txt",
+        "url": "https://raw.githubusercontent.com/eurostat/searoute/88a2e568a8e0144d1f5a81c3931a7bc2bcce6901/LICENSE",
+        "sha256": "b2a251cd9bfe08db1891f4f5d771d36e3d4fbd7d4df66df8ece67371b0ffd51f",
+        "bytes": 14147
+      },
+      {
+        "file": "README-upstream.md",
+        "url": "https://raw.githubusercontent.com/eurostat/searoute/88a2e568a8e0144d1f5a81c3931a7bc2bcce6901/README.md",
+        "sha256": "29a2e6d729d0b5d2b84cf8830918cb685c5f1dd40ab2b4750efb4324838563ae",
+        "bytes": 6388
+      }
+    ],
+    "limitations": [
+      "Reference network for maritime transport simulation; not an official nautical chart, maintained fairway, or navigation instruction",
+      "Upstream describes an ORNL Global Shipping Lane Network (2000) base enriched with European coastal AIS lines; source age varies",
+      "5 km is a graph generalization setting, not guaranteed accuracy or coastal clearance",
+      "Graph connectivity does not establish navigability, current canal access, depth, draft, clearance, traffic separation, ice or legal permissions",
+      "Port reference coordinates and nearest graph nodes do not establish verified harbor approach routes",
+      "Upstream Java nearest opposite-dateline zero-cost bridging is deliberately not reproduced for latitude-mismatched nodes"
+    ]
+  },
+  "coast": {
+    "files_sha256": {
+      "ne_10m_land.shp": "4cad3a49bc75c1a4c2f3d7efae04f2f8e63151c96764b2658effabf524331fa6",
+      "ne_10m_land.shx": "f3b02a190c3020eeafd0f48de982619826b57ecd853cbc68e4fc049652891a04",
+      "ne_10m_land.dbf": "e422520372e65c6fb8220888580e5331d04699bcd71c27e53ad42e241a531cbd",
+      "ne_10m_land.prj": "a02a27b1d1982c8516d83398e85a3c8b1aef1713c13ef4d84d7bde17430c07c4"
+    },
+    "source": "Natural Earth v5.1.1 / 1:10 million"
+  },
+  "screening": {
+    "status": "no_land_intersection",
+    "policy": "route-land-geodesic-2nm-v1",
+    "geodesic_spacing_nm_max": 2,
+    "accepted_network_edges": 70173,
+    "total_network_edges": 72478,
+    "route_edges": 57
+  },
+  "constraints": {
+    "blocked_passages": [
+      "corinth",
+      "kiel",
+      "northeast",
+      "northwest",
+      "panama",
+      "suez"
+    ],
+    "used_passages": [],
+    "max_attachment_gap_nm": 100
+  },
+  "edge_ids": [
+    65114,
+    34710,
+    11044,
+    45484,
+    39572,
+    55481,
+    33315,
+    57060,
+    37126,
+    49518,
+    865,
+    36556,
+    29555,
+    3013,
+    71474,
+    43271,
+    25011,
+    21307,
+    27789,
+    49797,
+    33700,
+    21826,
+    41505,
+    37923,
+    35832,
+    53709,
+    48909,
+    10480,
+    51075,
+    60708,
+    70622,
+    48685,
+    24076,
+    14080,
+    68684,
+    2342,
+    65972,
+    61411,
+    8262,
+    28451,
+    44826,
+    68341,
+    57449,
+    64665,
+    32772,
+    6010,
+    16114,
+    52944,
+    48727,
+    37017,
+    55576,
+    61417,
+    60406,
+    59393,
+    33489,
+    53462,
+    53531
+  ],
+  "scope": "network_segment_only",
+  "limitations": [
+    "과거 공개 항로망에서 거리 기준으로 계산한 해상 구간 후보입니다. 현재 통항 가능성·수심·흘수·교통분리대는 검증하지 않았습니다.",
+    "항구 대표점과 항로망 접속점 사이의 간격은 위치 차이이며 항행 경로가 아닙니다. 구간 거리·시간·연료에서 제외됩니다.",
+    "해안선은 1:10 million 지도 축척입니다. 해도 수준의 작은 섬·수로·안전 여유를 보증하지 않습니다.",
+    "수에즈·파나마·킬·코린트 운하 및 북서·북동 극지 통로를 제외했습니다. 나머지 통로의 실시간 운영 상태는 확인하지 않습니다.",
+    "가장 가까운 항로망 노드를 선택했습니다. 반도·방파제의 어느 쪽으로 입출항할 수 있는지는 별도 확인이 필요합니다.",
+    "현재 파랑·해류·연료를 최소화한 경로가 아닙니다. 선택한 해상 경로에 예보를 조회하는 단계입니다."
+  ],
+  "schema_version": "sea-route-1.0",
+  "created_at_utc": "2026-09-12T10:06:10.458429+00:00",
+  "request": {
+    "departure_port_id": "unlocode:KRPUS",
+    "arrival_port_id": "unlocode:USLGB",
+    "avoid_passages": []
+  },
+  "port_catalog": {
+    "catalog_id": "ports-9211d92725cd1f17",
+    "catalog_sha256": "9211d92725cd1f178e5a1c0e7d4f6652ced8de1381d41e4b49914f61c0e3e15c",
+    "sources": [
+      {
+        "edition": "2025-1",
+        "files": [
+          {
+            "bytes": 13507338,
+            "path": "raw/unlocode-2025-1.zip",
+            "retrieved_at": "2026-09-12T08:28:48.450000Z",
+            "sha256": "ad409fc7149b10f98d61190c34d9daf78b78bb8b31464cc66de1a89d09b01b5d",
+            "source": "unlocode",
+            "url": "https://opensource.unicc.org/un/unece/uncefact/vocab-locode/-/jobs/artifacts/2025-1/download?job=package-release"
+          }
+        ],
+        "id": "unlocode",
+        "license": "Official site states UN/CEFACT standards are CC BY 4.0; dataset-specific terms are not separately declared.",
+        "license_url": "https://unlocode.unece.org/terms/",
+        "records": 17520,
+        "retrieved_at": "2026-09-12T08:28:48.450000Z",
+        "sha256": "644c67b6019647877eb9fd89eda1c9c4107c5a96e9eeb90930ef6d57a1972127",
+        "title": "UNECE UN/LOCODE",
+        "url": "https://unlocode.unece.org/publications/"
+      },
+      {
+        "edition": "live FeatureServer snapshot",
+        "files": [
+          {
+            "bytes": 35873,
+            "path": "raw/wpi-layer.json",
+            "retrieved_at": "2026-09-12T08:29:59.970000Z",
+            "sha256": "2e5555734a11af8cde1b8c42a73bc05bfad7e1fa979e73be969f2f5a3c541b9c",
+            "source": "wpi",
+            "url": "https://fgmod.nga.mil/nauticalpubs-feature/rest/services/WPI/WPI_Viewer/FeatureServer/0?f=pjson"
+          },
+          {
+            "bytes": 18,
+            "path": "raw/wpi-count.json",
+            "retrieved_at": "2026-09-12T08:29:59.800000Z",
+            "sha256": "3096b55fa4c9760dc64d7d60c74fe1b7aa1105dbe95ce48001e21af860a0a65e",
+            "source": "wpi",
+            "url": "https://fgmod.nga.mil/nauticalpubs-feature/rest/services/WPI/WPI_Viewer/FeatureServer/0/query?where=1%3D1&returnCountOnly=true&f=pjson"
+          },
+          {
+            "bytes": 2953670,
+            "path": "raw/wpi-features-0.json",
+            "retrieved_at": "2026-09-12T08:30:56.860000Z",
+            "sha256": "13a8175a1c745a0f7051e85ab65cbdabb4365293ccd840bef23b9e891e308c6e",
+            "source": "wpi",
+            "url": "https://fgmod.nga.mil/nauticalpubs-feature/rest/services/WPI/WPI_Viewer/FeatureServer/0/query?where=1%3D1&outFields=%2A&outSR=4326&returnGeometry=true&orderByFields=objectid+ASC&resultOffset=0&resultRecordCount=1000&f=json"
+          },
+          {
+            "bytes": 2992926,
+            "path": "raw/wpi-features-1000.json",
+            "retrieved_at": "2026-09-12T08:30:55.840000Z",
+            "sha256": "7e5c0edf2acf1599a41f3b057a22f32d8c67d4a9ea642686f6ba0e132f02d41f",
+            "source": "wpi",
+            "url": "https://fgmod.nga.mil/nauticalpubs-feature/rest/services/WPI/WPI_Viewer/FeatureServer/0/query?where=1%3D1&outFields=%2A&outSR=4326&returnGeometry=true&orderByFields=objectid+ASC&resultOffset=1000&resultRecordCount=1000&f=json"
+          },
+          {
+            "bytes": 2972954,
+            "path": "raw/wpi-features-2000.json",
+            "retrieved_at": "2026-09-12T08:30:52.820000Z",
+            "sha256": "13a35a5d32796ec9f55dfdb3c895eeb0ad7a60c1764d500ea65cd4ad1d07ecde",
+            "source": "wpi",
+            "url": "https://fgmod.nga.mil/nauticalpubs-feature/rest/services/WPI/WPI_Viewer/FeatureServer/0/query?where=1%3D1&outFields=%2A&outSR=4326&returnGeometry=true&orderByFields=objectid+ASC&resultOffset=2000&resultRecordCount=1000&f=json"
+          },
+          {
+            "bytes": 2415313,
+            "path": "raw/wpi-features-3000.json",
+            "retrieved_at": "2026-09-12T08:31:01.170000Z",
+            "sha256": "49a254a1adf2a15051c562f7be57ced278d04adbe6b8c7220d43f9675d3dfecb",
+            "source": "wpi",
+            "url": "https://fgmod.nga.mil/nauticalpubs-feature/rest/services/WPI/WPI_Viewer/FeatureServer/0/query?where=1%3D1&outFields=%2A&outSR=4326&returnGeometry=true&orderByFields=objectid+ASC&resultOffset=3000&resultRecordCount=1000&f=json"
+          },
+          {
+            "bytes": 18434,
+            "path": "raw/wpi-object-ids.json",
+            "retrieved_at": "2026-09-12T08:41:36.060000Z",
+            "sha256": "d2f002ad55ef058fe7f697b4677d2dbe287bf367c3e5fef37bbac2d2a8423d24",
+            "source": "wpi",
+            "url": "https://fgmod.nga.mil/nauticalpubs-feature/rest/services/WPI/WPI_Viewer/FeatureServer/0/query?where=1%3D1&returnIdsOnly=true&f=json"
+          }
+        ],
+        "id": "wpi",
+        "license": "NGA publicly released reference data; attribution retained",
+        "license_url": "https://msi.nga.mil/Publications/WPI",
+        "records": 3807,
+        "retrieved_at": "2026-09-12T08:41:36.060000Z",
+        "sha256": "d8398ce9623e090bea3664a27d185888ccc4ce7414fb253598aaba7d697277b9",
+        "title": "NGA World Port Index",
+        "url": "https://msi.nga.mil/Publications/WPI"
+      }
+    ]
+  },
+  "plan_id": "c0accf39801b7397df474f61df89a2f32bb778dff4d2fe3f57f90282e7df6c62"
+}

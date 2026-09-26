@@ -1,0 +1,571 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Poseidon — 선교 시점</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root{
+    --ink:#e8eef2; --ink2:#9fb2bd; --ink3:#6b7f8b;
+    --panel:rgba(10,17,22,.82); --line:rgba(150,180,200,.22);
+    --ok:#4fbfce; --warn:#d9a05b; --bad:#e0728f;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%;background:#060b0f;color:var(--ink);
+    font-family:"IBM Plex Sans KR",-apple-system,"Apple SD Gothic Neo",sans-serif;
+    overflow:hidden}
+  canvas{position:fixed;inset:0;width:100%;height:100%;display:block}
+  .mono{font-family:"IBM Plex Mono",ui-monospace,monospace;font-variant-numeric:tabular-nums}
+  .panel{position:fixed;z-index:3;background:var(--panel);border:1px solid var(--line);
+    backdrop-filter:blur(10px);border-radius:3px;padding:14px 16px}
+  #hud{top:14px;left:14px;max-width:330px}
+  #hud h1{margin:0 0 2px;font-size:15px;font-weight:600;letter-spacing:-.01em}
+  #hud .sub{font-size:11.5px;color:var(--ink3);margin-bottom:12px}
+  .row{display:flex;justify-content:space-between;gap:14px;font-size:12.5px;
+    padding:3px 0;border-bottom:1px solid rgba(150,180,200,.08)}
+  .row:last-child{border-bottom:none}
+  .row b{font-weight:500;color:var(--ink)}
+  .k{color:var(--ink2)}
+  #ctl{bottom:14px;left:14px;right:14px;display:flex;gap:18px;align-items:center;
+    flex-wrap:wrap}
+  label{font-size:11.5px;color:var(--ink2);display:flex;align-items:center;gap:8px}
+  input[type=range]{width:130px;accent-color:var(--ok)}
+  input[type=number]{width:74px;background:rgba(255,255,255,.06);color:var(--ink);
+    border:1px solid var(--line);border-radius:2px;padding:4px 6px;font-size:12px}
+  button{background:rgba(79,191,206,.14);color:var(--ok);border:1px solid var(--ok);
+    border-radius:2px;padding:5px 11px;font-size:12px;cursor:pointer}
+  button:hover{background:rgba(79,191,206,.24)}
+  button.ghost{background:transparent;color:var(--ink2);border-color:var(--line)}
+  #enc{position:fixed;top:14px;right:14px;width:184px;text-align:center}
+  #compass{width:150px;height:150px;margin:6px auto 8px;display:block}
+  .badge{display:inline-block;font-size:10.5px;padding:2px 7px;border-radius:2px;
+    letter-spacing:.05em;margin-top:6px}
+  .b-ok{background:rgba(79,191,206,.16);color:var(--ok);border:1px solid var(--ok)}
+  .b-warn{background:rgba(217,160,91,.16);color:var(--warn);border:1px solid var(--warn)}
+  .b-bad{background:rgba(224,114,143,.16);color:var(--bad);border:1px solid var(--bad)}
+  #ship{position:fixed;top:214px;right:14px;width:298px}
+  #ship .row{font-size:12px}
+  #haz .badge{display:block;margin-top:5px;text-align:left;line-height:1.45;padding:5px 8px}
+  #prov{position:fixed;bottom:78px;right:14px;width:298px;font-size:11px;
+    line-height:1.55;color:var(--ink2);max-height:38vh;overflow-y:auto}
+  #prov h2{margin:0 0 7px;font-size:11.5px;color:var(--ink);font-weight:600;
+    letter-spacing:.02em}
+  #prov dt{color:var(--ink);font-weight:500;margin-top:6px;font-size:11px}
+  #prov dd{margin:1px 0 0;color:var(--ink3)}
+  #msg{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);
+    font-size:13px;color:var(--ink2);text-align:center;line-height:1.7}
+  a{color:var(--ok)}
+  @media (max-width:820px){ #prov{display:none} #ship{top:auto;bottom:96px;width:250px} #enc{width:150px} #compass{width:118px;height:118px} }
+</style>
+
+<canvas id="gl"></canvas>
+
+<svg id="deck" viewBox="0 0 1000 260" preserveAspectRatio="none"
+     style="position:fixed;left:0;right:0;bottom:0;height:19vh;pointer-events:none;z-index:1">
+  <defs>
+    <linearGradient id="dg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#243138"/><stop offset="1" stop-color="#0d1418"/>
+    </linearGradient>
+  </defs>
+  <g id="deckg">
+    <path d="M0,260 L0,150 C160,96 340,72 500,72 C660,72 840,96 1000,150 L1000,260 Z"
+          fill="url(#dg)"/>
+    <path d="M0,150 C160,96 340,72 500,72 C660,72 840,96 1000,150"
+          fill="none" stroke="#4a5f6b" stroke-width="3"/>
+    <path d="M0,168 C160,114 340,90 500,90 C660,90 840,114 1000,168"
+          fill="none" stroke="rgba(120,150,165,.35)" stroke-width="2"/>
+  </g>
+</svg>
+
+<div class="panel" id="hud">
+  <h1>선교 시점</h1>
+  <div class="sub">예보 스펙트럼으로 실현한 해면 · 개별 파는 예측이 아니다<br><span style="color:var(--ok)">드래그로 둘러보기</span> — 좌우는 선수방위가 바뀐다</div>
+  <div class="row"><span class="k">지점</span><b class="mono" id="pt">—</b></div>
+  <div class="row"><span class="k">사이클 · 리드</span><b class="mono" id="cyc">—</b></div>
+  <div class="row"><span class="k">유의파고 Hs</span><b class="mono" id="hs">—</b></div>
+  <div class="row"><span class="k">첨두주기 Tp</span><b class="mono" id="tp">—</b></div>
+  <div class="row"><span class="k">평균주기 Tm02</span><b class="mono" id="tm">—</b></div>
+  <div class="row"><span class="k">파향 (오는 쪽)</span><b class="mono" id="dir">—</b></div>
+  <div class="row"><span class="k">방향 확산</span><b class="mono" id="spr">—</b></div>
+  <div class="row"><span class="k">파 성분</span><b class="mono" id="nc">—</b></div>
+  <div class="row"><span class="k">실현 검증</span><b class="mono" id="chk">—</b></div>
+  <div id="vwarn" style="margin-top:8px"></div>
+</div>
+
+<div class="panel" id="enc">
+  <canvas id="compass" width="300" height="300"></canvas>
+  <div class="row" style="border:none;justify-content:center">
+    <span class="k">조우각</span><b class="mono" id="encv">—</b>
+  </div>
+  <div id="encbadge"></div>
+</div>
+
+<div class="panel" id="ship">
+  <div class="row" style="border:none"><span class="k">선박</span><b class="mono" id="shipdim">—</b></div>
+  <div class="row"><span class="k">롤 고유주기</span><b class="mono" id="tr">—</b></div>
+  <div class="row"><span class="k">조우주기 T<sub>e</sub></span><b class="mono" id="te">—</b></div>
+  <div class="row"><span class="k">롤 (직접 강제)</span><b class="mono" id="roll">—</b></div>
+  <div class="row"><span class="k">피치 · 히브</span><b class="mono" id="pit">—</b></div>
+  <div id="haz" style="margin-top:9px"></div>
+</div>
+
+<div class="panel" id="prov">
+  <h2>이 화면이 보여주는 것</h2>
+  <dl id="provlist"></dl>
+</div>
+
+<div class="panel" id="ctl">
+  <label>위도 <input type="number" id="ilat" value="30.0" step="0.25" min="12.5" max="46"></label>
+  <label>경도 <input type="number" id="ilon" value="124.25" step="0.25" min="120" max="148"></label>
+  <label>리드 <input type="range" id="ilead" min="0" max="72" step="3" value="36">
+    <span class="mono" id="leadv">+36 h</span></label>
+  <label>선수방위 <input type="range" id="ihead" min="0" max="359" step="1" value="0">
+    <span class="mono" id="headv">000°</span></label>
+  <label>시선 높이 <input type="range" id="ieye" min="1.5" max="45" step="0.5" value="3">
+    <span class="mono" id="eyev">3.0 m</span></label>
+  <label>수선간장 m <input type="number" id="iL" value="200" step="10" min="10" max="450"></label>
+  <label>선폭 m <input type="number" id="iB" value="32" step="1" min="3" max="70"></label>
+  <label>흘수 m <input type="number" id="iD" value="11" step="0.5" min="1" max="25"></label>
+  <label>GM m <input type="number" id="iGM" value="1.2" step="0.1" min="0.1" max="10"></label>
+  <label>속력 kn <input type="number" id="iV" value="14" step="1" min="0" max="40"></label>
+  <button id="go">불러오기</button>
+  <span style="display:flex;gap:6px">
+    <button class="ghost" data-p="30.0,124.25,36">거친 바다</button>
+    <button class="ghost" data-p="27.0,128.5,0">가파른 파</button>
+    <button class="ghost" data-p="34.5,129.0,12">대한해협</button>
+    <button class="ghost" data-p="36.0,131.0,12">동해</button>
+  </span>
+  <button class="ghost" id="pause">일시정지</button>
+  <a href="/" style="font-size:11.5px;margin-left:auto">지도로</a>
+</div>
+
+<div id="msg">예보를 불러오는 중…</div>
+
+<script>
+const MAXC = 96;                       // 셰이더가 중첩하는 최대 성분 수
+const gl = document.getElementById('gl').getContext('webgl2', {antialias:true});
+if (!gl) document.getElementById('msg').textContent = '이 브라우저는 WebGL2를 지원하지 않는다.';
+
+const VS = `#version 300 es
+precision highp float;
+in vec2 aXZ;
+uniform mat4 uVP;
+uniform float uT, uEye;
+uniform int uN;
+uniform vec4 uC[${MAXC}];              // kx, kz, omega, phase
+uniform float uA[${MAXC}];             // 진폭
+out vec3 vPos; out vec3 vNrm; out float vDist;
+
+void main(){
+  float x = aXZ.x, z = aXZ.y;
+  float y = 0.0; float dydx = 0.0; float dydz = 0.0;
+  for (int i = 0; i < ${MAXC}; ++i) {
+    if (i >= uN) break;
+    vec4 c = uC[i];
+    float ph = c.x * x + c.y * z - c.z * uT + c.w;
+    float s = sin(ph);
+    y    += uA[i] * cos(ph);
+    dydx -= uA[i] * c.x * s;
+    dydz -= uA[i] * c.y * s;
+  }
+  vPos = vec3(x, y, z);
+  vNrm = normalize(vec3(-dydx, 1.0, -dydz));
+  vDist = length(vec2(x, z));
+  gl_Position = uVP * vec4(x, y - uEye, z, 1.0);
+}`;
+
+const FS = `#version 300 es
+precision highp float;
+in vec3 vPos; in vec3 vNrm; in float vDist;
+uniform vec3 uSun;
+out vec4 outColor;
+
+vec3 sky(vec3 d){
+  float t = clamp(d.y * 1.4 + 0.22, 0.0, 1.0);
+  vec3 low  = vec3(0.44, 0.53, 0.60);
+  vec3 high = vec3(0.10, 0.20, 0.33);
+  vec3 c = mix(low, high, t);
+  float sun = pow(max(dot(normalize(d), normalize(uSun)), 0.0), 90.0);
+  return c + vec3(1.0, 0.94, 0.80) * sun * 0.55;
+}
+
+void main(){
+  vec3 n = normalize(vNrm);
+  vec3 v = normalize(vec3(0.0, 1.0, 0.0) * 0.0 - vPos);   // 카메라는 원점
+  vec3 viewDir = normalize(-vPos);
+  float fres = pow(1.0 - max(dot(n, viewDir), 0.0), 4.0);
+  fres = clamp(0.03 + 0.97 * fres, 0.0, 1.0);
+
+  vec3 refl = reflect(-viewDir, n);
+  vec3 skyc = sky(refl);
+  vec3 deep = vec3(0.016, 0.055, 0.085);
+  vec3 shal = vec3(0.03, 0.13, 0.16);
+  vec3 water = mix(deep, shal, clamp(n.y, 0.0, 1.0));
+
+  float spec = pow(max(dot(refl, normalize(uSun)), 0.0), 180.0);
+  vec3 col = mix(water, skyc, fres) + vec3(1.0, 0.95, 0.85) * spec * 0.6;
+
+  // 경사면 음영 — 파의 기복을 드러낸다 (태양 반대면이 어두워진다)
+  float shade = clamp(dot(n, normalize(vec3(uSun.x, 0.55, uSun.z))), 0.0, 1.0);
+  col *= 0.62 + 0.55 * shade;
+
+  // 파정 거품 — 국소 기울기가 가파른 곳
+  float steep = 1.0 - n.y;
+  col += vec3(0.85, 0.92, 0.95) * smoothstep(0.10, 0.34, steep) * 0.42;
+
+  float fog = 1.0 - exp(-vDist * 0.00012);
+  col = mix(col, sky(normalize(vec3(vPos.x, 12.0, vPos.z))), clamp(fog, 0.0, 0.92));
+  outColor = vec4(pow(clamp(col, 0.0, 1.0), vec3(0.4545)), 1.0);
+}`;
+
+const SKY_VS = `#version 300 es
+precision highp float;
+out vec2 vUV;
+void main(){
+  vec2 p = vec2((gl_VertexID << 1) & 2, gl_VertexID & 2);
+  vUV = p; gl_Position = vec4(p * 2.0 - 1.0, 0.999, 1.0);
+}`;
+const SKY_FS = `#version 300 es
+precision highp float;
+in vec2 vUV; out vec4 outColor;
+uniform mat4 uInvVP; uniform vec3 uSun;
+void main(){
+  vec4 n = uInvVP * vec4(vUV * 2.0 - 1.0, 1.0, 1.0);
+  vec3 d = normalize(n.xyz / n.w);
+  float t = clamp(d.y * 1.4 + 0.22, 0.0, 1.0);
+  vec3 col = mix(vec3(0.44,0.53,0.60), vec3(0.10,0.20,0.33), t);
+  float sun = pow(max(dot(d, normalize(uSun)), 0.0), 90.0);
+  col += vec3(1.0,0.94,0.80) * sun * 0.55;
+  // 수평선 아래는 원거리 바다색으로 (격자 끝과 이어지게)
+  col = mix(vec3(0.10,0.17,0.22), col, smoothstep(-0.02, 0.03, d.y));
+  outColor = vec4(pow(clamp(col,0.0,1.0), vec3(0.4545)), 1.0);
+}`;
+
+function sh(t, src){ const s = gl.createShader(t); gl.shaderSource(s, src); gl.compileShader(s);
+  if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(s)); return s; }
+const prog = gl.createProgram();
+gl.attachShader(prog, sh(gl.VERTEX_SHADER, VS));
+gl.attachShader(prog, sh(gl.FRAGMENT_SHADER, FS));
+gl.linkProgram(prog);
+if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(prog));
+gl.useProgram(prog);
+
+// 시선 방향으로 촘촘한 방사형 격자 — 가까울수록 세밀하게
+function buildMesh(nr = 220, na = 220, rmax = 14000){
+  const pos = [], idx = [];
+  for (let i = 0; i <= nr; ++i){
+    const t = i / nr, r = Math.pow(t, 2.6) * rmax + t * 3.0;
+    for (let j = 0; j <= na; ++j){
+      const a = (j / na) * Math.PI * 2.0;
+      pos.push(r * Math.sin(a), r * Math.cos(a));
+    }
+  }
+  const row = na + 1;
+  for (let i = 0; i < nr; ++i) for (let j = 0; j < na; ++j){
+    const p = i * row + j;
+    idx.push(p, p + 1, p + row, p + 1, p + row + 1, p + row);
+  }
+  return { pos: new Float32Array(pos), idx: new Uint32Array(idx) };
+}
+const mesh = buildMesh();
+const vao = gl.createVertexArray(); gl.bindVertexArray(vao);
+const vbo = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, vbo);
+gl.bufferData(gl.ARRAY_BUFFER, mesh.pos, gl.STATIC_DRAW);
+const loc = gl.getAttribLocation(prog, 'aXZ');
+gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+const ibo = gl.createBuffer(); gl.bindElementBuffer = null;
+gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, ibo);
+gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, mesh.idx, gl.STATIC_DRAW);
+
+const skyProg = gl.createProgram();
+gl.attachShader(skyProg, sh(gl.VERTEX_SHADER, SKY_VS));
+gl.attachShader(skyProg, sh(gl.FRAGMENT_SHADER, SKY_FS));
+gl.linkProgram(skyProg);
+const uInvVP = gl.getUniformLocation(skyProg, 'uInvVP');
+const uSkySun = gl.getUniformLocation(skyProg, 'uSun');
+const skyVao = gl.createVertexArray();
+
+const U = n => gl.getUniformLocation(prog, n);
+const uVP = U('uVP'), uT = U('uT'), uEye = U('uEye'), uN = U('uN'), uSun = U('uSun');
+const uC = U('uC[0]'), uA = U('uA[0]');
+gl.enable(gl.DEPTH_TEST); gl.clearColor(0.03, 0.06, 0.09, 1);
+
+let S = { comp:null, heading:0, eye:3, pitch:-0.24, t0:performance.now(),
+      paused:false, data:null, drag:null, motion:null, shipOn:true, rollNow:0 };
+
+function setComponents(c){
+  // uniform 은 **현재 활성 프로그램**에만 설정된다. 프레임 루프가 하늘 셰이더로
+  // 전환한 뒤에 이 함수가 불리면 파 성분이 통째로 유실돼 해면이 평평해진다.
+  gl.useProgram(prog);
+  const n = Math.min(c.n, MAXC);
+  // 진폭 큰 성분 우선 — 잘려도 보이는 바다가 최대한 예보에 가깝게
+  const order = c.amp_m.map((a,i)=>[a,i]).sort((p,q)=>q[0]-p[0]).slice(0,n).map(p=>p[1]);
+  const C = new Float32Array(MAXC*4), A = new Float32Array(MAXC);
+  order.forEach((src,i)=>{
+    const k = c.k_rad_per_m[src], th = c.theta_rad[src];
+    C[i*4+0] = k*Math.cos(th); C[i*4+1] = k*Math.sin(th);
+    C[i*4+2] = c.omega_rad_per_s[src]; C[i*4+3] = c.phase_rad[src];
+    A[i] = c.amp_m[src];
+  });
+  gl.uniform4fv(uC, C); gl.uniform1fv(uA, A); gl.uniform1i(uN, n);
+  return { used:n, kept: order.reduce((s,i)=>s + c.amp_m[i]**2/2, 0),
+           total: c.amp_m.reduce((s,a)=>s + a*a/2, 0) };
+}
+
+function persp(fovy, ar, zn, zf){
+  const f = 1/Math.tan(fovy/2);
+  return new Float32Array([f/ar,0,0,0, 0,f,0,0, 0,0,(zf+zn)/(zn-zf),-1, 0,0,2*zf*zn/(zn-zf),0]);
+}
+function viewMat(headingRad, rollRad, pitchExtra){
+  // 카메라는 선박에 고정된다. 선체가 기울면 화면 전체가 함께 기운다 —
+  // 실제 선교에서 보는 그대로다.
+  const c = Math.cos(-headingRad), s = Math.sin(-headingRad);
+  const pitch = S.pitch + (pitchExtra || 0);
+  const cp = Math.cos(pitch), sp = Math.sin(pitch);
+  const yawPitch = [
+     c, sp*s, cp*s, 0,
+     0, cp,  -sp,   0,
+    -s, sp*c, cp*c, 0,
+     0, 0,    0,    1];
+  const cr = Math.cos(rollRad||0), sr = Math.sin(rollRad||0);
+  const roll = [ cr, sr, 0, 0,  -sr, cr, 0, 0,  0,0,1,0,  0,0,0,1];
+  return mul(roll, new Float32Array(yawPitch));
+}
+function inv4(m){
+  const o = new Float32Array(16), a = m;
+  const b00=a[0]*a[5]-a[1]*a[4], b01=a[0]*a[6]-a[2]*a[4], b02=a[0]*a[7]-a[3]*a[4];
+  const b03=a[1]*a[6]-a[2]*a[5], b04=a[1]*a[7]-a[3]*a[5], b05=a[2]*a[7]-a[3]*a[6];
+  const b06=a[8]*a[13]-a[9]*a[12], b07=a[8]*a[14]-a[10]*a[12], b08=a[8]*a[15]-a[11]*a[12];
+  const b09=a[9]*a[14]-a[10]*a[13], b10=a[9]*a[15]-a[11]*a[13], b11=a[10]*a[15]-a[11]*a[14];
+  let det = b00*b11-b01*b10+b02*b09+b03*b08-b04*b07+b05*b06;
+  if (!det) return o; det = 1.0/det;
+  o[0]=(a[5]*b11-a[6]*b10+a[7]*b09)*det;  o[1]=(a[2]*b10-a[1]*b11-a[3]*b09)*det;
+  o[2]=(a[13]*b05-a[14]*b04+a[15]*b03)*det; o[3]=(a[10]*b04-a[9]*b05-a[11]*b03)*det;
+  o[4]=(a[6]*b08-a[4]*b11-a[7]*b07)*det;  o[5]=(a[0]*b11-a[2]*b08+a[3]*b07)*det;
+  o[6]=(a[14]*b02-a[12]*b05-a[15]*b01)*det; o[7]=(a[8]*b05-a[10]*b02+a[11]*b01)*det;
+  o[8]=(a[4]*b10-a[5]*b08+a[7]*b06)*det;  o[9]=(a[1]*b08-a[0]*b10-a[3]*b06)*det;
+  o[10]=(a[12]*b04-a[13]*b02+a[15]*b00)*det; o[11]=(a[9]*b02-a[8]*b04-a[11]*b00)*det;
+  o[12]=(a[5]*b07-a[4]*b09-a[6]*b06)*det; o[13]=(a[0]*b09-a[1]*b07+a[2]*b06)*det;
+  o[14]=(a[13]*b01-a[12]*b03-a[14]*b00)*det; o[15]=(a[8]*b03-a[9]*b01+a[10]*b00)*det;
+  return o;
+}
+function mul(a,b){ const o=new Float32Array(16);
+  for(let i=0;i<4;i++)for(let j=0;j<4;j++){let v=0;for(let k=0;k<4;k++)v+=a[k*4+j]*b[i*4+k];o[i*4+j]=v;}
+  return o; }
+
+function resize(){
+  const d = Math.min(window.devicePixelRatio||1, 2);
+  const c = gl.canvas;
+  const w = Math.floor(c.clientWidth*d), h = Math.floor(c.clientHeight*d);
+  if (c.width!==w || c.height!==h){ c.width=w; c.height=h; }
+  gl.viewport(0,0,c.width,c.height);
+}
+
+function frame(now){
+  resize();
+  const t = S.paused ? S.pauseT : (now - S.t0)/1000;
+  if (!S.paused) S.lastT = t;
+  gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+  if (S.comp){
+    const ar = gl.canvas.width/gl.canvas.height;
+    // 선체 운동 — 조우주기로 진동. 위상은 임의(예측이 아니다).
+    let roll = 0, pitchX = 0, heave = 0;
+    if (S.motion && S.shipOn){
+      const te = Math.max(S.motion.encounter_period_s, 1.0);
+      const ph = 2*Math.PI*t/te;
+      roll   = (S.motion.roll_amp_deg  * Math.PI/180) * Math.sin(ph);
+      pitchX = (S.motion.pitch_amp_deg * Math.PI/180) * Math.sin(ph + 1.1);
+      heave  =  S.motion.heave_amp_m * Math.sin(ph + 0.5);
+    }
+    S.rollNow = roll;
+    const VP = mul(persp(50*Math.PI/180, ar, 0.4, 40000),
+                   viewMat(S.heading*Math.PI/180, roll, pitchX));
+    // 하늘 먼저 (깊이 거의 최대라 바다가 위에 그려진다)
+    gl.useProgram(skyProg);
+    gl.uniformMatrix4fv(uInvVP, false, inv4(VP));
+    gl.uniform3f(uSkySun, 0.34, 0.30, -0.89);
+    gl.bindVertexArray(skyVao);
+    gl.depthMask(false); gl.drawArrays(gl.TRIANGLES, 0, 3); gl.depthMask(true);
+    gl.useProgram(prog);
+    gl.uniformMatrix4fv(uVP,false,VP);
+    gl.uniform1f(uT, t); gl.uniform1f(uEye, S.eye + heave);
+    gl.uniform3f(uSun, 0.34, 0.30, -0.89);
+    gl.bindVertexArray(vao);
+    gl.drawElements(gl.TRIANGLES, mesh.idx.length, gl.UNSIGNED_INT, 0);
+  }
+  const dg = document.getElementById('deckg');
+  if (dg) dg.setAttribute('transform',
+    `rotate(${(-(S.rollNow||0)*180/Math.PI*0.85).toFixed(2)} 500 260)`);
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+
+// ── 조우각 나침반 ────────────────────────────────────────────────
+function drawCompass(dirFrom, heading){
+  const cv = document.getElementById('compass'), x = cv.getContext('2d');
+  const R = 150, cx = 150, cy = 150;
+  x.clearRect(0,0,300,300);
+  x.strokeStyle = 'rgba(150,180,200,.30)'; x.lineWidth = 2;
+  x.beginPath(); x.arc(cx,cy,116,0,7); x.stroke();
+  x.fillStyle = 'rgba(159,178,189,.85)'; x.font = '600 15px monospace'; x.textAlign='center';
+  ['N','E','S','W'].forEach((s,i)=>{ const a=i*Math.PI/2 - Math.PI/2;
+    x.fillText(s, cx+Math.cos(a)*138, cy+Math.sin(a)*138+5); });
+  // 선박 (선수 방위)
+  const hr = (heading-90)*Math.PI/180;
+  x.strokeStyle = '#e8eef2'; x.lineWidth = 3.5; x.beginPath();
+  x.moveTo(cx-Math.cos(hr)*52, cy-Math.sin(hr)*52);
+  x.lineTo(cx+Math.cos(hr)*66, cy+Math.sin(hr)*66); x.stroke();
+  x.beginPath(); x.arc(cx+Math.cos(hr)*66, cy+Math.sin(hr)*66, 6, 0, 7);
+  x.fillStyle='#e8eef2'; x.fill();
+  // 파가 오는 방향 -> 진행 화살표
+  const dr = (dirFrom-90)*Math.PI/180;
+  x.strokeStyle = '#4fbfce'; x.lineWidth = 5; x.beginPath();
+  x.moveTo(cx+Math.cos(dr)*108, cy+Math.sin(dr)*108);
+  x.lineTo(cx+Math.cos(dr)*34,  cy+Math.sin(dr)*34); x.stroke();
+  const hx = cx+Math.cos(dr)*34, hy = cy+Math.sin(dr)*34;
+  x.beginPath(); x.moveTo(hx,hy);
+  x.lineTo(hx+Math.cos(dr+2.5)*20, hy+Math.sin(dr+2.5)*20);
+  x.lineTo(hx+Math.cos(dr-2.5)*20, hy+Math.sin(dr-2.5)*20);
+  x.closePath(); x.fillStyle='#4fbfce'; x.fill();
+}
+
+function encounterAngle(dirFrom, heading){
+  return ((dirFrom - heading + 180) % 360 + 360) % 360 - 180;
+}
+function encBadge(a){
+  const m = Math.abs(a);
+  if (m <= 30)  return ['b-warn','정면파 (head sea)'];
+  if (m >= 150) return ['b-bad','선미파 — 서프라이딩·브로칭 주의역'];
+  if (m >= 60 && m <= 120) return ['b-warn','횡파 (beam sea) — 횡동요'];
+  return ['b-ok','사파 (oblique)'];
+}
+
+// ── 데이터 ───────────────────────────────────────────────────────
+const el = id => document.getElementById(id);
+/* 성적은 한 번만 받아 캐시한다. 하드코딩된 임계를 쓰지 않는다. */
+let SKILL = null;
+async function loadSkill(){
+  try { SKILL = await (await fetch('/v1/skill?var=hs')).json(); }
+  catch (e) { SKILL = null; }
+}
+function bandCount(hs){
+  if (!SKILL || SKILL.status !== 'ok' || !SKILL.by_obs_hs) return null;
+  const b = SKILL.by_obs_hs.find(x => hs >= x.obs_hs_min && hs < x.obs_hs_max);
+  return b ? b.n : 0;
+}
+
+async function load(){
+  const lat = el('ilat').value, lon = el('ilon').value, lead = el('ilead').value;
+  el('msg').style.display = 'block';
+  el('msg').textContent = '예보를 불러오는 중…';
+  try{
+    const q = new URLSearchParams({lat, lon, lead,
+      heading: Math.round(S.heading),
+      ship_length: el('iL').value, ship_beam: el('iB').value, ship_draft: el('iD').value, ship_gm: el('iGM').value, ship_speed: el('iV').value});
+    const r = await fetch(`/v1/seastate/point?${q}`);
+    const d = await r.json();
+    if (!r.ok){ el('msg').innerHTML = '불러올 수 없다<br><span style="color:#6b7f8b">'
+        + (d.detail||r.status) + '</span>'; return; }
+    S.data = d;
+    const info = setComponents(d.components);
+    S.comp = true; S.t0 = performance.now();
+    el('msg').style.display = 'none';
+    const i = d.integrals;
+    el('pt').textContent  = `${d.point.lat.toFixed(2)}N ${d.point.lon.toFixed(2)}E · ${d.point.depth_m.toFixed(0)}m`;
+    el('cyc').textContent = `${d.cycle} +${d.lead_h.toFixed(0)}h`;
+    el('hs').textContent  = `${i.hs_m.toFixed(2)} m`;
+    el('tp').textContent  = `${i.tp_s.toFixed(1)} s`;
+    el('tm').textContent  = `${i.tm02_s.toFixed(1)} s`;
+    el('dir').textContent = `${i.dir_mean_deg.toFixed(0)}°`;
+    el('spr').textContent = `${i.dir_spread_deg.toFixed(0)}°`;
+    el('nc').textContent  = `${info.used} / ${d.components.n}`;
+    // 검증 범위 밖이면 명시한다. 임계는 /v1/skill 의 observed_range 에서 읽는다 —
+    // HTML 에 박으면 표본이 늘어도 화면이 옛 숫자를 계속 말한다.
+    const warn = el('vwarn');
+    const orng = SKILL && SKILL.status === 'ok' ? SKILL.observed_range : null;
+    if (!orng){
+      warn.innerHTML = `<span class="badge b-warn">검증 범위 미산출 — 성적을 불러오지 못했다</span>`;
+    } else if (i.hs_m > orng.max){
+      warn.innerHTML = `<span class="badge b-bad">검증 범위 밖 — 채점된 최대 파고 ${orng.max} m 를 넘는다</span>`;
+    } else if (i.hs_m > orng.p95){
+      const nb = bandCount(i.hs_m);
+      warn.innerHTML = `<span class="badge b-warn">검증 표본 희박 — 관측 상위 5% 경계 ${orng.p95} m 초과` +
+        (nb === null ? '' : ` · 이 파고대 표본 ${nb}건`) + `</span>`;
+    } else { warn.innerHTML = ''; }
+    const shown = 4*Math.sqrt(info.kept);
+    el('chk').textContent = `Hs ${shown.toFixed(2)} m (${(100*info.kept/info.total).toFixed(0)}%)`;
+    el('chk').style.color = Math.abs(shown - i.hs_m) < 0.12*i.hs_m ? '' : 'var(--warn)';
+    const dl = el('provlist'); dl.innerHTML = '';
+    for (const [k,v] of Object.entries(d.provenance)){
+      dl.insertAdjacentHTML('beforeend', `<dt>${k}</dt><dd>${v}</dd>`);
+    }
+    // 선박
+    S.motion = d.motion;
+    S.eye = Math.max(2, d.ship.bridge_height_m ? +el('ieye').value : +el('ieye').value);
+    el('shipdim').textContent = `${d.ship.length_m.toFixed(0)}×${d.ship.beam_m.toFixed(0)} m · GM ${d.ship.gm_m} · ${d.ship.speed_kn.toFixed(0)} kn`;
+    el('tr').textContent  = `${d.ship.roll_period_s.toFixed(1)} s`;
+    el('te').textContent  = `${d.motion.encounter_period_s.toFixed(1)} s`;
+    el('roll').textContent = `${d.motion.roll_amp_deg.toFixed(1)}° (×${d.motion.roll_magnification.toFixed(2)})`;
+    el('pit').textContent = `${d.motion.pitch_amp_deg.toFixed(1)}° · ${d.motion.heave_amp_m.toFixed(1)} m`;
+    const hz = el('haz');
+    // '경보'·'위험 판정'이라는 말을 쓰지 않는다. 이 화면은 형식승인 항해장비가 아니고,
+    // 그 어휘를 흉내내면 선원이 우리 출력을 BAM 경보와 같은 지위로 착각한다.
+    // level 은 서버가 내는 값 그대로 두되 표기만 '해당 / 근접'으로 바꾼다.
+    hz.innerHTML = d.hazards.length ? d.hazards.map(h =>
+      `<span class="badge ${h.level==='bad'?'b-bad':'b-warn'}">` +
+      `${h.level==='bad'?'해당':'근접'} · ${h.title} — ${h.detail}</span>`
+    ).join('') : '<span class="badge b-ok">IMO 1228 조건 — 해당 없음</span>';
+    refreshEnc();
+  }catch(e){ el('msg').textContent = '요청 실패: ' + e.message; }
+}
+function refreshEnc(){
+  if (!S.data) return;
+  const dirFrom = S.data.integrals.dir_mean_deg;
+  const a = encounterAngle(dirFrom, S.heading);
+  el('encv').textContent = `${a>0?'+':''}${a.toFixed(0)}°`;
+  const [cls,txt] = encBadge(a);
+  el('encbadge').innerHTML = `<span class="badge ${cls}">${txt}</span>`;
+  drawCompass(dirFrom, S.heading);
+}
+
+el('go').onclick = load;
+document.querySelectorAll('button[data-p]').forEach(b => b.onclick = () => {
+  const [la,lo,ld] = b.dataset.p.split(',');
+  el('ilat').value = la; el('ilon').value = lo;
+  el('ilead').value = ld; el('leadv').textContent = `+${ld} h`;
+  load();
+});
+el('ilead').oninput = e => el('leadv').textContent = `+${e.target.value} h`;
+let headTimer = null;
+el('ihead').oninput = e => {
+  S.heading = +e.target.value;
+  el('headv').textContent = String(S.heading).padStart(3,'0') + '°';
+  refreshEnc();
+  // 선수방위가 바뀌면 조우주기·IMO 판정이 전부 달라진다 — 잠시 뒤 다시 받는다
+  clearTimeout(headTimer); headTimer = setTimeout(load, 420);
+};
+el('ieye').oninput = e => { S.eye = +e.target.value; el('eyev').textContent = `${S.eye.toFixed(1)} m`; };
+el('pause').onclick = () => {
+  S.paused = !S.paused;
+  if (S.paused) S.pauseT = S.lastT; else S.t0 = performance.now() - S.pauseT*1000;
+  el('pause').textContent = S.paused ? '재생' : '일시정지';
+};
+// 드래그로 둘러보기 — 좌우는 선수방위(조우각이 함께 바뀐다), 상하는 시선각
+const cv = document.getElementById('gl');
+function dragStart(x,y){ S.drag = {x,y,h:S.heading,p:S.pitch}; }
+function dragMove(x,y){
+  if (!S.drag) return;
+  S.heading = ((S.drag.h + (x - S.drag.x) * 0.22) % 360 + 360) % 360;
+  S.pitch = Math.max(-1.05, Math.min(0.35, S.drag.p + (y - S.drag.y) * 0.0022));
+  el('ihead').value = Math.round(S.heading);
+  el('headv').textContent = String(Math.round(S.heading)).padStart(3,'0') + '°';
+  refreshEnc();
+}
+cv.style.cursor = 'grab';
+cv.addEventListener('pointerdown', e => { cv.setPointerCapture(e.pointerId);
+  cv.style.cursor='grabbing'; dragStart(e.clientX, e.clientY); });
+cv.addEventListener('pointermove', e => dragMove(e.clientX, e.clientY));
+cv.addEventListener('pointerup',   e => { S.drag=null; cv.style.cursor='grab'; });
+cv.addEventListener('pointercancel', () => { S.drag=null; cv.style.cursor='grab'; });
+
+window.addEventListener('resize', resize);
+loadSkill().then(load);   // 성적을 먼저 받아야 검증 범위 경고가 하드코딩 없이 뜬다
+</script>

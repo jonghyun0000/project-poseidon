@@ -1,0 +1,93 @@
+{
+  "cases": [
+    {
+      "departure": "KRPUS",
+      "arrival": "SGSIN",
+      "http_status": 200,
+      "elapsed_seconds": 1.6258147910002663,
+      "distance_nm": 2580.5643436453943,
+      "waypoint_count": 40,
+      "gaps_nm": [
+        0.5261533135180315,
+        1.2738539701984355
+      ],
+      "plan_id": "83bba3dc194d570a7239004f2e2a2c6871702faab4c18f6fc87c9931231a2a50",
+      "used_passages": []
+    },
+    {
+      "departure": "KRPUS",
+      "arrival": "USLGB",
+      "http_status": 200,
+      "elapsed_seconds": 0.3573969170001874,
+      "distance_nm": 5793.022371958902,
+      "waypoint_count": 67,
+      "gaps_nm": [
+        0.5261533135180315,
+        8.292680289154967
+      ],
+      "plan_id": "c0accf39801b7397df474f61df89a2f32bb778dff4d2fe3f57f90282e7df6c62",
+      "used_passages": []
+    },
+    {
+      "departure": "NLRTM",
+      "arrival": "CNSGH",
+      "http_status": 200,
+      "elapsed_seconds": 0.21444116700058657,
+      "distance_nm": 13895.835215966687,
+      "waypoint_count": 280,
+      "gaps_nm": [
+        14.564092747144276,
+        44.660146575658075
+      ],
+      "plan_id": "3e71ba0ebca2611d8453fa1835e402b9d0daba2041dc2b85d8dbbd2a40680270",
+      "used_passages": [
+        "dover"
+      ]
+    },
+    {
+      "departure": "KRPUS",
+      "arrival": "USLAX",
+      "http_status": 422,
+      "elapsed_seconds": 0.0051034580001214636,
+      "error": {
+        "detail": "Los Angeles: 원천 좌표가 불일치합니다. 위치가 확인된 다른 항목을 선택하세요."
+      }
+    }
+  ],
+  "voyage_integrity_checks": [
+    {
+      "case": "geometry_changed",
+      "http_status": 422,
+      "response": {
+        "detail": "저장된 자동 항로와 입력 좌표가 다릅니다. 자동 항로를 다시 불러오거나 수동 항로로 전환하세요."
+      }
+    },
+    {
+      "case": "geometry_simplified",
+      "http_status": 422,
+      "response": {
+        "detail": "저장된 자동 항로와 입력 좌표가 다릅니다. 자동 항로를 다시 불러오거나 수동 항로로 전환하세요."
+      }
+    },
+    {
+      "case": "wrong_source",
+      "http_status": 422,
+      "response": {
+        "detail": "자동 해상 항로의 예보 분석은 전 세계 원천을 선택해야 합니다."
+      }
+    }
+  ],
+  "verified_at_utc": "2026-09-12T10:14:11.295496+00:00",
+  "regression": {
+    "python_passed": 459,
+    "web_passed": 67
+  },
+  "browser_checks": [
+    "Busan-Singapore port autocomplete and candidate route",
+    "Three-scenario global wave/wind analysis and playback",
+    "Stored plan reload retains 40 native points and both port selectors",
+    "Regional/global switching preserves separate manual inputs and global plan",
+    "390px viewport without horizontal overflow",
+    "Busan-Long Beach dateline route: 67 native waypoints, 1191 forecast points, full track visible after zero simplification and contiguous color grouping"
+  ]
+}

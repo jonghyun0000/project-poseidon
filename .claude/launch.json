@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "poseidon-api",
+      "runtimeExecutable": ".venv/bin/uvicorn",
+      "runtimeArgs": ["poseidon.api.app:app", "--port", "8811"],
+      "port": 8811
+    }
+  ]
+}

@@ -1,0 +1,224 @@
+openapi: 3.1.0
+info:
+  title: Project Poseidon Ocean Digital Twin API
+  version: 0.2.0-draft
+  description: >
+    Phase 2 초안. 모든 시각은 UTC ISO-8601. 격자 응답은 타일(양자화 바이너리) 또는
+    Zarr 청크 리다이렉트. 예보 응답은 AI 보정 여부(corrected)와 예측구간을 항상 포함한다.
+servers:
+  - url: /v1
+paths:
+  /state/current:
+    get:
+      summary: 현재 분석 상태 요약 (트윈 최신 유효 상태)
+      parameters:
+        - {name: vars, in: query, required: true, schema: {type: string}, example: "hs,tp,dir,u10,ssh"}
+        - {name: bbox, in: query, required: true, schema: {type: string}, example: "124,33,132,39"}
+        - {name: level, in: query, schema: {type: string, enum: [auto, L0, L1, L2], default: auto}}
+      responses:
+        "200":
+          content:
+            application/json:
+              schema: {$ref: "#/components/schemas/GridSummary"}
+  /forecast:
+    get:
+      summary: 점 예보 (전 리드타임)
+      parameters:
+        - {name: lat, in: query, required: true, schema: {type: number}}
+        - {name: lon, in: query, required: true, schema: {type: number}}
+        - {name: vars, in: query, schema: {type: string, default: "hs,tp,dir,tide,surge"}}
+        - {name: horizons, in: query, schema: {type: string, default: "PT5M,PT10M,PT30M,PT1H,PT6H,P1D,P3D,P7D"}}
+      responses:
+        "200":
+          content:
+            application/json:
+              schema: {$ref: "#/components/schemas/PointForecast"}
+  /tiles/{var}/{t}/{z}/{x}/{y}:
+    get:
+      summary: 격자 필드 양자화 타일 (클라이언트 컬러맵)
+      parameters:
+        - {name: var, in: path, required: true, schema: {type: string}}
+        - {name: t, in: path, required: true, schema: {type: string, format: date-time}}
+        - {name: z, in: path, required: true, schema: {type: integer}}
+        - {name: x, in: path, required: true, schema: {type: integer}}
+        - {name: y, in: path, required: true, schema: {type: integer}}
+      responses:
+        "200":
+          description: uint16 양자화 필드 + 스케일 헤더(X-Scale, X-Offset, X-Nodata)
+          content:
+            application/octet-stream: {schema: {type: string, format: binary}}
+  /vectors/{var}/{t}:
+    get:
+      summary: 벡터장 서브샘플 (바람·해류·파향, deck.gl 입자용)
+      parameters:
+        - {name: var, in: path, required: true, schema: {type: string, enum: [wind, current, wave_dir]}}
+        - {name: t, in: path, required: true, schema: {type: string, format: date-time}}
+        - {name: bbox, in: query, required: true, schema: {type: string}}
+        - {name: stride, in: query, schema: {type: integer, default: 4}}
+      responses:
+        "200":
+          content:
+            application/octet-stream: {schema: {type: string, format: binary}}
+  /spectrum/nearest:
+    get:
+      summary: 최근접 스펙트럼 출력점의 방향 스펙트럼 (WebGPU 해수면 합성용)
+      parameters:
+        - {name: lat, in: query, required: true, schema: {type: number}}
+        - {name: lon, in: query, required: true, schema: {type: number}}
+        - {name: t, in: query, required: true, schema: {type: string, format: date-time}}
+      responses:
+        "200":
+          content:
+            application/json:
+              schema: {$ref: "#/components/schemas/DirectionalSpectrum"}
+  /tide:
+    get:
+      summary: 조화합성 조위 시계열 (FES2022 + 지역 보정)
+      parameters:
+        - {name: lat, in: query, required: true, schema: {type: number}}
+        - {name: lon, in: query, required: true, schema: {type: number}}
+        - {name: from, in: query, required: true, schema: {type: string, format: date-time}}
+        - {name: to, in: query, required: true, schema: {type: string, format: date-time}}
+        - {name: step, in: query, schema: {type: string, default: PT10M}}
+      responses:
+        "200":
+          content:
+            application/json:
+              schema: {$ref: "#/components/schemas/TimeSeries"}
+  /observations:
+    get:
+      summary: 관측 조회 (QC 플래그 포함)
+      parameters:
+        - {name: type, in: query, schema: {type: string, enum: [buoy, tide_gauge, altimeter, hf_radar, argo]}}
+        - {name: bbox, in: query, required: true, schema: {type: string}}
+        - {name: from, in: query, required: true, schema: {type: string, format: date-time}}
+        - {name: to, in: query, required: true, schema: {type: string, format: date-time}}
+      responses:
+        "200":
+          content:
+            application/json:
+              schema: {type: array, items: {$ref: "#/components/schemas/Observation"}}
+  /skill:
+    get:
+      summary: 검증 통계 (리드타임별 RMSE/bias/SI/CRPS)
+      parameters:
+        - {name: var, in: query, required: true, schema: {type: string}}
+        - {name: region, in: query, schema: {type: string, default: east-asia}}
+        - {name: window, in: query, schema: {type: string, default: P30D}}
+      responses:
+        "200":
+          content:
+            application/json:
+              schema: {$ref: "#/components/schemas/SkillReport"}
+  /alerts:
+    get:
+      summary: 활성 경보 (고파랑·해일·급변)
+      parameters:
+        - {name: bbox, in: query, schema: {type: string}}
+      responses:
+        "200":
+          content:
+            application/json:
+              schema: {type: array, items: {$ref: "#/components/schemas/Alert"}}
+  /system/cycles:
+    get:
+      summary: 예보 사이클 상태 (ADR-004 상태기계 노출)
+      responses:
+        "200":
+          content:
+            application/json:
+              schema: {type: array, items: {$ref: "#/components/schemas/CycleStatus"}}
+
+components:
+  schemas:
+    PointForecast:
+      type: object
+      required: [lat, lon, cycle, items]
+      properties:
+        lat: {type: number}
+        lon: {type: number}
+        cycle: {type: string, format: date-time}
+        corrected: {type: boolean, description: AI 보정 적용 여부}
+        model_version: {type: string}
+        items:
+          type: array
+          items:
+            type: object
+            required: [valid_time, var, q50]
+            properties:
+              valid_time: {type: string, format: date-time}
+              var: {type: string}
+              q05: {type: number}
+              q50: {type: number}
+              q95: {type: number}
+              physics_raw: {type: number, description: 보정 전 물리 모델 원값}
+    DirectionalSpectrum:
+      type: object
+      required: [freq_hz, dir_deg, energy]
+      properties:
+        point_id: {type: string}
+        lat: {type: number}
+        lon: {type: number}
+        valid_time: {type: string, format: date-time}
+        freq_hz: {type: array, items: {type: number}, description: 32개 로그 분포}
+        dir_deg: {type: array, items: {type: number}, description: 36개, 해양학 규약(진행 방향)}
+        energy: {type: array, items: {type: array, items: {type: number}}, description: "m²/Hz/rad, [freq][dir]"}
+    Observation:
+      type: object
+      required: [station_id, ts, var, value, qc_flag]
+      properties:
+        station_id: {type: string}
+        ts: {type: string, format: date-time}
+        var: {type: string}
+        value: {type: number}
+        qc_flag: {type: integer, description: 0=good 1=suspect 2=bad 9=missing}
+    TimeSeries:
+      type: object
+      properties:
+        times: {type: array, items: {type: string, format: date-time}}
+        values: {type: array, items: {type: number}}
+        datum: {type: string, description: 조위 기준면 (예 MSL, 약최저저조위)}
+    GridSummary:
+      type: object
+      properties:
+        cycle: {type: string, format: date-time}
+        level: {type: string}
+        vars: {type: object, additionalProperties: {type: object,
+          properties: {min: {type: number}, max: {type: number}, mean: {type: number}}}}
+    SkillReport:
+      type: object
+      properties:
+        var: {type: string}
+        region: {type: string}
+        window: {type: string}
+        by_leadtime:
+          type: array
+          items:
+            type: object
+            properties:
+              lead: {type: string}
+              n: {type: integer}
+              rmse: {type: number}
+              bias: {type: number}
+              si: {type: number, description: scatter index}
+              crps: {type: number}
+              skill_vs_reference: {type: number, description: GFS-Wave 대비}
+    Alert:
+      type: object
+      properties:
+        alert_id: {type: string}
+        kind: {type: string, enum: [high_wave, surge, rapid_change, system]}
+        severity: {type: string, enum: [advisory, watch, warning]}
+        geometry: {type: object, description: GeoJSON}
+        issued: {type: string, format: date-time}
+        expires: {type: string, format: date-time}
+        message: {type: string}
+    CycleStatus:
+      type: object
+      properties:
+        run_id: {type: string, format: uuid}
+        cycle: {type: string, format: date-time}
+        status: {type: string, description: ADR-004 상태기계 상태}
+        degraded: {type: boolean}
+        events: {type: array, items: {type: object,
+          properties: {ts: {type: string, format: date-time}, event: {type: string}}}}

@@ -1,0 +1,27 @@
+{
+  "source": "global",
+  "name": "부산–울산 항만 대표점 연결 시험",
+  "cycle": "20260912T00",
+  "departure_utc": "2026-09-12T00:00:00+00:00",
+  "waypoints": [
+    {
+      "lat": 35.1,
+      "lon": 129.033333,
+      "port_id": "unlocode:KRPUS",
+      "name": "untrusted client label"
+    },
+    {
+      "lat": 35.45,
+      "lon": 129.4,
+      "port_id": "unlocode:KRUSN",
+      "name": "untrusted client label"
+    }
+  ],
+  "scenarios": [
+    {
+      "name": "기준",
+      "speed_kn": 14
+    }
+  ],
+  "hs_threshold_m": 3
+}
