@@ -198,10 +198,19 @@ def _station_locations() -> pd.DataFrame:
 
 
 def collocate_wave(cycle: str, obs_window_min: float = 30.0,
-                   level: str = "L1") -> pd.DataFrame:
-    """level: L1(0.25°, var=hs) | L2(0.05° 연안 중첩, var=hs_l2)."""
+                   level: str = "L1", *, source_id: str | None = None,
+                   write: bool = True) -> pd.DataFrame:
+    """level: L1(0.25°, var=hs) | L2(0.05° 연안 중첩, var=hs_l2).
+
+    source_id: 기본은 운영 산출물. 진단 산출물(`spectral_wave-L1-<tag>`)을 채점할 때 준다.
+    write: False 면 error_sample 에 쓰지 않고 DataFrame 만 돌려준다 — 진단 실행과 대조군을
+        **운영 채점 표본과 섞지 않고** 같은 조건으로 비교하기 위한 것이다(AGENTS.md §6-9, PHASE31).
+        진단 source_id 를 write=True 로 채점하는 것은 막는다.
+    """
+    src = source_id or ("spectral_wave-L2" if level == "L2" else "spectral_wave-L1")
+    if write and src not in ("spectral_wave-L1", "spectral_wave-L2"):
+        raise ValueError(f"진단 산출물 {src!r} 은 error_sample 에 쓰지 않는다 — write=False 로 채점할 것")
     catalog = Catalog(settings.catalog_path)
-    src = "spectral_wave-L2" if level == "L2" else "spectral_wave-L1"
     fc_rows = [r for r in catalog.find_datasets("forecast", settings.domain_name, cycle)
                if r["source_id"] == src]
     if not fc_rows:
@@ -209,7 +218,8 @@ def collocate_wave(cycle: str, obs_window_min: float = 30.0,
     fc = xr.open_zarr(fc_rows[-1]["uri"], consolidated=False)
     # 예보 파일이 스스로 밝힌 엔진 설정 (없으면 unknown — 추론하지 않는다)
     engine_tag = {k: str(fc.attrs.get(k, "unknown"))
-                  for k in ("advection", "gse", "gse_gamma", "produced_at")}
+                  for k in ("advection", "gse", "gse_gamma", "produced_at",
+                            "init_fill", "init_fill_version")}
     forcing = xr.open_zarr(
         catalog.find_datasets("forcing", settings.domain_name, cycle)[-1]["uri"],
         consolidated=False)
@@ -351,9 +361,10 @@ def collocate_wave(cycle: str, obs_window_min: float = 30.0,
                     "predicted_raw": float(hs_raw[li]) if obs_var == "hs" else float("nan"),
                     "depth_model": depth_model,
                 })
-    if rows:
+    if rows and write:
         catalog.add_error_samples([{k: r[k] for k in _DB_COLS} for r in rows])
-    log.info("collocated %d samples (%s)", len(rows), cycle)
+    log.info("collocated %d samples (%s, %s%s)", len(rows), cycle, src,
+             "" if write else ", 쓰지 않음")
     return pd.DataFrame(rows)
 
 

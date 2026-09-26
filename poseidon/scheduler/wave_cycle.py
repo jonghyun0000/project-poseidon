@@ -75,7 +75,8 @@ def run_wave_forecast(cycle: str, hours: float = 6.0, *,
                       swell: str = "none",
                       swell_fe: float | None = None,
                       init_gamma: float | None = None,
-                      init_spread_power: float | None = None) -> dict:
+                      init_spread_power: float | None = None,
+                      init_fill: str = "none") -> dict:
     """assimilate: "none"(기본, 기존 동작 비트 동일) | "oi-hs-v1" Hs 최적내삽.
 
     동화를 켜면 산출물이 **다른 파일·다른 source_id** 로 기록된다
@@ -89,8 +90,14 @@ def run_wave_forecast(cycle: str, hours: float = 6.0, *,
         주어야 한다 — 그래야 `source_id`가 갈려 운영 `error_sample`에
         섞이지 않는다(CLAUDE.md 함정 9).
     """
+    # init_fill: GFS-Wave 적분량을 격자로 옮길 때 NaN 셀 처리 (wave_inputs, PHASE31).
+    # 기본 "none" 은 기존 동작과 비트 동일. 다른 모드는 진단 전용 — out_tag 필수.
+    from poseidon.scheduler.wave_inputs import (INIT_FILL_MODES, INIT_FILL_VERSION,
+                                                grid_wave_fields)
+    if init_fill not in INIT_FILL_MODES:
+        raise ValueError(f"unknown init_fill {init_fill!r} (supported: {INIT_FILL_MODES})")
     _diag = (enable is not None or negative_input or swell != "none"
-             or drag != "wu1982"
+             or drag != "wu1982" or init_fill != "none"
              or init_gamma is not None or init_spread_power is not None)
     if _diag and not out_tag:
         raise ValueError(
@@ -120,16 +127,16 @@ def run_wave_forecast(cycle: str, hours: float = 6.0, *,
             _mkw["swell_par"] = SwellPar(fe=float(swell_fe))
     model = RegionalWaveModel(lats, lons, depth, grid, h_min=10.0, **_mkw)
 
-    def wave_fields(t_idx_ds: xr.Dataset):
-        i = {"latitude": xr.DataArray(lats, dims="y"),
-             "longitude": xr.DataArray(lons, dims="x")}
-        hs = t_idx_ds.swh.interp(**i).values
-        tp = t_idx_ds.perpw.interp(**i).values
-        mdir = _from_compass_from(t_idx_ds.dirpw.interp(**i).values)
-        return hs, tp, mdir
+    fill_info: list[dict] = []
+
+    def wave_fields(t_idx_ds: xr.Dataset, mode: str = "none"):
+        hs, tp, dfrom, info = grid_wave_fields(t_idx_ds, lats, lons, mode)
+        if mode != "none":
+            fill_info.append(info)
+        return hs, tp, _from_compass_from(dfrom)
 
     # 초기조건 + 경계 (t=0)
-    hs0, tp0, dir0 = wave_fields(waves.isel(time=0))
+    hs0, tp0, dir0 = wave_fields(waves.isel(time=0), init_fill)
     _spec_kw = {"gamma": init_gamma, "spread_power": init_spread_power}
     e = model.spectra_from_integrals(hs0, tp0, dir0, **_spec_kw)
     model.set_boundary(e, sides="WESN")
@@ -167,13 +174,17 @@ def run_wave_forecast(cycle: str, hours: float = 6.0, *,
             log.warning("동화 미적용(%s) — 산출물은 assimilation='none' 으로 기록된다",
                         assim_info.get("status"))
 
-    run_id = catalog.create_run(cycle=cycle, engine="wave-L1",
-                                domain=settings.domain_name) \
-        if catalog.get_run(cycle=cycle, engine="wave-L1",
-                           domain=settings.domain_name) is None \
-        else catalog.get_run(cycle=cycle, engine="wave-L1",
-                             domain=settings.domain_name)["run_id"]
-    catalog.set_status(run_id, "RUNNING_L1")
+    # 태그 붙은 실행(진단·동화 실험)은 운영 사이클의 실행 상태를 건드리지 않는다.
+    # 건드리면 실험이 도중에 죽을 때 운영 사이클이 RUNNING_L1 에 멈춰 발행 목록에서 빠진다.
+    run_id = None
+    if not out_tag and assimilate == "none":
+        run_id = catalog.create_run(cycle=cycle, engine="wave-L1",
+                                    domain=settings.domain_name) \
+            if catalog.get_run(cycle=cycle, engine="wave-L1",
+                               domain=settings.domain_name) is None \
+            else catalog.get_run(cycle=cycle, engine="wave-L1",
+                                 domain=settings.domain_name)["run_id"]
+        catalog.set_status(run_id, "RUNNING_L1")
 
     dt = model.cfl_dt()
     n = int(round(hours * 3600 / dt))
@@ -205,11 +216,8 @@ def run_wave_forecast(cycle: str, hours: float = 6.0, *,
         if t >= bc_next_update and t_axis[-1] > 0:
             ds_t = waves.interp(time=waves.time[0].values
                                 + np.timedelta64(int(min(t, float(t_axis[-1]))), "s"))
-            i = {"latitude": xr.DataArray(lats, dims="y"),
-                 "longitude": xr.DataArray(lons, dims="x")}
-            eb = model.spectra_from_integrals(
-                ds_t.swh.interp(**i).values, ds_t.perpw.interp(**i).values,
-                _from_compass_from(ds_t.dirpw.interp(**i).values), **_spec_kw)
+            # 경계도 초기장과 같은 방식으로 옮긴다 (같은 결함, 같은 수정)
+            eb = model.spectra_from_integrals(*wave_fields(ds_t, init_fill), **_spec_kw)
             model.set_boundary(eb, sides="WESN")
             e_bc = eb
             bc_next_update += bc_interval
@@ -267,6 +275,8 @@ def run_wave_forecast(cycle: str, hours: float = 6.0, *,
                "init_gamma": "default" if init_gamma is None else str(init_gamma),
                "init_spread_power": ("default" if init_spread_power is None
                                      else str(init_spread_power)),
+               # 초기장·경계의 격자 매핑 방식 — 채점 표본이 방식별로 추적되게 한다 (PHASE31)
+               "init_fill": init_fill, "init_fill_version": INIT_FILL_VERSION,
                "dir_convention": "coming_from, deg true, clockwise",
                "moment_units": "m0[m2] m1[m2/s] m2[m2/s2] a1,b1[m2]",
                "period_defs": "tp=peak; tm01=m0/m1, tm02=sqrt(m0/m2) via grid.derive",
@@ -287,8 +297,11 @@ def run_wave_forecast(cycle: str, hours: float = 6.0, *,
                                         "gse_gamma": float(model.gse_gamma),
                                         "assimilation": out.attrs.get("assimilation",
                                                                       "none"),
+                                        "init_fill": init_fill,
+                                        "init_fill_first": fill_info[0] if fill_info else None,
                                         "assim": assim_info})
-    catalog.set_status(run_id, "PUBLISHED")
+    if run_id is not None:
+        catalog.set_status(run_id, "PUBLISHED")
     log.info("final lead metrics: %s", per_lead[-1])
     return metrics
 
@@ -326,6 +339,9 @@ def main() -> int:
     parser.add_argument("--assim-no-line-of-sight", action="store_true")
     parser.add_argument("--assim-exclude-stations", default="",
                         help="쉼표 구분 관측소 ID — 동화에서 제외 (독립 검증용)")
+    parser.add_argument("--init-fill", default="none",
+                        choices=("none", "seanorm", "seanorm_nn1"),
+                        help="GFS-Wave -> 격자 NaN 셀 처리 (진단 전용, --out-tag 필수). PHASE31")
     args = parser.parse_args()
     logging.basicConfig(level=logging.INFO,
                         format="%(asctime)s %(levelname)-5s %(name)s %(message)s")
@@ -356,7 +372,8 @@ def main() -> int:
                           drag=args.drag,
                           swell=args.swell, swell_fe=args.swell_fe,
                           init_gamma=args.init_gamma,
-                          init_spread_power=args.init_spread_power)
+                          init_spread_power=args.init_spread_power,
+                          init_fill=args.init_fill)
     print(m)
     return 0
 
