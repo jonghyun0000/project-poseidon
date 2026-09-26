@@ -13,6 +13,9 @@
     4. 발행 후 48시간이 지난 최근 사이클(2개 이상, 최대 4개)의 채점 표본이 전부 0건인가
        — 4개를 요구하면 루프가 멈춰 사이클이 적은 바로 그 상황을 놓친다
     5. T7 여유 공간이 20 GB 미만인가
+    6. 배터리로 돌고 있는가 — caffeinate -s 는 전원 연결 때만 시스템 절전을 막는다.
+       멈춘 뒤 "예보가 오래됐다"로 알게 되기 전에, 멈출 조건을 먼저 알린다
+       (2026-09-27: 배터리 85% 방전 중에 운영하고 있었다)
 
 왜 파이썬 표준 라이브러리인가 (셸 스크립트가 아닌 이유)
     처음엔 zsh + /usr/bin/sqlite3 로 짰다. launchd 에서 실행하자 macOS 개인정보 보호(TCC)가
@@ -43,9 +46,25 @@ DISK_MIN_GB = 20
 RENOTIFY_S = 6 * 3600
 
 
+def on_battery() -> bool | None:
+    """pmset 으로 전원을 본다. 판정할 수 없으면 None (경보를 내지 않는다)."""
+    try:
+        out = subprocess.run(["/usr/bin/pmset", "-g", "batt"], capture_output=True,
+                             text=True, timeout=10).stdout
+    except Exception:  # noqa: BLE001
+        return None
+    if "Battery Power" in out:
+        return True
+    if "AC Power" in out:
+        return False
+    return None
+
+
 def check(root: Path, now: datetime) -> tuple[list[str], str]:
     alerts: list[str] = []
     detail: list[str] = []
+    if on_battery():
+        alerts.append("배터리로 동작 중 — 전원을 연결하지 않으면 절전으로 운영이 멈춘다")
     if not root.is_dir():
         return ["프로젝트 폴더 없음 — T7 이 연결되지 않았다"], ""
     if subprocess.run(["/usr/bin/pgrep", "-f", "poseidon.scheduler.operational"],
