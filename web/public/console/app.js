@@ -1,7 +1,8 @@
 import {finite,fmt,esc,validPoint,dateLabel,csvData,sampleValue,summarizeForecast} from './domain.js';
 import {chartMarkup} from './charts.js';
 import {initVoyage} from './voyage.js';
-import {initPorts} from './ports.js';
+import {initPorts} from './ports.js?v=helm-32';
+import {initHelm} from './helm.js?v=33.3';
 import {normalizeLongitude,OCEAN_VIEWS} from './global-domain.js';
 import {globalValidationMarkup} from './global-validation.js';
 import {globalAltimeterMarkup,loadGlobalEvidence} from './global-altimeter.js';
@@ -20,7 +21,7 @@ function currentItem(){return currentPoint()?.data?.items?.[S.lead]||null;}
 function coords(p){return `${Math.abs(p.lat).toFixed(3)}°${p.lat<0?'S':'N'}  ${Math.abs(p.lon).toFixed(3)}°${p.lon<0?'W':'E'}`;}
 function renderPoints(){
  $('point-count').textContent=`${S.points.length} / 8`;
- $('point-list').innerHTML=S.points.map((p,i)=>{const value=sampleValue(p.data?.items?.[S.lead],'hs');return `<div class="point-card ${p.id===S.selected?'active':''}"><button class="remove-point" data-remove="${p.id}" aria-label="${esc(p.name)} 삭제">×</button><button data-point="${p.id}" style="padding:0;text-align:left;width:100%"><div class="point-title"><span class="point-marker">${String(i+1).padStart(2,'0')}</span>${esc(p.name)}</div><div class="coords">${esc(coords(p))}</div><div class="mini-value"><b>${fmt(value,1)} <small>m</small></b><small>${p.loading?'조회 중':p.error?'조회 실패':p.data?'Hs · 예측':'미조회'}</small></div></button></div>`;}).join('');
+ $('point-list').innerHTML=S.points.map((p,i)=>{const value=sampleValue(p.data?.items?.[S.lead],'hs',{source:S.source});return `<div class="point-card ${p.id===S.selected?'active':''}"><button class="remove-point" data-remove="${p.id}" aria-label="${esc(p.name)} 삭제">×</button><button data-point="${p.id}" style="padding:0;text-align:left;width:100%"><div class="point-title"><span class="point-marker">${String(i+1).padStart(2,'0')}</span>${esc(p.name)}</div><div class="coords">${esc(coords(p))}</div><div class="mini-value"><b>${fmt(value,1)} <small>m</small></b><small>${p.loading?'조회 중':p.error?'조회 실패':p.data?'Hs · 예측':'미조회'}</small></div></button></div>`;}).join('');
  $('point-list').querySelectorAll('[data-point]').forEach(el=>el.onclick=()=>selectPoint(el.dataset.point));
  $('point-list').querySelectorAll('[data-remove]').forEach(el=>el.onclick=()=>{const id=el.dataset.remove;S.points=S.points.filter(p=>p.id!==id);if(S.selected===id)S.selected=S.points[0]?.id||null;save();render();drawMarkers();if(currentPoint()&&!currentPoint().data)loadPoint(currentPoint());});
 }
@@ -45,9 +46,9 @@ function renderHeader(){
 }
 function renderInspector(){
  const p=currentPoint(),it=currentItem();$('selected-name').textContent=p?.name||'지점을 선택하세요';$('selected-coords').textContent=p?coords(p):'관심 지점 또는 지도에서 선택';
- $('hs-value').textContent=fmt(sampleValue(it,'hs'));$('tp-value').textContent=fmt(sampleValue(it,periodKey()),1);$('dir-value').textContent=fmt(sampleValue(it,directionKey()),0);
- const exceed=finite(it?.q50)&&it.q50>S.threshold;
- $('threshold-state').textContent=p?.loading?'지점 자료 조회 중':p?.error?p.error:!it?'지점 미선택':!finite(it.q50)||!isGlobal()&&it.q50<=.011?'이 시각의 유효한 파랑 값 없음':exceed?`사용자 비교선 ${S.threshold} m 초과`:`사용자 비교선 ${S.threshold} m 이하`;
+ const hs=sampleValue(it,'hs',{source:S.source});$('hs-value').textContent=fmt(hs);$('tp-value').textContent=fmt(sampleValue(it,periodKey()),1);$('dir-value').textContent=fmt(sampleValue(it,directionKey()),0);
+ const exceed=finite(hs)&&hs>S.threshold;
+ $('threshold-state').textContent=p?.loading?'지점 자료 조회 중':p?.error?p.error:!it?'지점 미선택':!finite(hs)?'이 시각의 유효한 파랑 값 없음':exceed?`사용자 비교선 ${S.threshold} m 초과`:`사용자 비교선 ${S.threshold} m 이하`;
  $('threshold-state').style.color=exceed?'#a77d38':'';
  const a=it?.applicability;
  const notes={in_range:'파고 검증 범위 안',sparse:'파고 검증 표본 부족',out_of_range:'파고 검증 범위 밖',no_coverage:'인근 검증 근거 부족'};
@@ -60,7 +61,7 @@ function renderInspector(){
  $('observation').innerHTML=S.observationError?'<p>관측 조회 실패. 새로고침으로 다시 확인하세요.</p>':S.observations===null?'<p>관측 자료 조회 중</p>':obs?`<b>${esc(obs.station_id)} · ${fmt(obs.value)} m</b><br>${esc(dateLabel(obs.ts,S.tz))}<br><span class="micro">${esc(obs.provider?.toUpperCase())} · QC 통과 · 관측 ${fmt(obs.age_h,1)}시간 경과 · 예보 시각과 다를 수 있습니다.</span>`:p?.stationId?'<p>이 관측소의 최근 48시간 유효 관측이 없습니다.</p>':'<p>선택 좌표의 직접 관측이 없습니다.</p><p class="micro">직접 관측은 별도 자료입니다. 전 지구 예보의 정확도 검증을 대신하지 않습니다.</p>';
  $('export').disabled=!p?.data||!!p?.loading;
  const data=p?.data;const items=data?.items||[];
- $('chart').innerHTML=p?.loading?'<div class="empty">예측 시계열 불러오는 중</div>':p?.error?`<div class="empty">${esc(p.error)}</div>`:items.length?chartMarkup(items,S.variable,S.lead,S.threshold):'<div class="empty">지점을 선택하면 예측 추세를 확인할 수 있습니다.</div>';
+ $('chart').innerHTML=p?.loading?'<div class="empty">예측 시계열 불러오는 중</div>':p?.error?`<div class="empty">${esc(p.error)}</div>`:items.length?chartMarkup(items,S.variable,S.lead,S.threshold,{source:S.source}):'<div class="empty">지점을 선택하면 예측 추세를 확인할 수 있습니다.</div>';
  $('chart-location').textContent=p?.name||'';
  $('chart-note').textContent=S.variable===directionKey()?(isGlobal()?'NOAA 주 파향 DIRPW · 진북 기준. 각도 평균으로 연결하지 않습니다.':'파향은 진북 기준, 파가 오는 방향입니다. 각도 평균으로 연결하지 않습니다.'):S.variable===periodKey()?(isGlobal()?'NOAA 주 파주기 PERPW. Tp 또는 Tm02와 동일한 변수로 취급하지 않습니다.':'첨두주기 · 부분 검증. 예측값의 신뢰구간을 표시한 그래프가 아닙니다.'):'실선: 예측값 · 점선: 사용자 비교선 · 세로선: 선택 시각';
  if(it?.missing?.[S.variable]==='not_stored')$('chart-note').textContent='선택 사이클에 이 변수가 저장되어 있지 않습니다. 값이 있는 변수나 다른 사이클을 선택하세요.';
@@ -98,7 +99,7 @@ async function loadPoint(p){
  finally{if(S.meta?.cycle===cycle&&S.source===source){p.loading=false;render();}}
 }
 function setLead(index){if(!S.meta)return;S.lead=Math.min(S.meta.leads_h.length-1,Math.max(0,Math.round(index)));syncURL();render();drawField();}
-function setView(view){S.view=view;['analysis','voyage','ports','validation','operations'].forEach(v=>{$(v+'-view').hidden=v!==view;document.querySelector(`[data-view="${v}"]`).classList.toggle('active',v===view);});voyage.pause();syncURL();if(view==='analysis')S.map?.resize();if(view==='voyage')voyage.activate();if(view==='ports')ports.activate();if(view==='validation')loadValidation();if(view==='operations')loadOperations();}
+function setView(view){S.view=view;['analysis','voyage','helm','ports','validation','operations'].forEach(v=>{$(v+'-view').hidden=v!==view;document.querySelector(`[data-view="${v}"]`).classList.toggle('active',v===view);});voyage.pause();helm.pause();syncURL();if(view==='analysis')S.map?.resize();if(view==='voyage')voyage.activate();if(view==='helm')helm.activate();if(view==='ports')ports.activate();if(view==='validation')loadValidation();if(view==='operations')loadOperations();}
 function metric(label,value,note){return `<div class="metric-tile"><label>${esc(label)}</label><strong>${esc(value)}</strong><small>${esc(note)}</small></div>`;}
 let validationRequest=0;
 async function loadValidation(){
@@ -141,9 +142,10 @@ async function refresh(force=false){
  }catch(e){$('forecast-state').textContent='예보 조회 실패';$('forecast-period').textContent=e.message;}
  finally{S.refreshing=false;$('refresh').disabled=false;$('source-select').disabled=false;}
 }
-function showTable(){const p=currentPoint();if(!p?.data)return;$('data-table').innerHTML=`<p class="muted">${esc(coords(p))} · ${esc(p.data.cycle)} UTC · 예측값</p><table><thead><tr><th>유효 시각 UTC</th><th>리드 h</th><th>파고 m</th><th>${isGlobal()?'주 파주기':'첨두주기'} s</th><th>Tm02 s</th><th>${isGlobal()?'주 파향':'첨두파향'} °</th><th>파고 검증 범위</th></tr></thead><tbody>${p.data.items.map(i=>`<tr><td>${esc(dateLabel(i.valid_time))}</td><td>${fmt(i.lead_h,2)}</td><td>${fmt(sampleValue(i,'hs'),3)}</td><td>${fmt(sampleValue(i,periodKey()),2)}</td><td>${fmt(sampleValue(i,'tm02'),2)}</td><td>${fmt(sampleValue(i,directionKey()),1)}</td><td>${esc(({in_range:'범위 안',sparse:'표본 부족',out_of_range:'범위 밖',no_coverage:'근거 부족'})[i.applicability?.verdict]||'—')}</td></tr>`).join('')}</tbody></table>`;$('data-dialog').showModal();}
+function showTable(){const p=currentPoint();if(!p?.data)return;$('data-table').innerHTML=`<p class="muted">${esc(coords(p))} · ${esc(p.data.cycle)} UTC · 예측값</p><table><thead><tr><th>유효 시각 UTC</th><th>리드 h</th><th>파고 m</th><th>${isGlobal()?'주 파주기':'첨두주기'} s</th><th>Tm02 s</th><th>${isGlobal()?'주 파향':'첨두파향'} °</th><th>파고 검증 범위</th></tr></thead><tbody>${p.data.items.map(i=>`<tr><td>${esc(dateLabel(i.valid_time))}</td><td>${fmt(i.lead_h,2)}</td><td>${fmt(sampleValue(i,'hs',{source:S.source}),3)}</td><td>${fmt(sampleValue(i,periodKey()),2)}</td><td>${fmt(sampleValue(i,'tm02'),2)}</td><td>${fmt(sampleValue(i,directionKey()),1)}</td><td>${esc(({in_range:'범위 안',sparse:'표본 부족',out_of_range:'범위 밖',no_coverage:'근거 부족'})[i.applicability?.verdict]||'—')}</td></tr>`).join('')}</tbody></table>`;$('data-dialog').showModal();}
 const voyage=initVoyage({api,getMeta:()=>S.meta,getSource:()=>S.source});
-const ports=initPorts({api,onUsePort:(port,role)=>{voyage.usePort(port,role);setView('voyage');}});
+const helm=initHelm({api});
+const ports=initPorts({api,onUsePort:(port,role)=>{if(role==='helm'){setView('helm');helm.usePort(port);}else{voyage.usePort(port,role);setView('voyage');}}});
 $('voy-open-ports').onclick=()=>setView('ports');
 async function changeSource(){if(S.refreshing)return;S.source=$('source-select').value;S.pinned=null;S.meta=null;S.lead=0;S.variable='hs';S.showStations=false;S.points.forEach(p=>{p.data=null;p.loading=false;p.error=null;});$('forecast-state').textContent='예보 원천 전환 중';$('forecast-period').textContent='';renderPoints();renderInspector();for(const id of ['waves','waves-west','waves-east'])if(S.map?.getLayer(id))S.map.setLayoutProperty(id,'visibility','none');$('map-error').hidden=true;$('chart-tabs').querySelectorAll('button').forEach(b=>b.classList.toggle('selected',b.dataset.var==='hs'));voyage.sourceChanged();syncURL();drawStations();await refresh(true);if(S.mapReady)S.map.easeTo({center:isGlobal()?[0,20]:[129,33.5],zoom:isGlobal()?1.25:3.8,duration:500});if(S.view==='validation')loadValidation();if(S.view==='operations')loadOperations();}
 $('source-select').onchange=changeSource;
@@ -166,4 +168,4 @@ const fromURL=params.getAll('pt').map(v=>v.split(',')).filter(([a,b])=>validPoin
 const stored=readStored('poseidon.console.points',[]);
 const initial=fromURL.length?fromURL.map(([lat,lon])=>({...((Array.isArray(stored)?stored:[]).find(p=>Math.abs(p.lat-lat)<.001&&Math.abs(p.lon-lon)<.001)||{}),lat,lon})):Array.isArray(stored)&&stored.length?stored:[{lat:34.5,lon:129,name:'대한해협'}];
 for(const p of initial.slice(0,8))if(validPoint(p.lat,p.lon))await addPoint(p.lat,p.lon,p.name,p.stationId);
-initMap();if(['voyage','ports','validation','operations'].includes(params.get('view')))setView(params.get('view'));await refresh();setInterval(()=>refresh(),300000);
+initMap();if(['voyage','helm','ports','validation','operations'].includes(params.get('view')))setView(params.get('view'));await refresh();setInterval(()=>refresh(),300000);

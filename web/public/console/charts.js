@@ -1,7 +1,7 @@
 import {finite,sampleValue,esc} from './domain.js';
-export function chartMarkup(items,varName,leadIndex,threshold){
+export function chartMarkup(items,varName,leadIndex,threshold,options={}){
  const w=680,h=132,left=38,right=12,top=13,bottom=22,iw=w-left-right,ih=h-top-bottom;
- const values=items.map(i=>sampleValue(i,varName));
+ const values=items.map(i=>sampleValue(i,varName,options));
  if(!values.some(finite))return '<div class="empty">이 변수는 선택한 예보에 유효한 값이 없습니다.</div>';
  const circular=varName==='dirp'||varName==='primary_direction';
  const maxLead=Math.max(...items.map(i=>i.lead_h),1);

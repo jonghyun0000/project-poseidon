@@ -1,0 +1,9 @@
+MapLibre GL JS 5.7.1
+
+Copyright (c) MapLibre contributors.
+
+Licensed under the BSD 3-Clause License. The full license text is available at:
+https://github.com/maplibre/maplibre-gl-js/blob/v5.7.1/LICENSE.txt
+
+This vendored distribution was downloaded from:
+https://cdn.jsdelivr.net/npm/maplibre-gl@5.7.1/dist/

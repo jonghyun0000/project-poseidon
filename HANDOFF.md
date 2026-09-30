@@ -6,6 +6,38 @@
 
 ---
 
+## 최신 변경 — 2026-09-27 / Phase 33 조종 해안선 판정
+
+`/console?view=helm`에서 Natural Earth 1:10m 육지와 불러온 OSM 부두·방파제의
+선체/이동경로 교차를 검사해 조종을 멈춘다. 해안선 자료 미확보 구역에서는 조종을 멈추고
+새 구역을 확보한다. 상세: [Phase 33](docs/PHASE33_HELM_COAST_SCREEN.md).
+작은 섬·수심·공식 ENC·실선 조종 성능은 미검증이므로 항해 안전 판정으로 사용하지 않는다.
+
+## 최신 변경 — 2026-09-27 / Phase 32 참조선 조종
+
+`/console?view=helm`: 실제 제원 기반 12종 선박 선택·전후진·조타·항적 JSON 저장.
+기존 234개 국가·지역 항구 카탈로그 연결, 12개국 대표점 주변 실제 OSM 형상 6,307개를 보존했다.
+추가 지도 구역은 사용자 요청 시 조회한다. 실선 조종계수·전체 항만·수심/충돌 검증은 미완료다.
+Node 81개, Python 비scientific 383개 통과. 상세: [Phase 32](docs/PHASE32_REFERENCE_FLEET_HELM.md).
+Claude의 Phase 31 초기장 실험과 미커밋 평가 파일은 보존했고 운영 서비스를 재시작하지 않았다.
+
+## 최신 변경 — 2026-09-27 / Phase 30 결측 표시
+
+API와 수치 산출물은 건드리지 않고 콘솔 표시 계층을 정리했다. 지역 예보에서 `no_wave_energy`이거나
+`0.011 m` 이하인 Hs는 카드·상세·표·그래프·항로 지도 색상에서 유효 파랑값으로 표시하지 않는다.
+전 지구 NOAA 원천은 같은 임계값으로 잘라내지 않는다. 즉 지역 마스크 결함 계열의 영값이 "잔잔한 바다"처럼
+보이는 화면 오해를 줄이는 변경이다.
+`tests/web/console.test.mjs`, `tests/web/voyage-track.test.mjs`에 회귀 테스트를 추가했고 전체 Node 화면 테스트 71개가 통과했다.
+재현 문서: [Phase 30](docs/PHASE30_MISSING_DISPLAY.md). 남은 비API 후보는 OSM 타일·글꼴 캐시와 표시 PNG의 sea-normalized 업스케일이다.
+
+## 최신 변경 — 2026-09-27 / Phase 29 지도 런타임
+
+API 계약 작업은 보류하고 브라우저 전달 경로를 먼저 개선했다. 콘솔과 기존 화면의 MapLibre GL JS 5.7.1
+JS·CSS를 프로젝트에 고정해 외부 CDN 지연·차단이 지도 런타임을 막지 않게 했다.
+배경 OSM 타일과 글꼴은 아직 외부 자료라 완전한 오프라인 지도는 아니다.
+`tests/web/assets.test.mjs`와 전체 Node 화면 테스트를 통과했고, 로컬 서버에서 번들 200 응답과 항로 지도 렌더링을 확인했다.
+재현 문서: [Phase 29](docs/PHASE29_LOCAL_MAP_RUNTIME.md). 다음 비API 작업은 지도 타일 캐시/대체와 표시 결함 정리다.
+
 ## 최신 변경 — 2026-09-27 / 분업 시작 · Phase 28
 
 - **git 도입**(기준선 `97784c0`). **Claude·Astra 분업** — 소유 경로·절차·작업 카드는 [docs/분업.md](docs/분업.md). Astra 는 A1 부터

@@ -21,6 +21,7 @@ from fastapi.staticfiles import StaticFiles
 from poseidon.api.voyage import router as voyage_router
 from poseidon.api.global_ocean import router as global_router
 from poseidon.api.global_validation import router as global_validation_router
+from poseidon.api.helm_coast import router as helm_coast_router
 from poseidon.api.ports import router as ports_router
 from poseidon.api.routing import router as routing_router
 from poseidon.ai.correction import ResidualCorrector
@@ -40,6 +41,7 @@ app.mount("/console-assets", StaticFiles(directory=WEB_ROOT / "console"), name="
 app.include_router(voyage_router)
 app.include_router(global_router)
 app.include_router(global_validation_router)
+app.include_router(helm_coast_router)
 app.include_router(ports_router)
 app.include_router(routing_router)
 CORR_PATH = settings.data_root / "models" / "corr-hs.json"

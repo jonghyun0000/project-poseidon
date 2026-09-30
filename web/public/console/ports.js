@@ -49,6 +49,7 @@ export function initPorts({api,onUsePort}){
   return requests.detail.run(()=>api('/v1/ports/'+encodeURIComponent(id)),port=>{
    S.selected=port;S.selectedId=port.id;
    $('ports-detail').innerHTML=portDetailMarkup(port,S.meta);renderList();drawSelected();focusPort();
+   const helmButton=document.createElement('button');helmButton.type='button';helmButton.className='outline';helmButton.textContent='선박 조종에서 항구 보기';helmButton.disabled=!located(port);helmButton.onclick=()=>onUsePort(port,'helm');$('ports-detail').append(helmButton);
    $('ports-detail-title').focus({preventScroll:window.innerWidth>800});
    $('ports-focus').onclick=focusPort;
    $('ports-detail').querySelectorAll('[data-port-role]').forEach(button=>button.onclick=async()=>{

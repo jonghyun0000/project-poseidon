@@ -27,3 +27,5 @@ Phase 26: `routing.py`는 항구 쌍을 검증하고 고정 Eurostat 해상망�
 `/v1/routing/{meta,plan,plans/{plan_id}}`, `routing_voyage.py`는 저장 계획의 모든 좌표·정책·해안선과 거리·육지 교차를 검증한다.
 자동 항로는 `route_plan_id`와 최대 5,000점, 수동은 기존 20점. `voyage-1.4`에 전체 `route_plan`,
 `scope=network_segment_only`를 반환한다. 미검증 항구 접속 간격은 계산에서 제외하며 항만 도착 판정은 미적용이다.
+
+Phase 33: `helm_coast.py`의 `/v1/helm/coast`는 Natural Earth 1:10m 육지를 선박 주변 0.03°로 잘라 반환한다. 지도 축척 교차 검사 전용이며 공식 ENC·수심 자료가 아니다.

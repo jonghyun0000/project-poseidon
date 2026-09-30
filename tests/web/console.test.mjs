@@ -10,6 +10,8 @@ test('missing numeric input is never displayed as zero',()=>{
  assert.equal(validPoint('30','135'),true);
  assert.equal(sampleValue({q50:null},'hs'),null);
  assert.equal(sampleValue({q50:0,applicability:{reasons:['no_wave_energy']}},'hs'),null);
+ assert.equal(sampleValue({q50:0.005},'hs'),null);
+ assert.equal(sampleValue({q50:0.005},'hs',{source:'global'}),0.005);
 });
 test('UTC and KST labels have an unambiguous date across midnight',()=>{
  assert.equal(dateLabel('2026-09-06T18:00:00Z'),'2026-09-06 18:00 UTC');
@@ -42,4 +44,10 @@ test('time series gaps do not get bridged by invented values',()=>{
  assert.equal((path.match(/M/g)||[]).length,2);
  assert.doesNotMatch(path,/L/);
  assert.doesNotMatch(markup,/NaN|Infinity/);
+});
+test('regional near-zero wave heights are displayed as missing gaps',()=>{
+ const markup=chartMarkup([{lead_h:0,q50:0.005},{lead_h:3,q50:0.006}],'hs',0,3);
+ assert.match(markup,/유효한 값이 없습니다/);
+ const global=chartMarkup([{lead_h:0,q50:0.005},{lead_h:3,q50:0.006}],'hs',0,3,{source:'global'});
+ assert.doesNotMatch(global,/유효한 값이 없습니다/);
 });

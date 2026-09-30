@@ -1,5 +1,6 @@
 export const finite = v => (typeof v === 'number' || typeof v === 'string' && v.trim() !== '') && Number.isFinite(Number(v));
 export const fmt = (v,n=2) => finite(v) ? Number(v).toFixed(n) : '—';
+export const WAVE_DISPLAY_FLOOR_M = 0.011;
 export const esc = v => String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 export function validPoint(lat,lon){return finite(lat)&&finite(lon)&&Math.abs(+lat)<=90&&+lon>=-180&&+lon<=360;}
 export function utcDate(v){if(!v)return null;const s=String(v);const d=new Date(/(?:Z|[+-]\d\d:\d\d)$/.test(s)?s:s+'Z');return Number.isNaN(+d)?null:d;}
@@ -15,7 +16,15 @@ export function csvData(point,data,exportedAt){
  const rows=(data.items||[]).map(i=>[iso(exportedAt),data.cycle,iso(data.produced_at),point.lat,point.lon,data.level,iso(i.valid_time),i.lead_h,sampleValue(i,'hs'),i.physics_raw,sampleValue(i,'tp'),sampleValue(i,'tm02'),sampleValue(i,'dirp'),data.corrected,data.model_version,i.applicability?.verdict,(i.applicability?.reasons||[]).join('|'),JSON.stringify(i.missing||{}),JSON.stringify(data.engine||{}),data.source||'regional',data.provider||'Poseidon regional',iso(data.retrieved_at),sampleValue(i,'primary_period'),sampleValue(i,'primary_direction'),i.wind?.speed_ms]);
  return '\ufeff'+[header,...rows].map(row=>row.map(quote).join(',')).join('\r\n');
 }
-export function sampleValue(item,varName){if(!item)return null;if(item.applicability?.reasons?.includes('no_wave_energy'))return null;const v=varName==='hs'?item.q50:item.values?.[varName];return finite(v)?Number(v):null;}
+export function sampleValue(item,varName,options={}){
+ if(!item)return null;
+ const source=options.source||'regional',reasons=item.applicability?.reasons||[];
+ if(varName==='hs'&&(item.status==='no_wave_energy'||reasons.includes('no_wave_energy')))return null;
+ const v=varName==='hs'?item.q50:item.values?.[varName];
+ if(!finite(v))return null;
+ if(varName==='hs'&&source!=='global'&&Number(v)<=WAVE_DISPLAY_FLOOR_M)return null;
+ return Number(v);
+}
 export function summarizeForecast(meta,now=Date.now()){
  if(!meta?.valid_times?.length)return {label:'예보 없음',current:false};
  const first=utcDate(meta.valid_times[0]),last=utcDate(meta.valid_times.at(-1));

@@ -4,14 +4,15 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Poseidon · 해양 분석 워크스페이스</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='5' fill='%230d3449'/%3E%3Cpath d='M4 10q4-5 8 0t8 0M4 16q4-5 8 0t8 0' fill='none' stroke='%235cddd1' stroke-width='2'/%3E%3C/svg%3E">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/maplibre-gl@5.7.1/dist/maplibre-gl.css">
-<script src="https://cdn.jsdelivr.net/npm/maplibre-gl@5.7.1/dist/maplibre-gl.js"></script>
+<link rel="stylesheet" href="/console-assets/vendor/maplibre-gl-5.7.1/maplibre-gl.css">
+<script src="/console-assets/vendor/maplibre-gl-5.7.1/maplibre-gl.js"></script>
 <link rel="stylesheet" href="/console-assets/style.css">
+<link rel="stylesheet" href="/console-assets/helm.css?v=32.1">
 </head>
 <body>
 <header class="topbar">
  <a class="brand" href="/console"><svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="6"/><path d="M6 12q5-6 10 0t10 0M6 20q5-6 10 0t10 0"/></svg><span>POSEIDON<small>OCEAN OPERATIONS</small></span></a>
- <nav aria-label="주요 메뉴"><button data-view="analysis" class="active">해역 분석</button><button data-view="voyage">항로 시뮬레이션</button><button data-view="ports">세계 항구</button><button data-view="validation">예측 검증</button><button data-view="operations">데이터 운영</button></nav>
+ <nav aria-label="주요 메뉴"><button data-view="analysis" class="active">해역 분석</button><button data-view="voyage">항로 시뮬레이션</button><button data-view="helm">선박 조종</button><button data-view="ports">세계 항구</button><button data-view="validation">예측 검증</button><button data-view="operations">데이터 운영</button></nav>
  <div class="topright"><span class="pill">검증 단계</span><time id="clock">UTC</time><button id="refresh" class="iconbtn" aria-label="데이터 새로고침">↻</button></div>
 </header>
 <div class="statusbar" role="status"><span class="statusdot"></span><strong id="forecast-state">예보 상태 확인 중</strong><span id="forecast-period"></span><button id="new-cycle" hidden>새 예보로 전환</button><a href="/legacy" class="legacy">기존 분석 화면 ↗</a></div>
@@ -138,7 +139,8 @@
 
 <main id="validation-view" class="report-view" hidden><div class="report-heading"><div class="section-label">MODEL VERIFICATION</div><h1>예측 검증</h1><p>실제 관측과의 대조 결과. 테스트 통과와 예측 정확도는 별개의 지표입니다.</p></div><div id="validation-body"></div></main>
 <main id="operations-view" class="report-view" hidden><div class="report-heading"><div class="section-label">DATA OPERATIONS</div><h1>데이터 운영</h1><p>자료 확보부터 예보 생산까지의 사이클 이력. 실행 여부는 카탈로그 기록만으로 보장하지 않습니다.</p></div><div id="operations-body"></div></main>
+<main id="helm-view" class="helm-workspace" hidden></main>
 <footer><span>POSEIDON · ANALYST WORKSPACE</span><span id="sync-time">동기화 중</span><span>로컬 분석 환경 · 항해용 해도 아님</span></footer>
 <dialog id="data-dialog"><div class="dialog-head"><h2>선택 지점 예측 수치</h2><button id="close-dialog" aria-label="닫기">닫기</button></div><div id="data-table"></div></dialog>
-<script type="module" src="/console-assets/app.js"></script>
+<script type="module" src="/console-assets/app.js?v=helm-33.3"></script>
 </body></html>

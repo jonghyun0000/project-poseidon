@@ -1,0 +1,53 @@
+.helm-workspace{display:grid;grid-template-columns:222px minmax(320px,1fr) 260px;min-height:0;overflow:hidden}
+.helm-workspace[hidden]{display:none}
+.helm-fleet,.helm-harbor{padding:20px 16px;overflow:auto;background:#fff}
+.helm-fleet{border-right:1px solid var(--line)}.helm-fleet h1{font-size:24px}
+.helm-muted{font-size:11px;color:#748895;line-height:1.7;margin:8px 0 14px}
+#helm-fleet-list{display:grid;gap:5px;margin-top:18px}
+#helm-fleet-list button{display:flex;align-items:center;gap:13px;text-align:left;white-space:normal;padding:10px 9px;border:1px solid #e1e9ed}
+#helm-fleet-list button.selected{background:#edf7f5;border-color:#4ca298}
+#helm-fleet-list b,#helm-fleet-list small,#helm-fleet-list em{display:block}
+#helm-fleet-list b{font-size:12px}#helm-fleet-list small{font-size:10px;color:#6b818e;margin:4px 0;line-height:1.4}
+#helm-fleet-list em{font:9px ui-monospace,monospace;color:#8799a3}
+.helm-ship-glyph{display:block;flex:0 0 22px;height:53px;background:var(--ship-color);clip-path:polygon(50% 0,88% 18%,100% 42%,100% 90%,80% 100%,20% 100%,0 90%,0 42%,12% 18%);position:relative}
+.helm-ship-glyph:after{content:'';position:absolute;inset:12px 5px 8px;border:2px solid #ffffffa0;background:repeating-linear-gradient(0deg,transparent,transparent 6px,#ffffff60 7px,#ffffff60 9px)}
+.helm-center{display:flex;flex-direction:column;min-width:0;min-height:0}
+.helm-ship-header{display:flex;align-items:center;gap:18px;padding:16px 22px;background:#fff;border-bottom:1px solid var(--line)}
+#helm-type{color:#537b89;font-size:10px}#helm-name{font-size:20px;font-weight:650;margin-top:4px}
+#helm-size{margin-left:auto;font-size:12px;white-space:nowrap;color:#6c8490}
+#helm-source{border-color:#cfdae0;font-size:10px}
+.helm-map-stage{position:relative;flex:1;min-height:270px;background:#bdd7e3}
+#helm-map{position:absolute;inset:0}
+.helm-map-tools{position:absolute;top:12px;left:12px;display:flex;gap:5px}
+.helm-map-tools button{font-size:10px;background:#fffffff2;border-color:#c5d6de;box-shadow:0 2px 5px #16344210}
+.helm-map-tools button.selected{background:#195e6b;color:white}
+.helm-hud{position:absolute;top:58px;left:12px;display:flex;gap:24px;background:#123544ee;color:#edf8ff;padding:13px 19px;border-radius:5px;pointer-events:none}
+.helm-hud small{display:block;color:#9dbecb;font-size:9px;margin-bottom:6px}
+.helm-hud strong{font:21px ui-monospace,monospace;font-weight:500}
+.helm-map-message{position:absolute;left:12px;bottom:50px;max-width:calc(100% - 60px);background:#fffef5ee;color:#746446;padding:8px 11px;border:1px solid #dfd4b6;font-size:10px;line-height:1.6;border-radius:4px}
+.helm-map-caption{position:absolute;right:12px;top:12px;font-size:9px;padding:7px;color:#466577;background:#ffffffcc;pointer-events:none}
+.helm-tile-error{position:absolute;top:132px;left:12px;background:#fff1e7;color:#994c2c;padding:10px;max-width:90%;font-size:11px}
+.helm-console{display:grid;grid-template-columns:1fr 1fr 165px;gap:22px;background:#113443;color:#dbeaf0;padding:18px 20px}
+.helm-control label{display:flex;justify-content:space-between;font-size:11px}.helm-control output{color:#84d6c5;font-size:11px}
+.helm-control input{display:block;width:100%;accent-color:#75cdbb;margin:21px 0;padding:0}
+.helm-control-buttons{display:flex;gap:4px}.helm-control-buttons button{flex:1;padding:6px 3px;border:1px solid #40616e;font-size:10px;color:#c7dce4}
+.helm-control-buttons button:hover{background:#305867}
+.helm-transport{display:grid;grid-template-columns:1fr 1fr;gap:7px;font-size:10px}
+.helm-transport button{font-size:10px;padding:6px;border-color:#40616e}
+.helm-transport label{display:flex;flex-direction:column;gap:3px;color:#9eb8c5}.helm-transport select{background:#234a59;color:white;border-color:#40616e;padding:4px}
+.helm-transport .helm-primary{background:#79d0be;color:#143f46;font-weight:650}.helm-transport .helm-primary.running{background:#e1b96c}
+.helm-session-line{display:flex;flex-wrap:wrap;gap:8px 18px;background:#e7eff2;padding:9px 16px;font-size:9px;color:#688290}
+.helm-method{padding:10px 16px;background:#f4f7f8;font-size:10px;color:#6f8490;line-height:1.8;max-height:150px;overflow:auto;flex-shrink:0}
+.helm-method summary{cursor:pointer}.helm-method p{margin:7px 0}.helm-method a{color:#267f8b;text-decoration:underline}
+.helm-harbor{border-left:1px solid var(--line)}.helm-harbor h2{font-size:17px}.helm-harbor>label,.helm-harbor form label{display:block;font-size:10px;margin:13px 0 7px;color:#77909b}
+.helm-harbor select{width:100%;font-size:11px}.helm-search-row{display:flex;gap:4px}.helm-search-row input{width:100%;font-size:11px}.helm-search-row button{border-color:#c6d6de;font-size:10px}
+#helm-search-status{margin-bottom:6px}#helm-port-list{max-height:210px;overflow:auto}
+#helm-port-list button{display:block;width:100%;white-space:normal;text-align:left;border-bottom:1px solid #e4ecef;border-radius:0;padding:9px 2px}
+#helm-port-list b{font-size:11px;font-weight:550}#helm-port-list small{display:block;color:#8b9ba5;font-size:9px;margin-top:5px}
+.helm-pages{display:flex;justify-content:space-between}.helm-pages button{font-size:10px}
+#helm-port-detail{border-top:1px solid #dce5e9;margin-top:12px;padding:15px 0;line-height:1.8}
+#helm-port-detail h3{font-size:16px}#helm-port-detail p{font-size:11px}#helm-port-detail small{font-size:10px;color:#9b7746}
+#helm-facilities,#helm-weather{width:100%;border-color:#bed1d5;font-size:11px;white-space:normal;background:#eff7f6}
+#helm-facility-status,#helm-weather-status{overflow-wrap:anywhere;font-size:10px}
+@media(max-width:1250px){.helm-workspace{grid-template-columns:180px minmax(320px,1fr) 230px}.helm-map-caption{top:120px;right:auto;left:12px}.helm-console{gap:12px;padding:14px 12px;grid-template-columns:1fr 1fr}.helm-transport{grid-column:1/-1;grid-template-columns:repeat(4,1fr)}.helm-transport label{flex-direction:row;align-items:center}.helm-ship-header{padding:12px}.helm-ship-header #helm-size{font-size:10px}}
+@media(max-width:800px){.helm-workspace{display:flex;flex-direction:column;overflow:auto}.helm-fleet{overflow:visible;padding:16px}.helm-fleet h1{font-size:21px}.helm-fleet>.helm-muted{display:none}#helm-fleet-list{display:flex;overflow:auto;margin-top:12px;padding-bottom:5px}#helm-fleet-list button{flex:0 0 170px}.helm-center{flex:none;min-height:650px}.helm-map-stage{flex:none;height:380px}.helm-harbor{overflow:visible;border-top:1px solid var(--line)}.helm-hud{gap:15px}.helm-hud strong{font-size:17px}#helm-name{font-size:17px}#helm-source{display:none}.helm-ship-header{gap:8px}.helm-map-tools{gap:3px}.helm-map-tools button{padding:6px}.helm-console{gap:15px}.helm-method{max-height:none}.helm-session-line>span:last-child{display:none}}

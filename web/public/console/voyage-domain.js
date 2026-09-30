@@ -1,11 +1,11 @@
-import {finite} from './domain.js';
+import {finite,sampleValue} from './domain.js';
 import {unwrapRoute} from './global-domain.js';
 
-export function voyageTrackFeatures(points,threshold){
+export function voyageTrackFeatures(points,threshold,options={}){
  if(!Array.isArray(points)||points.length<2)return [];
  const track=unwrapRoute(points),features=[];
  for(let i=1;i<track.length;i++){
-  const a=track[i-1],b=track[i],from=a.values?.hs,to=b.values?.hs;
+  const a=track[i-1],b=track[i],from=sampleValue({q50:a.values?.hs,status:a.status,applicability:a.applicability},'hs',options),to=sampleValue({q50:b.values?.hs,status:b.status,applicability:b.applicability},'hs',options);
   const missing=!Number.isFinite(from)||!Number.isFinite(to);
   const color=missing?'#8795a3':Math.max(from,to)>threshold?'#b97247':'#207f87';
   const previous=features.at(-1),end=[b.plot_lon,b.lat];

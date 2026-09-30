@@ -36,6 +36,11 @@ test('missing observations merge into one grey run and never acquire a low-wave 
  assert.equal(features.length,1);assert.equal(features[0].properties.color,missing);
  assert.deepEqual(features[0].geometry.coordinates,points.map(p=>[p.lon,p.lat]));
 });
+test('regional near-zero wave energy is drawn as missing, while global keeps explicit values',()=>{
+ const points=[0.005,0.006,2].map((hs,i)=>point(140+i,hs));
+ assert.deepEqual(voyageTrackFeatures(points,3).map(f=>f.properties.color),[missing]);
+ assert.deepEqual(voyageTrackFeatures(points,3,{source:'global'}).map(f=>f.properties.color),[below]);
+});
 
 test('dateline unwrapping remains continuous across feature color boundaries',()=>{
  for(const longitudes of [[179,179.8,-179.8,-179],[-179,-179.8,179.8,179]]){
