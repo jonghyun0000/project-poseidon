@@ -126,6 +126,8 @@ def lead0_all() -> dict:
     obs = []
     for prov in ("kma", "ndbc"):
         for f in (settings.parquet_root / "obs" / prov).rglob("*.parquet"):
+            if f.name.startswith("._"):   # exFAT AppleDouble 부속 파일 (사전 등록 후 수정, PHASE31 §3)
+                continue
             obs.append(pd.read_parquet(f, columns=["station_id", "ts", "var", "value", "qc_flag"]))
     obs = pd.concat(obs, ignore_index=True)
     obs = obs[(obs["var"] == "hs") & (obs.qc_flag == 0)]
