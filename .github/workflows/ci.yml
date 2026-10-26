@@ -7,20 +7,38 @@ on:
 
 jobs:
   lint-type-unit:
+    name: ${{ matrix.check }}
     runs-on: ubuntu-latest
+    env:
+      POSEIDON_DATA_ROOT: ${{ runner.temp }}/poseidon-${{ matrix.check }}
+    strategy:
+      # Existing lint debt must not cancel type checks or regression tests.
+      fail-fast: false
+      matrix:
+        include:
+          - check: lint
+            command: uv run ruff check .
+          - check: format
+            command: uv run ruff format --check .
+          - check: types
+            command: uv run mypy
+          # Several regression files have no unit marker. Include them as well
+          # as integration contracts; local-data checks explicitly report skips.
+          - check: regression
+            command: uv run pytest -m "not scientific" -q
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v5
         with: { python-version: "3.12" }
       - run: uv sync --all-groups
-      - run: uv run ruff check .
-      - run: uv run ruff format --check .
-      - run: uv run mypy
-      - run: uv run pytest -m unit -q
+      - name: Run ${{ matrix.check }} check
+        run: ${{ matrix.command }}
 
   scientific:
     if: github.event_name == 'schedule'
     runs-on: ubuntu-latest
+    env:
+      POSEIDON_DATA_ROOT: ${{ runner.temp }}/poseidon-scientific
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v5
