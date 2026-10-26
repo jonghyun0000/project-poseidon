@@ -13,7 +13,11 @@ def isolated_catalog(monkeypatch, tmp_path):
     monkeypatch.setattr(op, "Catalog", lambda path: cat)
 
 
-def test_disk_free_is_positive():
+def test_disk_free_is_positive(monkeypatch, tmp_path):
+    from dataclasses import replace
+
+    # A clean checkout does not contain the ignored operational data lake.
+    monkeypatch.setattr(op, "settings", replace(op.settings, data_root=tmp_path))
     assert op.disk_free_gb() > 0
 
 
