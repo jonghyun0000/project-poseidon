@@ -6,6 +6,13 @@
 
 ---
 
+## 최신 변경 — 2026-10-26 / Phase 34 CI 진단 분리
+
+CI 린트 실패가 타입·회귀 검사를 막지 않도록 작업을 분리했고, 독립 체크아웃용 테스트 자료를 고쳤다.
+로컬 비scientific 375 passed/12 skipped, scientific 기준선 87 passed/4 skipped.
+Ruff 566건과 strict mypy 기준선 787건은 남아 있으며 CI 전체 복구 완료가 아니다.
+물리·운영 구현은 변경하지 않았다. 재실행 실패와 환경 차이는 [Phase 34](docs/PHASE34_CI_DIAGNOSTICS.md)에 기록했다.
+
 ## 최신 변경 — 2026-09-27 / Phase 33 조종 해안선 판정
 
 `/console?view=helm`에서 Natural Earth 1:10m 육지와 불러온 OSM 부두·방파제의
