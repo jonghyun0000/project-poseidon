@@ -9,8 +9,6 @@ jobs:
   lint-type-unit:
     name: ${{ matrix.check }}
     runs-on: ubuntu-latest
-    env:
-      POSEIDON_DATA_ROOT: ${{ runner.temp }}/poseidon-${{ matrix.check }}
     strategy:
       # Existing lint debt must not cancel type checks or regression tests.
       fail-fast: false
@@ -32,16 +30,18 @@ jobs:
         with: { python-version: "3.12" }
       - run: uv sync --all-groups
       - name: Run ${{ matrix.check }} check
+        env:
+          POSEIDON_DATA_ROOT: ${{ runner.temp }}/poseidon-${{ matrix.check }}
         run: ${{ matrix.command }}
 
   scientific:
     if: github.event_name == 'schedule'
     runs-on: ubuntu-latest
-    env:
-      POSEIDON_DATA_ROOT: ${{ runner.temp }}/poseidon-scientific
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v5
         with: { python-version: "3.12" }
       - run: uv sync --all-groups
       - run: uv run pytest -m "scientific or integration" -q
+        env:
+          POSEIDON_DATA_ROOT: ${{ runner.temp }}/poseidon-scientific
